@@ -1,0 +1,13 @@
+# Laravel .gitignore
+/vendor
+/.venv
+.env
+.env.backup
+.phpunit.result.cache
+/storage/*.key
+/bootstrap/cache
+.DS_Store
+/node_modules
+/public/storage
+/public/hot
+.rnd

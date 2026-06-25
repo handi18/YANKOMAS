@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: simaspirasi-app
+    restart: unless-stopped
+    working_dir: /app
+    environment:
+      - APP_NAME="SIMASPIRASI IMIGRASI"
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=base64:4ktLQB1pjNmOKxcMa7qC6C/hR5j2F9T+2qW8pV5sX/0=
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=simaspirasi_imigrasi
+      - DB_USERNAME=simaspirasi
+      - DB_PASSWORD=password
+    volumes:
+      - ./:/app
+      - /app/storage
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+    networks:
+      - simaspirasi-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: simaspirasi-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: simaspirasi_imigrasi
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_PASSWORD: password
+      MYSQL_USER: simaspirasi
+    volumes:
+      - dbdata:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - simaspirasi-network
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: simaspirasi-phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: simaspirasi
+      PMA_PASSWORD: password
+      PMA_PORT: 3306
+    ports:
+      - "8001:80"
+    depends_on:
+      - mysql
+    networks:
+      - simaspirasi-network
+
+volumes:
+  dbdata:
+    driver: local
+
+networks:
+  simaspirasi-network:
+    driver: bridge
