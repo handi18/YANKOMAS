@@ -23,7 +23,7 @@ $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>" 
-                           id="tanggal_kejadian" name="tanggal_kejadian" value="<?php echo e(old('tanggal_kejadian')); ?>" required>
+                           id="tanggal_kejadian" name="tanggal_kejadian" value="<?php echo e(old('tanggal_kejadian', now()->format('Y-m-d'))); ?>" required>
                     <?php $__errorArgs = ['tanggal_kejadian'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -45,7 +45,7 @@ $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>" 
-                           id="jam_kejadian" name="jam_kejadian" value="<?php echo e(old('jam_kejadian')); ?>" required>
+                           id="jam_kejadian" name="jam_kejadian" value="<?php echo e(old('jam_kejadian', now()->format('H:i'))); ?>" required>
                     <?php $__errorArgs = ['jam_kejadian'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -72,7 +72,7 @@ endif;
 unset($__errorArgs, $__bag); ?>" id="jenis" name="jenis" required>
                         <option value="">-- Pilih Jenis --</option>
                         <option value="saran" <?php echo e(old('jenis') === 'saran' ? 'selected' : ''); ?>>Saran</option>
-                        <option value="masukan" <?php echo e(old('jenis') === 'masukan' ? 'selected' : ''); ?>>Masukan</option>
+                        <option value="informasi" <?php echo e(old('jenis') === 'informasi' ? 'selected' : ''); ?>>Informasi</option>
                         <option value="pengaduan" <?php echo e(old('jenis') === 'pengaduan' ? 'selected' : ''); ?>>Pengaduan</option>
                     </select>
                     <?php $__errorArgs = ['jenis'];
@@ -95,7 +95,7 @@ if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>" id="kategori" name="kategori" required>
+unset($__errorArgs, $__bag); ?>" id="kategori" name="kategori">
                         <option value="">-- Pilih Kategori --</option>
                         <option value="ringan" <?php echo e(old('kategori') === 'ringan' ? 'selected' : ''); ?>>Ringan</option>
                         <option value="sedang" <?php echo e(old('kategori') === 'sedang' ? 'selected' : ''); ?>>Sedang</option>
@@ -111,7 +111,7 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-                </div>
+                </div> 
             </div>
 
             <div class="row mb-3">
@@ -155,7 +155,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>" id="media" name="media" required>
                         <option value="">-- Pilih Media --</option>
-                        <option value="Tatap Muka" <?php echo e(old('media') === 'Tatap Muka' ? 'selected' : ''); ?>>Tatap Muka</option>
+                        <option value="Tatap Muka" <?php echo e(old('media', 'Tatap Muka') === 'Tatap Muka' ? 'selected' : ''); ?>>Tatap Muka</option>
                         <option value="Telepon" <?php echo e(old('media') === 'Telepon' ? 'selected' : ''); ?>>Telepon</option>
                         <option value="WhatsApp" <?php echo e(old('media') === 'WhatsApp' ? 'selected' : ''); ?>>WhatsApp</option>
                     </select>
@@ -221,6 +221,32 @@ unset($__errorArgs, $__bag); ?>
         </ul>
     </div>
 </div>
-<?php $__env->stopSection(); ?>
 
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const jenisSelect = document.getElementById('jenis');
+        const kategoriSelect = document.getElementById('kategori');
+
+        function handleKategoriState() {
+            if (jenisSelect.value === 'pengaduan') {
+                // Aktifkan kategori dan buat menjadi required kembali
+                kategoriSelect.removeAttribute('disabled');
+                kategoriSelect.setAttribute('required', 'required');
+            } else {
+                // Kunci kategori, hapus status required, dan kosongkan pilihannya
+                kategoriSelect.setAttribute('disabled', 'disabled');
+                kategoriSelect.removeAttribute('required');
+                kategoriSelect.value = '';
+            }
+        }
+
+        // Jalankan saat pertama kali halaman dimuat (menjaga data lama jika validasi error)
+        handleKategoriState();
+
+        // Jalankan setiap kali ada perubahan pada dropdown Jenis Aspirasi
+        jenisSelect.addEventListener('change', handleKategoriState);
+    });
+</script>
+<?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\kuliah\Magang\projek magang\simaspirasi-imigrasi\resources\views/aspirasi/create.blade.php ENDPATH**/ ?>

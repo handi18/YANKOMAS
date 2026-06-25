@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
             'nip' => '19800101001',
             'username' => 'admin',
             'email' => 'admin@imigrasi.go.id',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('password18'),
             'role' => 'admin',
         ]);
 

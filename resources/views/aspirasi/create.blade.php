@@ -16,7 +16,7 @@
                 <div class="col-md-6">
                     <label for="tanggal_kejadian" class="form-label">Tanggal Kejadian *</label>
                     <input type="date" class="form-control @error('tanggal_kejadian') is-invalid @enderror" 
-                           id="tanggal_kejadian" name="tanggal_kejadian" value="{{ old('tanggal_kejadian') }}" required>
+                           id="tanggal_kejadian" name="tanggal_kejadian" value="{{ old('tanggal_kejadian', now()->format('Y-m-d')) }}" required>
                     @error('tanggal_kejadian')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -24,7 +24,7 @@
                 <div class="col-md-6">
                     <label for="jam_kejadian" class="form-label">Jam Kejadian *</label>
                     <input type="time" class="form-control @error('jam_kejadian') is-invalid @enderror" 
-                           id="jam_kejadian" name="jam_kejadian" value="{{ old('jam_kejadian') }}" required>
+                           id="jam_kejadian" name="jam_kejadian" value="{{ old('jam_kejadian', now()->format('H:i')) }}" required>
                     @error('jam_kejadian')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -37,7 +37,7 @@
                     <select class="form-select @error('jenis') is-invalid @enderror" id="jenis" name="jenis" required>
                         <option value="">-- Pilih Jenis --</option>
                         <option value="saran" {{ old('jenis') === 'saran' ? 'selected' : '' }}>Saran</option>
-                        <option value="masukan" {{ old('jenis') === 'masukan' ? 'selected' : '' }}>Masukan</option>
+                        <option value="informasi" {{ old('jenis') === 'informasi' ? 'selected' : '' }}>Informasi</option>
                         <option value="pengaduan" {{ old('jenis') === 'pengaduan' ? 'selected' : '' }}>Pengaduan</option>
                     </select>
                     @error('jenis')
@@ -46,7 +46,7 @@
                 </div>
                 <div class="col-md-6">
                     <label for="kategori" class="form-label">Kategori *</label>
-                    <select class="form-select @error('kategori') is-invalid @enderror" id="kategori" name="kategori" required>
+                    <select class="form-select @error('kategori') is-invalid @enderror" id="kategori" name="kategori">
                         <option value="">-- Pilih Kategori --</option>
                         <option value="ringan" {{ old('kategori') === 'ringan' ? 'selected' : '' }}>Ringan</option>
                         <option value="sedang" {{ old('kategori') === 'sedang' ? 'selected' : '' }}>Sedang</option>
@@ -55,7 +55,7 @@
                     @error('kategori')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                </div>
+                </div> 
             </div>
 
             <div class="row mb-3">
@@ -77,7 +77,7 @@
                     <label for="media" class="form-label">Media Penerimaan *</label>
                     <select class="form-select @error('media') is-invalid @enderror" id="media" name="media" required>
                         <option value="">-- Pilih Media --</option>
-                        <option value="Tatap Muka" {{ old('media') === 'Tatap Muka' ? 'selected' : '' }}>Tatap Muka</option>
+                        <option value="Tatap Muka" {{ old('media', 'Tatap Muka') === 'Tatap Muka' ? 'selected' : '' }}>Tatap Muka</option>
                         <option value="Telepon" {{ old('media') === 'Telepon' ? 'selected' : '' }}>Telepon</option>
                         <option value="WhatsApp" {{ old('media') === 'WhatsApp' ? 'selected' : '' }}>WhatsApp</option>
                     </select>
@@ -122,4 +122,31 @@
         </ul>
     </div>
 </div>
+
+{{-- Script Pengkondisian Jenis Aspirasi & Kategori --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const jenisSelect = document.getElementById('jenis');
+        const kategoriSelect = document.getElementById('kategori');
+
+        function handleKategoriState() {
+            if (jenisSelect.value === 'pengaduan') {
+                // Aktifkan kategori dan buat menjadi required kembali
+                kategoriSelect.removeAttribute('disabled');
+                kategoriSelect.setAttribute('required', 'required');
+            } else {
+                // Kunci kategori, hapus status required, dan kosongkan pilihannya
+                kategoriSelect.setAttribute('disabled', 'disabled');
+                kategoriSelect.removeAttribute('required');
+                kategoriSelect.value = '';
+            }
+        }
+
+        // Jalankan saat pertama kali halaman dimuat (menjaga data lama jika validasi error)
+        handleKategoriState();
+
+        // Jalankan setiap kali ada perubahan pada dropdown Jenis Aspirasi
+        jenisSelect.addEventListener('change', handleKategoriState);
+    });
+</script>
 @endsection

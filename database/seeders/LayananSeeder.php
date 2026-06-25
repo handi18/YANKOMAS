@@ -13,8 +13,7 @@ class LayananSeeder extends Seeder
             'Paspor Baru',
             'Paspor Penggantian',
             'Izin Tinggal',
-            'WNA',
-            'Informasi',
+            'BAP',
         ];
 
         foreach ($layanan as $item) {

@@ -76,11 +76,15 @@ class AsirasiController extends Controller
 
     public function store(Request $request)
     {
+        if ($request->jenis !== 'pengaduan') {
+            $request->merge(['kategori' => null]);
+        }
+
         $validated = $request->validate([
             'tanggal_kejadian' => ['required', 'date'],
             'jam_kejadian' => ['required', 'date_format:H:i'],
-            'jenis' => ['required', 'in:saran,masukan,pengaduan'],
-            'kategori' => ['required', 'in:ringan,sedang,berat'],
+            'jenis' => ['required', 'in:saran,informasi,pengaduan'], 
+            'kategori' => ['required_if:jenis,pengaduan', 'nullable', 'in:ringan,sedang,berat'],
             'isi_aspirasi' => ['required', 'string', 'min:10'],
             'layanan_id' => ['required', 'exists:layanan,id'],
             'media' => ['required', 'in:Tatap Muka,Telepon,WhatsApp'],
@@ -140,7 +144,7 @@ class AsirasiController extends Controller
         $validated = $request->validate([
             'tanggal_kejadian' => ['required', 'date'],
             'jam_kejadian' => ['required', 'date_format:H:i'],
-            'jenis' => ['required', 'in:saran,masukan,pengaduan'],
+            'jenis' => ['required', 'in:saran,informasi,pengaduan'],
             'kategori' => ['required', 'in:ringan,sedang,berat'],
             'isi_aspirasi' => ['required', 'string', 'min:10'],
             'layanan_id' => ['required', 'exists:layanan,id'],

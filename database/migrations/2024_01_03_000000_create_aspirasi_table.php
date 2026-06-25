@@ -13,8 +13,8 @@ return new class extends Migration
             $table->string('nomor_tiket')->unique();
             $table->date('tanggal_kejadian');
             $table->time('jam_kejadian');
-            $table->enum('jenis', ['saran', 'masukan', 'pengaduan']);
-            $table->enum('kategori', ['ringan', 'sedang', 'berat']);
+            $table->enum('jenis', ['saran','informasi', 'pengaduan']); 
+            $table->enum('kategori', ['ringan', 'sedang', 'berat'])->nullable(); 
             $table->text('isi_aspirasi');
             $table->foreignId('layanan_id')->constrained('layanan')->onDelete('cascade');
             $table->enum('media', ['Tatap Muka', 'Telepon', 'WhatsApp']);
