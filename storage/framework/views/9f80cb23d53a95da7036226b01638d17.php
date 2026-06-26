@@ -34,7 +34,7 @@
                     <select name="jenis" class="form-select form-select-sm">
                         <option value="">Semua Jenis</option>
                         <option value="saran" <?php echo e(request('jenis') === 'saran' ? 'selected' : ''); ?>>Saran</option>
-                        <option value="masukan" <?php echo e(request('jenis') === 'masukan' ? 'selected' : ''); ?>>Masukan</option>
+                        <option value="informasi" <?php echo e(request('jenis') === 'informasi' ? 'selected' : ''); ?>>Informasi</option>
                         <option value="pengaduan" <?php echo e(request('jenis') === 'pengaduan' ? 'selected' : ''); ?>>Pengaduan</option>
                     </select>
                 </div>

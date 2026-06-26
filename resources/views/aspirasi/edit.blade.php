@@ -42,7 +42,7 @@
                     <select class="form-select @error('jenis') is-invalid @enderror" id="jenis" name="jenis" required>
                         <option value="">-- Pilih Jenis --</option>
                         <option value="saran" {{ old('jenis', $aspirasi->jenis) === 'saran' ? 'selected' : '' }}>Saran</option>
-                        <option value="masukan" {{ old('jenis', $aspirasi->jenis) === 'masukan' ? 'selected' : '' }}>Masukan</option>
+                        <option value="informasi" {{ old('jenis', $aspirasi->jenis) === 'informasi' ? 'selected' : '' }}>Informasi</option>
                         <option value="pengaduan" {{ old('jenis', $aspirasi->jenis) === 'pengaduan' ? 'selected' : '' }}>Pengaduan</option>
                     </select>
                     @error('jenis')
@@ -96,6 +96,78 @@
                 <div class="mb-3">
                     <label for="status" class="form-label">Status *</label>
                     <select class="form-select @error('status') is-invalid @enderror" id="status" name="status" required>
+                        {{-- Filter & Tabel SIP --}}
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header card-header-custom d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0"><i class="fas fa-list"></i> Data SIP (Saran, Informasi, Pengaduan)</h5>
+
+                                        {{-- Filter Dropdown Range Waktu --}}
+                                        <form method="GET" action="{{ route('dashboard') }}" class="d-flex gap-2 align-items-center">
+                                            <select name="range" class="form-select form-select-sm" style="width: auto;" onchange="this.form.submit()">
+                                                <option value="hari_ini"   {{ request('range','hari_ini') == 'hari_ini'   ? 'selected' : '' }}>Hari Ini</option>
+                                                <option value="minggu_ini" {{ request('range') == 'minggu_ini' ? 'selected' : '' }}>Minggu Ini</option>
+                                                <option value="bulan_ini"  {{ request('range') == 'bulan_ini'  ? 'selected' : '' }}>Bulan Ini</option>
+                                                <option value="tahun_ini"  {{ request('range') == 'tahun_ini'  ? 'selected' : '' }}>Tahun Ini</option>
+                                                <option value="semua"      {{ request('range') == 'semua'      ? 'selected' : '' }}>Semua</option>
+                                            </select>
+                                        </form>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-hover">
+                                                <thead class="table-dark">
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>No. Tiket</th>
+                                                        <th>Tanggal</th>
+                                                        <th>Jenis</th>
+                                                        <th>Isi Aspirasi</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @forelse($dataSIP as $index => $sip)
+                                                    <tr>
+                                                        <td>{{ $index + 1 }}</td>
+                                                        <td>{{ $sip->nomor_tiket }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($sip->tanggal_kejadian)->format('d/m/Y') }}</td>
+                                                        <td>
+                                                            @if($sip->jenis == 'saran')
+                                                                <span class="badge bg-success">Saran</span>
+                                                            @elseif($sip->jenis == 'informasi')
+                                                                <span class="badge bg-info">Informasi</span>
+                                                            @elseif($sip->jenis == 'pengaduan')
+                                                                <span class="badge bg-danger">Pengaduan</span>
+                                                            @else
+                                                                <span class="badge bg-secondary">{{ ucfirst($sip->jenis) }}</span>
+                                                            @endif
+                                                        </td>
+                                                        <td>{{ Str::limit($sip->isi_aspirasi, 60) }}</td>
+                                                        <td>
+                                                            @if($sip->status == 'Baru')
+                                                                <span class="badge bg-primary">Baru</span>
+                                                            @elseif($sip->status == 'Diproses')
+                                                                <span class="badge bg-warning text-dark">Diproses</span>
+                                                            @elseif($sip->status == 'Selesai')
+                                                                <span class="badge bg-success">Selesai</span>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                    @empty
+                                                    <tr>
+                                                        <td colspan="6" class="text-center text-muted">Tidak ada data</td>
+                                                    </tr>
+                                                    @endforelse
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <option value="Baru" {{ old('status', $aspirasi->status) === 'Baru' ? 'selected' : '' }}>Baru</option>
                         <option value="Diproses" {{ old('status', $aspirasi->status) === 'Diproses' ? 'selected' : '' }}>Diproses</option>
                         <option value="Selesai" {{ old('status', $aspirasi->status) === 'Selesai' ? 'selected' : '' }}>Selesai</option>

@@ -10,66 +10,74 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Get statistics
-        $today = Aspirasi::today()->count();
-        $thisWeek = Aspirasi::thisWeek()->count();
-        $thisMonth = Aspirasi::thisMonth()->count();
-        $thisYear = Aspirasi::thisYear()->count();
-
-        // Get jenis breakdown
-        $jenisSaran = Aspirasi::byJenis('saran')->count();
-        $jenisMasukan = Aspirasi::byJenis('masukan')->count();
-        $jenisPengaduan = Aspirasi::byJenis('pengaduan')->count();
-
-        // Get kategori breakdown
-        $kategoriRingan = Aspirasi::byKategori('ringan')->count();
-        $kategoriSedang = Aspirasi::byKategori('sedang')->count();
-        $kategoriBerat = Aspirasi::byKategori('berat')->count();
-
-        // Get trend data for current month
-        $trendData = [];
-        $currentMonth = now()->month;
-        $currentYear = now()->year;
-        $daysInMonth = now()->daysInMonth;
-
-        for ($day = 1; $day <= $daysInMonth; $day++) {
-            $date = Carbon::create($currentYear, $currentMonth, $day);
-            $count = Aspirasi::whereDate('tanggal_kejadian', $date->format('Y-m-d'))->count();
-            $trendData[] = [
-                'date' => $day,
-                'count' => $count
-            ];
+        // Filter range waktu
+        $range = $request->get('range', 'semua');
+        $sipQuery = Aspirasi::query();
+        switch ($range) {
+            case 'hari_ini':
+                $sipQuery->today();
+                break;
+            case 'minggu_ini':
+                $sipQuery->thisWeek();
+                break;
+            case 'bulan_ini':
+                $sipQuery->thisMonth();
+                break;
+            case 'tahun_ini':
+                $sipQuery->thisYear();
+                break;
+            // 'semua' = tidak ada filter tambahan
         }
 
-        // Get top layanan
-        $topLayanan = Layanan::withCount('aspirasi')
-            ->orderByDesc('aspirasi_count')
-            ->take(5)
-            ->get();
+        // Stat cards
+        $sipTotal  = (clone $sipQuery)->count();
+        $Saran     = (clone $sipQuery)->byJenis('saran')->count();
+        $Informasi = (clone $sipQuery)->byJenis('informasi')->count();
+        $Pengaduan = (clone $sipQuery)->byJenis('pengaduan')->count();
 
-        // Get status breakdown
-        $statusBaru = Aspirasi::byStatus('Baru')->count();
-        $statusDiproses = Aspirasi::byStatus('Diproses')->count();
-        $statusSelesai = Aspirasi::byStatus('Selesai')->count();
+        // Grafik jenis (ikut filter)
+        $jenisSaran     = (clone $sipQuery)->byJenis('saran')->count();
+        $Informasi      = (clone $sipQuery)->byJenis('informasi')->count();
+        $jenisPengaduan = (clone $sipQuery)->byJenis('pengaduan')->count();
+
+        // Grafik kategori (ikut filter)
+        $kategoriRingan = (clone $sipQuery)->byKategori('ringan')->count();
+        $kategoriSedang = (clone $sipQuery)->byKategori('sedang')->count();
+        $kategoriBerat  = (clone $sipQuery)->byKategori('berat')->count();
+
+        // Status aspirasi (ikut filter)
+        $statusBaru     = (clone $sipQuery)->byStatus('Baru')->count();
+        $statusDiproses = (clone $sipQuery)->byStatus('Diproses')->count();
+        $statusSelesai  = (clone $sipQuery)->byStatus('Selesai')->count();
+
+        // Tren per hari dalam bulan ini (ikut filter)
+        $trendData   = [];
+        $currentMonth = now()->month;
+        $currentYear  = now()->year;
+        $daysInMonth  = now()->daysInMonth;
+
+        for ($day = 1; $day <= $daysInMonth; $day++) {
+            $date  = Carbon::create($currentYear, $currentMonth, $day);
+            $count = (clone $sipQuery)->whereDate('tanggal_kejadian', $date->format('Y-m-d'))->count();
+            $trendData[] = ['date' => $day, 'count' => $count];
+        }
 
         return view('dashboard.index', [
-            'today' => $today,
-            'thisWeek' => $thisWeek,
-            'thisMonth' => $thisMonth,
-            'thisYear' => $thisYear,
-            'jenisSaran' => $jenisSaran,
-            'jenisMasukan' => $jenisMasukan,
+            'sipTotal'       => $sipTotal,
+            'Saran'          => $Saran,
+            'Informasi'      => $Informasi,
+            'Pengaduan'      => $Pengaduan,
+            'jenisSaran'     => $jenisSaran,
             'jenisPengaduan' => $jenisPengaduan,
             'kategoriRingan' => $kategoriRingan,
             'kategoriSedang' => $kategoriSedang,
-            'kategoriBerat' => $kategoriBerat,
-            'trendData' => json_encode($trendData),
-            'topLayanan' => $topLayanan,
-            'statusBaru' => $statusBaru,
+            'kategoriBerat'  => $kategoriBerat,
+            'statusBaru'     => $statusBaru,
             'statusDiproses' => $statusDiproses,
-            'statusSelesai' => $statusSelesai,
+            'statusSelesai'  => $statusSelesai,
+            'trendData'      => json_encode($trendData),
         ]);
     }
 }

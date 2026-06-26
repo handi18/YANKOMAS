@@ -9,6 +9,8 @@ class LayananSeeder extends Seeder
 {
     public function run(): void
     {
+        Layanan::truncate();
+        
         $layanan = [
             'Paspor Baru',
             'Paspor Penggantian',

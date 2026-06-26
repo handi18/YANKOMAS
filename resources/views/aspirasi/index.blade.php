@@ -34,7 +34,7 @@
                     <select name="jenis" class="form-select form-select-sm">
                         <option value="">Semua Jenis</option>
                         <option value="saran" {{ request('jenis') === 'saran' ? 'selected' : '' }}>Saran</option>
-                        <option value="masukan" {{ request('jenis') === 'masukan' ? 'selected' : '' }}>Masukan</option>
+                        <option value="informasi" {{ request('jenis') === 'informasi' ? 'selected' : '' }}>Informasi</option>
                         <option value="pengaduan" {{ request('jenis') === 'pengaduan' ? 'selected' : '' }}>Pengaduan</option>
                     </select>
                 </div>

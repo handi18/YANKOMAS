@@ -37,19 +37,7 @@
         .filter-info strong {
             color: #003366;
         }
-        .summary {
-            background-color: #e8f4f8;
-            padding: 10px 15px;
-            margin-bottom: 15px;
-            border-radius: 3px;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-        }
-        .summary-item {
-            text-align: center;
-            border-right: 1px solid #003366;
-        }
+
         .summary-item:last-child {
             border-right: none;
         }
@@ -101,7 +89,7 @@
 <body>
     <div class="header">
         <h1>SIMASPIRASI IMIGRASI</h1>
-        <p>Sistem Informasi Saran, Masukan, dan Pengaduan Internal</p>
+        <p>Sistem Informasi Saran, Informasi, dan Pengaduan Internal</p>
         <p>Kantor Imigrasi Kelas I TPI Kota Bandung</p>
     </div>
 
@@ -110,39 +98,43 @@
 
     </div>
 
-    <div class="summary">
-        <div class="summary-item">
-            <div class="value"><?php echo e($summary['total']); ?></div>
-            <div class="label">Total</div>
-        </div>
-        <div class="summary-item">
-            <div class="value"><?php echo e($summary['saran']); ?></div>
-            <div class="label">Saran</div>
-        </div>
-        <div class="summary-item">
-            <div class="value"><?php echo e($summary['masukan']); ?></div>
-            <div class="label">Masukan</div>
-        </div>
-        <div class="summary-item">
-            <div class="value"><?php echo e($summary['pengaduan']); ?></div>
-            <div class="label">Pengaduan</div>
-        </div>
-    </div>
-
-    <div class="summary">
-        <div class="summary-item">
-            <div class="value"><?php echo e($summary['ringan']); ?></div>
-            <div class="label">Ringan</div>
-        </div>
-        <div class="summary-item">
-            <div class="value"><?php echo e($summary['sedang']); ?></div>
-            <div class="label">Sedang</div>
-        </div>
-        <div class="summary-item">
-            <div class="value"><?php echo e($summary['berat']); ?></div>
-            <div class="label">Berat</div>
-        </div>
-    </div>
+    <table style="width: 100%; background-color: #e8f4f8; margin-bottom: 15px; border-collapse: collapse;">
+    <tr style="border-bottom: 1px solid #003366;">
+        <td style="text-align: center; padding: 10px; border-right: 1px solid #003366;">
+            <div style="font-size: 14px; font-weight: bold; color: #003366;"><?php echo e($summary['total']); ?></div>
+            <div style="font-size: 10px; color: #666;">Total</div>
+        </td>
+        <td style="text-align: center; padding: 10px; border-right: 1px solid #003366;">
+            <div style="font-size: 14px; font-weight: bold; color: #003366;"><?php echo e($summary['saran']); ?></div>
+            <div style="font-size: 10px; color: #666;">Saran</div>
+        </td>
+        <td style="text-align: center; padding: 10px; border-right: 1px solid #003366;">
+            <div style="font-size: 14px; font-weight: bold; color: #003366;"><?php echo e($summary['informasi']); ?></div>
+            <div style="font-size: 10px; color: #666;">Informasi</div>
+        </td>
+        <td style="text-align: center; padding: 10px;">
+            <div style="font-size: 14px; font-weight: bold; color: #003366;"><?php echo e($summary['pengaduan']); ?></div>
+            <div style="font-size: 10px; color: #666;">Pengaduan</div>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; padding: 10px; border-right: 1px solid #003366;">
+            <div style="font-size: 11px; color: #999;">Kategori Pengaduan</div>
+        </td>
+        <td style="text-align: center; padding: 10px; border-right: 1px solid #003366;">
+            <div style="font-size: 14px; font-weight: bold; color: #003366;"><?php echo e($summary['ringan']); ?></div>
+            <div style="font-size: 10px; color: #666;">Ringan</div>
+        </td>
+        <td style="text-align: center; padding: 10px; border-right: 1px solid #003366;">
+            <div style="font-size: 14px; font-weight: bold; color: #003366;"><?php echo e($summary['sedang']); ?></div>
+            <div style="font-size: 10px; color: #666;">Sedang</div>
+        </td>
+        <td style="text-align: center; padding: 10px;">
+            <div style="font-size: 14px; font-weight: bold; color: #003366;"><?php echo e($summary['berat']); ?></div>
+            <div style="font-size: 10px; color: #666;">Berat</div>
+        </td>
+    </tr>
+</table>
 
     <table>
         <thead>

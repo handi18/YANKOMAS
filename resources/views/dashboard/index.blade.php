@@ -3,32 +3,47 @@
 @section('title', 'Dashboard')
 
 @section('content')
+{{-- Stat Cards SIP --}}
 <div class="row mb-4">
     <div class="col-md-3">
         <div class="stat-card today">
-            <h5><i class="fas fa-calendar-day"></i> Hari Ini</h5>
-            <div class="value">{{ $today }}</div>
+            <h5><i class="fas fa-envelope"></i> Total SIP</h5>
+            <div class="value">{{ $sipTotal }}</div>
         </div>
     </div>
     <div class="col-md-3">
         <div class="stat-card week">
-            <h5><i class="fas fa-calendar-week"></i> Minggu Ini</h5>
-            <div class="value">{{ $thisWeek }}</div>
+            <h5><i class="fas fa-lightbulb"></i> Saran</h5>
+            <div class="value">{{ $Saran }}</div>
         </div>
     </div>
     <div class="col-md-3">
         <div class="stat-card month">
-            <h5><i class="fas fa-calendar-alt"></i> Bulan Ini</h5>
-            <div class="value">{{ $thisMonth }}</div>
+            <h5><i class="fas fa-info-circle"></i> Informasi</h5>
+            <div class="value">{{ $Informasi }}</div>
         </div>
     </div>
     <div class="col-md-3">
         <div class="stat-card year">
-            <h5><i class="fas fa-calendar"></i> Tahun Ini</h5>
-            <div class="value">{{ $thisYear }}</div>
+            <h5><i class="fas fa-exclamation-circle"></i> Pengaduan</h5>
+            <div class="value">{{ $Pengaduan }}</div>
         </div>
     </div>
-</div>
+    
+    {{-- Filter di bawah card --}}
+    <div class="row mb-3">  
+        <div class="col-12 d-flex align-items-center gap-2">
+                <form method="GET" action="{{ route('dashboard') }}">
+                    <select name="range" class="form-select form-select-sm" style="width: auto;" onchange="this.form.submit()">
+                        <option value="hari_ini"   {{ request('range') == 'hari_ini'   ? 'selected' : '' }}>Hari Ini</option>
+                        <option value="minggu_ini" {{ request('range') == 'minggu_ini' ? 'selected' : '' }}>Minggu Ini</option>
+                        <option value="bulan_ini"  {{ request('range') == 'bulan_ini'  ? 'selected' : '' }}>Bulan Ini</option>
+                        <option value="tahun_ini"  {{ request('range') == 'tahun_ini'  ? 'selected' : '' }}>Tahun Ini</option>
+                        <option value="semua"      {{ request('range', 'semua') == 'semua' ? 'selected' : '' }}>Semua</option>
+                    </select>
+                </form>
+            </div>
+        </div>
 
 <div class="row mb-4">
     <div class="col-md-5">
@@ -58,7 +73,7 @@
 
     <div class="col-md-7">
         <div class="card h-100"> <div class="card-header card-header-custom">
-                <h5 class="mb-0"><i class="fas fa-line-chart"></i> Tren Aspirasi ({{ now()->format('F Y') }})</h5>
+                <h5 class="mb-0"><i class="fas fa-line-chart"></i> Tren Aspirasi ({{ now()->translatedFormat('F Y') }})</h5>
             </div>
             <div class="card-body d-flex flex-column justify-content-center">
                 <div style="height: 570px; position: relative;">
@@ -69,35 +84,27 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header card-header-custom">
-                <h5 class="mb-0"><i class="fas fa-trophy"></i> Layanan Top 5</h5>
-            </div>
-            <div class="card-body">
-                <canvas id="layananChart"></canvas>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
+<div class="row justify-content-center">
+    <div class="col-md-8"> 
         <div class="card">
             <div class="card-header card-header-custom">
                 <h5 class="mb-0"><i class="fas fa-clock"></i> Status Aspirasi</h5>
             </div>
             <div class="card-body">
-                <div class="row text-center">
-                    <div class="col-md-4">
-                        <h3 class="text-primary">{{ $statusBaru }}</h3>
-                        <p class="text-muted">Baru</p>
-                    </div>
-                    <div class="col-md-4">
-                        <h3 class="text-warning">{{ $statusDiproses }}</h3>
-                        <p class="text-muted">Diproses</p>
-                    </div>
-                    <div class="col-md-4">
-                        <h3 class="text-success">{{ $statusSelesai }}</h3>
-                        <p class="text-muted">Selesai</p>
+                <div class="d-flex justify-content-center">
+                    <div class="row text-center w-100" style="max-width: 500px;"> 
+                        <div class="col-4">
+                            <h3 class="text-primary">{{ $statusBaru }}</h3>
+                            <p class="text-muted mb-0">Baru</p>
+                        </div>
+                        <div class="col-4">
+                            <h3 class="text-warning">{{ $statusDiproses }}</h3>
+                            <p class="text-muted mb-0">Diproses</p>
+                        </div>
+                        <div class="col-4">
+                            <h3 class="text-success">{{ $statusSelesai }}</h3>
+                            <p class="text-muted mb-0">Selesai</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -113,9 +120,9 @@
     new Chart(jenisCtx, {
         type: 'doughnut',
         data: {
-            labels: ['Saran', 'Masukan', 'Pengaduan'],
+            labels: ['Saran', 'Informasi', 'Pengaduan'],
             datasets: [{
-                data: [{{ $jenisSaran }}, {{ $jenisMasukan }}, {{ $jenisPengaduan }}],
+                data: [{{ $jenisSaran }}, {{ $Informasi }}, {{ $jenisPengaduan }}],
                 backgroundColor: [
                     'rgba(75, 192, 192, 0.8)',
                     'rgba(54, 162, 235, 0.8)',
@@ -201,35 +208,5 @@
     });
 
     // Top Layanan Chart
-    const layananLabels = {!! json_encode($topLayanan->pluck('nama_layanan')->toArray()) !!};
-    const layananData = {!! json_encode($topLayanan->pluck('aspirasi_count')->toArray()) !!};
-    const layananCtx = document.getElementById('layananChart').getContext('2d');
-    new Chart(layananCtx, {
-        type: 'horizontalBar',
-        data: {
-            labels: layananLabels,
-            datasets: [{
-                label: 'Jumlah Aspirasi',
-                data: layananData,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.8)',
-                    'rgba(54, 162, 235, 0.8)',
-                    'rgba(255, 206, 86, 0.8)',
-                    'rgba(75, 192, 192, 0.8)',
-                    'rgba(153, 102, 255, 0.8)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            indexAxis: 'y',
-            responsive: true,
-            scales: {
-                x: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
 </script>
 @endpush

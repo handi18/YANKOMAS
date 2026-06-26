@@ -75,7 +75,7 @@ class ReportController extends Controller
             'summary' => [
                 'total' => $aspirations->count(),
                 'saran' => $aspirations->where('jenis', 'saran')->count(),
-                'masukan' => $aspirations->where('jenis', 'masukan')->count(),
+                'informasi' => $aspirations->where('jenis', 'informasi')->count(),
                 'pengaduan' => $aspirations->where('jenis', 'pengaduan')->count(),
                 'ringan' => $aspirations->where('kategori', 'ringan')->count(),
                 'sedang' => $aspirations->where('kategori', 'sedang')->count(),
