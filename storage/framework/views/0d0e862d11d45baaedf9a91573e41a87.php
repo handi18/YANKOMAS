@@ -22,15 +22,12 @@ if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>" 
-                           id="tanggal_kejadian" name="tanggal_kejadian" value="<?php echo e(old('tanggal_kejadian', now()->format('Y-m-d'))); ?>" required>
+unset($__errorArgs, $__bag); ?>" id="tanggal_kejadian" name="tanggal_kejadian" value="<?php echo e(old('tanggal_kejadian', now()->format('Y-m-d'))); ?>" required>
                     <?php $__errorArgs = ['tanggal_kejadian'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                        <div class="invalid-feedback"><?php echo e($message); ?></div>
-                    <?php unset($message);
+$message = $__bag->first($__errorArgs[0]); ?> <div class="invalid-feedback"><?php echo e($message); ?></div> <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
@@ -44,15 +41,12 @@ if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>" 
-                           id="jam_kejadian" name="jam_kejadian" value="<?php echo e(old('jam_kejadian', now()->format('H:i'))); ?>" required>
+unset($__errorArgs, $__bag); ?>" id="jam_kejadian" name="jam_kejadian" value="<?php echo e(old('jam_kejadian', now()->format('H:i'))); ?>" required>
                     <?php $__errorArgs = ['jam_kejadian'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                        <div class="invalid-feedback"><?php echo e($message); ?></div>
-                    <?php unset($message);
+$message = $__bag->first($__errorArgs[0]); ?> <div class="invalid-feedback"><?php echo e($message); ?></div> <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
@@ -71,17 +65,15 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>" id="jenis" name="jenis" required>
                         <option value="">-- Pilih Jenis --</option>
-                        <option value="saran" <?php echo e(old('jenis') === 'saran' ? 'selected' : ''); ?>>Saran</option>
-                        <option value="informasi" <?php echo e(old('jenis') === 'informasi' ? 'selected' : ''); ?>>Informasi</option>
-                        <option value="pengaduan" <?php echo e(old('jenis') === 'pengaduan' ? 'selected' : ''); ?>>Pengaduan</option>
+                        <?php $__currentLoopData = ['saran' => 'Saran', 'informasi' => 'Informasi', 'pengaduan' => 'Pengaduan']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $val => $lbl): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($val); ?>" <?php echo e(old('jenis') === $val ? 'selected' : ''); ?>><?php echo e($lbl); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                     <?php $__errorArgs = ['jenis'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                        <div class="invalid-feedback"><?php echo e($message); ?></div>
-                    <?php unset($message);
+$message = $__bag->first($__errorArgs[0]); ?> <div class="invalid-feedback"><?php echo e($message); ?></div> <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
@@ -97,17 +89,15 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>" id="kategori" name="kategori">
                         <option value="">-- Pilih Kategori --</option>
-                        <option value="ringan" <?php echo e(old('kategori') === 'ringan' ? 'selected' : ''); ?>>Ringan</option>
-                        <option value="sedang" <?php echo e(old('kategori') === 'sedang' ? 'selected' : ''); ?>>Sedang</option>
-                        <option value="berat" <?php echo e(old('kategori') === 'berat' ? 'selected' : ''); ?>>Berat</option>
+                        <?php $__currentLoopData = ['ringan' => 'Ringan', 'sedang' => 'Sedang', 'berat' => 'Berat']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $val => $lbl): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($val); ?>" <?php echo e(old('kategori') === $val ? 'selected' : ''); ?>><?php echo e($lbl); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                     <?php $__errorArgs = ['kategori'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                        <div class="invalid-feedback"><?php echo e($message); ?></div>
-                    <?php unset($message);
+$message = $__bag->first($__errorArgs[0]); ?> <div class="invalid-feedback"><?php echo e($message); ?></div> <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
@@ -127,19 +117,14 @@ endif;
 unset($__errorArgs, $__bag); ?>" id="layanan_id" name="layanan_id" required>
                         <option value="">-- Pilih Layanan --</option>
                         <?php $__currentLoopData = $layanan; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($item->id); ?>" <?php echo e(old('layanan_id') == $item->id ? 'selected' : ''); ?>>
-                                <?php echo e($item->nama_layanan); ?>
-
-                            </option>
+                            <option value="<?php echo e($item->id); ?>" <?php echo e(old('layanan_id') == $item->id ? 'selected' : ''); ?>><?php echo e($item->nama_layanan); ?></option>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                     <?php $__errorArgs = ['layanan_id'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                        <div class="invalid-feedback"><?php echo e($message); ?></div>
-                    <?php unset($message);
+$message = $__bag->first($__errorArgs[0]); ?> <div class="invalid-feedback"><?php echo e($message); ?></div> <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
@@ -155,17 +140,15 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>" id="media" name="media" required>
                         <option value="">-- Pilih Media --</option>
-                        <option value="Tatap Muka" <?php echo e(old('media', 'Tatap Muka') === 'Tatap Muka' ? 'selected' : ''); ?>>Tatap Muka</option>
-                        <option value="Telepon" <?php echo e(old('media') === 'Telepon' ? 'selected' : ''); ?>>Telepon</option>
-                        <option value="WhatsApp" <?php echo e(old('media') === 'WhatsApp' ? 'selected' : ''); ?>>WhatsApp</option>
+                        <?php $__currentLoopData = ['Tatap Muka', 'Telepon', 'WhatsApp']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $med): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($med); ?>" <?php echo e(old('media', 'Tatap Muka') === $med ? 'selected' : ''); ?>><?php echo e($med); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                     <?php $__errorArgs = ['media'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                        <div class="invalid-feedback"><?php echo e($message); ?></div>
-                    <?php unset($message);
+$message = $__bag->first($__errorArgs[0]); ?> <div class="invalid-feedback"><?php echo e($message); ?></div> <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
@@ -181,37 +164,28 @@ if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>" 
-                          id="isi_aspirasi" name="isi_aspirasi" rows="6" required><?php echo e(old('isi_aspirasi')); ?></textarea>
+unset($__errorArgs, $__bag); ?>" id="isi_aspirasi" name="isi_aspirasi" rows="6" required><?php echo e(old('isi_aspirasi')); ?></textarea>
                 <small class="text-muted">Minimal 10 karakter</small>
                 <?php $__errorArgs = ['isi_aspirasi'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                    <div class="invalid-feedback"><?php echo e($message); ?></div>
-                <?php unset($message);
+$message = $__bag->first($__errorArgs[0]); ?> <div class="invalid-feedback"><?php echo e($message); ?></div> <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
             </div>
 
             <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-primary-custom btn-primary">
-                    <i class="fas fa-save"></i> Simpan
-                </button>
-                <a href="<?php echo e(route('aspirasi.index')); ?>" class="btn btn-secondary">
-                    <i class="fas fa-times"></i> Batal
-                </a>
+                <button type="submit" class="btn btn-primary-custom btn-primary"><i class="fas fa-save"></i> Simpan</button>
+                <a href="<?php echo e(route('aspirasi.index')); ?>" class="btn btn-secondary"><i class="fas fa-times"></i> Batal</a>
             </div>
         </form>
     </div>
 </div>
 
 <div class="card mt-4">
-    <div class="card-header card-header-custom">
-        <h5 class="mb-0">Panduan Pengisian</h5>
-    </div>
+    <div class="card-header card-header-custom"><h5 class="mb-0">Panduan Pengisian</h5></div>
     <div class="card-body">
         <h6>Kategori Aspirasi:</h6>
         <ul>
@@ -222,30 +196,20 @@ unset($__errorArgs, $__bag); ?>
     </div>
 </div>
 
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const jenisSelect = document.getElementById('jenis');
-        const kategoriSelect = document.getElementById('kategori');
+        const jenis = document.getElementById('jenis');
+        const kategori = document.getElementById('kategori');
 
-        function handleKategoriState() {
-            if (jenisSelect.value === 'pengaduan') {
-                // Aktifkan kategori dan buat menjadi required kembali
-                kategoriSelect.removeAttribute('disabled');
-                kategoriSelect.setAttribute('required', 'required');
-            } else {
-                // Kunci kategori, hapus status required, dan kosongkan pilihannya
-                kategoriSelect.setAttribute('disabled', 'disabled');
-                kategoriSelect.removeAttribute('required');
-                kategoriSelect.value = '';
-            }
+        function toggleKategori() {
+            const isPengaduan = jenis.value === 'pengaduan';
+            kategori.disabled = !isPengaduan;
+            kategori.required = isPengaduan;
+            if (!isPengaduan) kategori.value = '';
         }
 
-        // Jalankan saat pertama kali halaman dimuat (menjaga data lama jika validasi error)
-        handleKategoriState();
-
-        // Jalankan setiap kali ada perubahan pada dropdown Jenis Aspirasi
-        jenisSelect.addEventListener('change', handleKategoriState);
+        toggleKategori();
+        jenis.addEventListener('change', toggleKategori);
     });
 </script>
 <?php $__env->stopSection(); ?>

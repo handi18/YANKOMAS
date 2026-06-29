@@ -17,6 +17,10 @@ Route::middleware(['auth'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // Profile
+    Route::get('/profile', [AdminController::class, 'profile'])->name('profile.edit');
+    Route::put('/profile', [AdminController::class, 'updateProfile'])->name('profile.update');
+
     // Aspirasi routes
     Route::resource('aspirasi', AsirasiController::class);
     Route::post('aspirasi/{aspirasi}/update-status', [AsirasiController::class, 'updateStatus'])->name('aspirasi.update-status');

@@ -36,7 +36,6 @@ class AdminController extends Controller
 
         User::create($validated);
 
-        // Log activity
         ActivityLog::create([
             'user_id' => Auth::id(),
             'aktivitas' => 'Menambah user baru: ' . $validated['username'],
@@ -62,7 +61,6 @@ class AdminController extends Controller
 
         $user->update($validated);
 
-        // Log activity
         ActivityLog::create([
             'user_id' => Auth::id(),
             'aktivitas' => 'Mengubah data user: ' . $user->username,
@@ -77,7 +75,6 @@ class AdminController extends Controller
             'password' => Hash::make('password'),
         ]);
 
-        // Log activity
         ActivityLog::create([
             'user_id' => Auth::id(),
             'aktivitas' => 'Reset password user: ' . $user->username,
@@ -112,12 +109,52 @@ class AdminController extends Controller
         $username = $user->username;
         $user->delete();
 
-        // Log activity
         ActivityLog::create([
             'user_id' => Auth::id(),
             'aktivitas' => 'Menghapus user: ' . $username,
         ]);
 
         return back()->with('success', 'User berhasil dihapus.');
+    }
+
+    // ==========================================
+    // FITUR PROFIL ADMIN
+    // ==========================================
+
+    public function profile()
+    {
+        return view('admin.profile', [
+            'user' => Auth::user()
+        ]);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        // Validasi input (nip & username tidak bisa diubah mandiri demi alasan keamanan data kantor)
+        $validated = $request->validate([
+            'nama' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'unique:users,email,' . $user->id],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'], // nullable artinya opsional ganti password
+        ]);
+
+        // Cek jika password mau diganti
+        if (!empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']); // hapus dari array agar password lama tidak tertimpa kosong
+        }
+
+        $user->update($validated);
+
+        // Catat aktivitas ganti data profil ke dalam log
+        ActivityLog::create([
+            'user_id' => $user->id,
+            'aktivitas' => 'Memperbarui data profil mandiri',
+        ]);
+
+        return back()->with('success', 'Profil Anda berhasil diperbarui.');
     }
 }

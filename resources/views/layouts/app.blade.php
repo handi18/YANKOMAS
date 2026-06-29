@@ -158,8 +158,8 @@
                             <i class="fas fa-user-circle"></i> {{ Auth::user()->nama }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Profil</a></li>
-                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profil</a></li>
+                            <li><hr class="dropdown-divider"></li>  
                             <li>
                                 <form action="{{ route('logout') }}" method="POST" style="display:inline;">
                                     @csrf
@@ -246,5 +246,22 @@
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2.0/dist/js/admin心理.min.js"></script>
     
     @stack('js')
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cari semua alert (sukses, error, maupun validasi) yang muncul di main content
+            const alerts = document.querySelectorAll('.main-content-area .alert');
+            
+            alerts.forEach(function(alert) {
+                setTimeout(function() {
+                    // Trigger bawaan Bootstrap 5 untuk menutup alert dengan efek animasi close
+                    const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+                    if (bsAlert) {
+                        bsAlert.close();
+                    }
+                }, 3000); // 3000 milidetik = 3 detik
+            });
+        });
+    </script>
 </body>
 </html>
