@@ -4,17 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title') - SIMASPIRASI IMIGRASI</title>
-    
-    <!-- Bootstrap 5 CSS -->
+
+    <link rel="icon" type="image/png" href="{{ asset('assets/img/logo_imigrasi_RI.png') }}">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    <!-- AdminLTE CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2.0/dist/css/adminlte.min.css">
     
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
     
     <style>
@@ -142,11 +140,13 @@
     @stack('css')
 </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container-fluid">
-            <a class="navbar-brand text-white font-weight-bold" href="#">
-                <i class="fas fa-file-alt"></i> SIMASPIRASI IMIGRASI
+            <a class="navbar-brand text-white font-weight-bold d-flex align-items-center" href="#">
+                <img src="{{ asset('assets/img/logo_imigrasi_Bandung.PNG') }}" 
+                     style="width: 32px; height: 32px; object-fit: contain; flex-shrink: 0;"
+                     class="me-2">
+                SIMASPIRASI IMIGRASI
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -158,7 +158,7 @@
                             @if(Auth::user()->foto)
                                 <img src="{{ asset('storage/' . Auth::user()->foto) }}" class="rounded-circle me-2" style="width: 28px; height: 28px; object-fit: cover; border: 1px solid rgba(255,255,255,0.5);">
                             @else
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode(substr(Auth::user()->nama, 0, 2)) }}&background=0066cc&color=fff&size=28&bold=true" class="rounded-circle me-2" style="width: 28px; height: 28px; object-fit: cover;">
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode(substr(Auth::user()->nama, 0, 1)) }}&background=0066cc&color=fff&size=28&bold=true" class="rounded-circle me-2" style="width: 28px; height: 28px; object-fit: cover;">
                             @endif
                             {{ Auth::user()->nama }}
                         </a>
@@ -180,7 +180,6 @@
 
     <div class="main-layout">
         
-        <!-- Sidebar (Kiri) -->
         <nav class="sidebar-custom">
             <ul class="nav flex-column">
                 <li class="nav-item">
@@ -195,7 +194,7 @@
                 </li>
                 
                 @if(Auth::user()->isAdmin())
-                    <hr class="my-3 border-light">
+                    <hr class="my-3 border-light opacity-25">
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('admin.users*') ? 'active' : '' }}" href="{{ route('admin.users') }}">
                             <i class="fas fa-users"></i> Kelola Petugas
@@ -210,7 +209,6 @@
             </ul>
         </nav>
 
-        <!-- Main Content (Kanan) -->
         <main class="main-content-area">
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -238,33 +236,26 @@
                 </div>
             @endif
 
-            <!-- Konten halaman index tabel disuntikkan di sini -->
             @yield('content')
         </main>
 
-    </div> <!-- Penutup .main-layout -->
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </div> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- AdminLTE JS -->
-    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2.0/dist/js/admin心理.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2.0/dist/js/adminlte.min.js"></script>
     
     @stack('js')
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Cari semua alert (sukses, error, maupun validasi) yang muncul di main content
             const alerts = document.querySelectorAll('.main-content-area .alert');
             
             alerts.forEach(function(alert) {
                 setTimeout(function() {
-                    // Trigger bawaan Bootstrap 5 untuk menutup alert dengan efek animasi close
                     const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
                     if (bsAlert) {
                         bsAlert.close();
                     }
-                }, 3000); // 3000 milidetik = 3 detik
+                }, 3000);
             });
         });
     </script>
