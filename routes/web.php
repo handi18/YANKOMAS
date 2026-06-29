@@ -17,9 +17,10 @@ Route::middleware(['auth'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Profile
+    // Fitur Profil Mandiri
     Route::get('/profile', [AdminController::class, 'profile'])->name('profile.edit');
     Route::put('/profile', [AdminController::class, 'updateProfile'])->name('profile.update');
+    Route::delete('/profile/foto', [AdminController::class, 'deleteFoto'])->name('profile.delete-foto');
 
     // Aspirasi routes
     Route::resource('aspirasi', AsirasiController::class);

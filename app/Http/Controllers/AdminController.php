@@ -7,6 +7,7 @@ use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -114,11 +115,11 @@ class AdminController extends Controller
             'aktivitas' => 'Menghapus user: ' . $username,
         ]);
 
-        return back()->with('success', 'User berhasil dihapus.');
+        return back()->with('success', 'User berhasil deleted.');
     }
 
     // ==========================================
-    // FITUR PROFIL ADMIN
+    // FITUR PROFIL MANDIRI + FOTO
     // ==========================================
 
     public function profile()
@@ -130,31 +131,60 @@ class AdminController extends Controller
 
     public function updateProfile(Request $request)
     {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
+        $user = User::findOrFail(Auth::id());
 
-        // Validasi input (nip & username tidak bisa diubah mandiri demi alasan keamanan data kantor)
         $validated = $request->validate([
             'nama' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email,' . $user->id],
-            'password' => ['nullable', 'string', 'min:8', 'confirmed'], // nullable artinya opsional ganti password
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
         ]);
 
-        // Cek jika password mau diganti
+        if ($request->hasFile('foto')) {
+            if ($user->foto && Storage::disk('public')->exists($user->foto)) {
+                Storage::disk('public')->delete($user->foto);
+            }
+
+            $path = $request->file('foto')->store('avatars', 'public');
+            $validated['foto'] = $path;
+        }
+
         if (!empty($validated['password'])) {
             $validated['password'] = Hash::make($validated['password']);
         } else {
-            unset($validated['password']); // hapus dari array agar password lama tidak tertimpa kosong
+            unset($validated['password']);
         }
 
-        $user->update($validated);
+        $user->fill($validated);
+        $user->save();
 
-        // Catat aktivitas ganti data profil ke dalam log
         ActivityLog::create([
             'user_id' => $user->id,
-            'aktivitas' => 'Memperbarui data profil mandiri',
+            'aktivitas' => 'Memperbarui data profil dan foto mandiri',
         ]);
 
         return back()->with('success', 'Profil Anda berhasil diperbarui.');
+    }
+
+    public function deleteFoto()
+    {
+        $user = User::findOrFail(Auth::id());
+
+        if ($user->foto) {
+            if (Storage::disk('public')->exists($user->foto)) {
+                Storage::disk('public')->delete($user->foto);
+            }
+
+            $user->update(['foto' => null]);
+
+            ActivityLog::create([
+                'user_id' => $user->id,
+                'aktivitas' => 'Menghapus foto profil',
+            ]);
+
+            return back()->with('success', 'Foto profil berhasil dihapus.');
+        }
+
+        return back()->with('error', 'Anda tidak memiliki foto profil untuk dihapus.');
     }
 }

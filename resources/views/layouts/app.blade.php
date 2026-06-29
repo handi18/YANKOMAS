@@ -154,12 +154,17 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-circle"></i> {{ Auth::user()->nama }}
+                        <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                            @if(Auth::user()->foto)
+                                <img src="{{ asset('storage/' . Auth::user()->foto) }}" class="rounded-circle me-2" style="width: 28px; height: 28px; object-fit: cover; border: 1px solid rgba(255,255,255,0.5);">
+                            @else
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode(substr(Auth::user()->nama, 0, 2)) }}&background=0066cc&color=fff&size=28&bold=true" class="rounded-circle me-2" style="width: 28px; height: 28px; object-fit: cover;">
+                            @endif
+                            {{ Auth::user()->nama }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profil</a></li>
-                            <li><hr class="dropdown-divider"></li>  
+                            <li><a class="dropdown-item {{ request()->routeIs('profile.edit') ? 'active' : '' }}" href="{{ route('profile.edit') }}">Profil</a></li>
+                            <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form action="{{ route('logout') }}" method="POST" style="display:inline;">
                                     @csrf

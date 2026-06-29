@@ -154,13 +154,18 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user-circle"></i> <?php echo e(Auth::user()->nama); ?>
+                        <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                            <?php if(Auth::user()->foto): ?>
+                                <img src="<?php echo e(asset('storage/' . Auth::user()->foto)); ?>" class="rounded-circle me-2" style="width: 28px; height: 28px; object-fit: cover; border: 1px solid rgba(255,255,255,0.5);">
+                            <?php else: ?>
+                                <img src="https://ui-avatars.com/api/?name=<?php echo e(urlencode(substr(Auth::user()->nama, 0, 2))); ?>&background=0066cc&color=fff&size=28&bold=true" class="rounded-circle me-2" style="width: 28px; height: 28px; object-fit: cover;">
+                            <?php endif; ?>
+                            <?php echo e(Auth::user()->nama); ?>
 
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="<?php echo e(route('profile.edit')); ?>">Profil</a></li>
-                            <li><hr class="dropdown-divider"></li>  
+                            <li><a class="dropdown-item <?php echo e(request()->routeIs('profile.edit') ? 'active' : ''); ?>" href="<?php echo e(route('profile.edit')); ?>">Profil</a></li>
+                            <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form action="<?php echo e(route('logout')); ?>" method="POST" style="display:inline;">
                                     <?php echo csrf_field(); ?>
