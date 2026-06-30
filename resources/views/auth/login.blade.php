@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - SIMASPIRASI IMIGRASI</title>
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -85,7 +85,12 @@
     <div class="login-container">
         <div class="login-card">
             <div class="login-header">
-                <i class="fas fa-file-alt" style="font-size: 40px; color: #003366; margin-bottom: 15px;"></i>
+                <div class="d-flex justify-content-center align-items-center gap-3 mb-3">
+                    <img src="{{ asset('assets/img/logo_imigrasi_RI.png') }}" 
+                         style="width: 50px; height: 50px; object-fit: contain;">
+                    <img src="{{ asset('assets/img/logo_imigrasi_Bandung.png') }}" 
+                         style="width: 50px; height: 50px; object-fit: contain;">
+                </div>
                 <h1>SIMASPIRASI IMIGRASI</h1>
                 <p>Sistem Informasi Saran, Masukan, dan Pengaduan Internal</p>
             </div>
@@ -119,17 +124,9 @@
             </form>
 
             <hr>
-            
-            <div class="alert alert-info" role="alert">
-                <strong>Demo Account:</strong>
-                <ul class="mb-0 mt-2" style="font-size: 13px;">
-                    <li><strong>Admin:</strong> admin / password</li>
-                    <li><strong>Petugas:</strong> budi.santoso / password</li>
-                </ul>
-            </div>
         </div>
     </div>
-
+            
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

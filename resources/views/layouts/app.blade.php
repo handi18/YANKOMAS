@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title') - SIMASPIRASI IMIGRASI</title>
 
-    <link rel="icon" type="image/png" href="{{ asset('assets/img/logo_imigrasi_RI.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets/img/logo_imigrasi_Bandung.png') }}">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
@@ -87,7 +87,7 @@
         }
         
         .card-header-custom {
-            background-color: var(--color-primary);
+            background: linear-gradient(135deg, #1c2d42 40%, #1c2d42 40%, #1041f2ff 100%);
             color: white;
             font-weight: 600;
         }
@@ -109,20 +109,11 @@
             margin-bottom: 15px;
         }
         
-        .stat-card.today {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        
-        .stat-card.week {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-        
-        .stat-card.month {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-        
+        .stat-card.today,
+        .stat-card.week,
+        .stat-card.month, 
         .stat-card.year {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            background: linear-gradient(135deg, #1c2d42 40%, #1c2d42 40%, #1041f2ff 100%);
         }
         
         .stat-card h5 {
@@ -142,12 +133,15 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container-fluid">
-            <a class="navbar-brand text-white font-weight-bold d-flex align-items-center" href="#">
-                <img src="{{ asset('assets/img/logo_imigrasi_Bandung.PNG') }}" 
+                <img src="{{ asset('assets/img/logo_imigrasi_RI.png') }}" 
                      style="width: 32px; height: 32px; object-fit: contain; flex-shrink: 0;"
                      class="me-2">
-                SIMASPIRASI IMIGRASI
-            </a>
+                <img src="{{ asset('assets/img/logo_imigrasi_Bandung.png') }}" 
+                     style="width: 32px; height: 32px; object-fit: contain; flex-shrink: 0;"
+                     class="me-2">
+                <span class="navbar-brand text-white font-weight-bold mb-0">
+                    SIMASPIRASI IMIGRASI
+                </span>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
