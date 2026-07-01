@@ -10,6 +10,9 @@ class Aspirasi extends Model
     use HasFactory;
 
     protected $table = 'aspirasi';
+    protected $primaryKey = 'id';
+    public $incrementing = true;
+    protected $keyType = 'int';
 
     protected $fillable = [
         'nomor_tiket',

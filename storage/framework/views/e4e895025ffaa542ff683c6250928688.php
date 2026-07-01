@@ -87,7 +87,7 @@
         }
         
         .card-header-custom {
-            background: linear-gradient(135deg, #1c2d42 40%, #1c2d42 40%, #1041f2ff 100%);
+            background: linear-gradient(135deg, #0e3b75ff 40%, #1c2d42 40%, #0c33c2ff 100%);
             color: white;
             font-weight: 600;
         }

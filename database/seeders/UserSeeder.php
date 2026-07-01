@@ -10,6 +10,12 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
+        // Cegah seeder dijalankan di environment production untuk keamanan data
+        if (app()->environment('production')) {
+            echo "UserSeeder tidak dapat dijalankan di environment production.\n";
+            return;
+        }
+
         // 1. Definisikan password default sekali saja untuk menghemat proses hashing di loop
         $defaultPassword = Hash::make('password123'); 
 

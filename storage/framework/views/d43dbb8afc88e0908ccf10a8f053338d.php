@@ -32,7 +32,9 @@
                             <td><?php echo e($user->username); ?></td>
                             <td><?php echo e($user->email); ?></td>
                             <td>
-                                <?php if($user->role === 'admin'): ?>
+                                <?php if($user->role === 'superadmin' || $user->isSuperAdmin()): ?>
+                                    <span class="badge bg-dark">Super Admin</span>
+                                <?php elseif($user->role === 'admin'): ?>
                                     <span class="badge bg-danger">Admin</span>
                                 <?php else: ?>
                                     <span class="badge bg-info">Petugas</span>
@@ -49,6 +51,7 @@
                                     </button>
                                 </form>
                                 <?php if($user->id !== Auth::id()): ?>
+                                    <?php if(!$user->isSuperAdmin()): ?>
                                     <form action="<?php echo e(route('admin.users.delete', $user->id)); ?>" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus?')">
                                         <?php echo csrf_field(); ?>
                                         <?php echo method_field('DELETE'); ?>
@@ -56,6 +59,7 @@
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
+                                    <?php endif; ?>
                                 <?php endif; ?>
                             </td>
                         </tr>
@@ -83,5 +87,4 @@
     }
 </style>
 <?php $__env->stopSection(); ?>
-
 <?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\kuliah\Magang\projek magang\simaspirasi-imigrasi\resources\views/admin/users/index.blade.php ENDPATH**/ ?>

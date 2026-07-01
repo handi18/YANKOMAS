@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 // Auth routes
 Route::get('/', [AuthController::class, 'login'])->name('login');
-Route::post('/login', [AuthController::class, 'authenticate'])->name('authenticate');
+Route::post('/login', [AuthController::class, 'authenticate'])->middleware('throttle:5,1')->name('authenticate');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Protected routes

@@ -13,7 +13,7 @@ class AdminController extends Controller
 {
     public function users()
     {
-        $users = User::paginate(15);
+        $users = User::orderBy('updated_at', 'desc')->paginate(15);
         return view('admin.users.index', ['users' => $users]);
     }
 
@@ -31,6 +31,9 @@ class AdminController extends Controller
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required', 'in:admin,petugas'],
+        ], [
+            'password.min' => 'Password harus minimal :min karakter.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.'
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -47,17 +50,28 @@ class AdminController extends Controller
 
     public function editUser(User $user)
     {
+        if ($user->isSuperAdmin() && !Auth::user()->isSuperAdmin()) {
+            return back()->with('error', 'Akun Super Admin tidak dapat dimodifikasi.');
+        }
+
         return view('admin.users.edit', ['user' => $user]);
     }
 
     public function updateUser(Request $request, User $user)
     {
+        if ($user->isSuperAdmin() && !Auth::user()->isSuperAdmin()) {
+            return back()->with('error', 'Akun Super Admin tidak dapat dimodifikasi.');
+        }
+        if ($request->role === 'super_admin' && !Auth::user()->isSuperAdmin()) {
+            return back()->with('error', 'Hanya Super Admin yang dapat memberikan role Super Admin.');
+        }
+
         $validated = $request->validate([
             'nama' => ['required', 'string', 'max:255'],
             'nip' => ['required', 'string', 'unique:users,nip,' . $user->id],
             'username' => ['required', 'string', 'unique:users,username,' . $user->id],
             'email' => ['required', 'email', 'unique:users,email,' . $user->id],
-            'role' => ['required', 'in:admin,petugas'],
+            'role' => ['required', 'in:admin,petugas,super_admin'],
         ]);
 
         $user->update($validated);
@@ -72,8 +86,14 @@ class AdminController extends Controller
 
     public function resetPassword(User $user)
     {
+        if ($user->isSuperAdmin() && !Auth::user()->isSuperAdmin()) {
+            return back()->with('error', 'Akun Super Admin tidak dapat di-reset passwordnya.');
+        }
+
+        $newPassword = \Illuminate\Support\Str::random(12);
+
         $user->update([
-            'password' => Hash::make('password'),
+            'password' => Hash::make($newPassword),
         ]);
 
         ActivityLog::create([
@@ -81,7 +101,7 @@ class AdminController extends Controller
             'aktivitas' => 'Reset password user: ' . $user->username,
         ]);
 
-        return back()->with('success', 'Password user berhasil direset ke "password".');
+        return back()->with('success', 'Password berhasil direset. Password baru: ' . $newPassword . ' (Harap simpan/berikan ke user, password ini tidak akan ditampilkan lagi)');
     }
 
     public function activityLogs(Request $request)
@@ -107,6 +127,14 @@ class AdminController extends Controller
 
     public function deleteUser(User $user)
     {
+        if ($user->id === Auth::id()) {
+            return back()->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
+        }
+
+        if ($user->isSuperAdmin() && !Auth::user()->isSuperAdmin()) {
+            return back()->with('error', 'Akun Super Admin tidak dapat dihapus.');
+        }
+
         $username = $user->username;
         $user->delete();
 
@@ -138,6 +166,9 @@ class AdminController extends Controller
             'email' => ['required', 'email', 'unique:users,email,' . $user->id],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
+        ], [
+            'password.min' => 'Password baru harus minimal :min karakter.',
+            'password.confirmed' => 'Konfirmasi password baru tidak cocok.'
         ]);
 
         if ($request->hasFile('foto')) {

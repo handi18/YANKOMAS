@@ -109,7 +109,11 @@ unset($__errorArgs, $__bag); ?>
 
             <div class="mb-3">
                 <label for="role" class="form-label">Role *</label>
-                <select class="form-select <?php $__errorArgs = ['role'];
+                <?php if($user->isSuperAdmin()): ?>
+                    <input type="text" class="form-control" value="Super Admin" disabled>
+                    <input type="hidden" name="role" value="super_admin">
+                <?php else: ?>
+                    <select class="form-select <?php $__errorArgs = ['role'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -117,9 +121,10 @@ $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>" id="role" name="role" required>
-                    <option value="admin" <?php echo e(old('role', $user->role) === 'admin' ? 'selected' : ''); ?>>Admin</option>
-                    <option value="petugas" <?php echo e(old('role', $user->role) === 'petugas' ? 'selected' : ''); ?>>Petugas</option>
-                </select>
+                        <option value="admin" <?php echo e(old('role', $user->role) === 'admin' ? 'selected' : ''); ?>>Admin</option>
+                        <option value="petugas" <?php echo e(old('role', $user->role) === 'petugas' ? 'selected' : ''); ?>>Petugas</option>
+                    </select>
+                <?php endif; ?>
                 <?php $__errorArgs = ['role'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :

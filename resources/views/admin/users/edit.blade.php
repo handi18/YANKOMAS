@@ -53,10 +53,15 @@
 
             <div class="mb-3">
                 <label for="role" class="form-label">Role *</label>
-                <select class="form-select @error('role') is-invalid @enderror" id="role" name="role" required>
-                    <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>Admin</option>
-                    <option value="petugas" {{ old('role', $user->role) === 'petugas' ? 'selected' : '' }}>Petugas</option>
-                </select>
+                @if($user->isSuperAdmin())
+                    <input type="text" class="form-control" value="Super Admin" disabled>
+                    <input type="hidden" name="role" value="super_admin">
+                @else
+                    <select class="form-select @error('role') is-invalid @enderror" id="role" name="role" required>
+                        <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>Admin</option>
+                        <option value="petugas" {{ old('role', $user->role) === 'petugas' ? 'selected' : '' }}>Petugas</option>
+                    </select>
+                @endif
                 @error('role')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror

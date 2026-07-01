@@ -15,6 +15,10 @@ class Role
             return redirect('/');
         }
 
+        if (Auth::user()->isSuperAdmin()) {
+        return $next($request);
+        }
+
         if (in_array(Auth::user()->role, $roles)) {
             return $next($request);
         }

@@ -33,17 +33,17 @@
     {{-- Filter di bawah card --}}
     <div class="row mb-3">  
         <div class="col-12 d-flex align-items-center gap-2">
-                <form method="GET" action="{{ route('dashboard') }}">
-                    <select name="range" class="form-select form-select-sm" style="width: auto;" onchange="this.form.submit()">
-                        <option value="hari_ini"   {{ request('range') == 'hari_ini'   ? 'selected' : '' }}>Hari Ini</option>
-                        <option value="minggu_ini" {{ request('range') == 'minggu_ini' ? 'selected' : '' }}>Minggu Ini</option>
-                        <option value="bulan_ini"  {{ request('range') == 'bulan_ini'  ? 'selected' : '' }}>Bulan Ini</option>
-                        <option value="tahun_ini"  {{ request('range') == 'tahun_ini'  ? 'selected' : '' }}>Tahun Ini</option>
-                        <option value="semua"      {{ request('range', 'semua') == 'semua' ? 'selected' : '' }}>Semua</option>
-                    </select>
-                </form>
-            </div>
+            <form method="GET" action="{{ route('dashboard') }}">
+                <select name="range" class="form-select form-select-sm" style="width: auto;" onchange="this.form.submit()">
+                    <option value="hari_ini"   {{ request('range') == 'hari_ini'   ? 'selected' : '' }}>Hari Ini</option>
+                    <option value="minggu_ini" {{ request('range') == 'minggu_ini' ? 'selected' : '' }}>Minggu Ini</option>
+                    <option value="bulan_ini"  {{ request('range') == 'bulan_ini'  ? 'selected' : '' }}>Bulan Ini</option>
+                    <option value="tahun_ini"  {{ request('range') == 'tahun_ini'  ? 'selected' : '' }}>Tahun Ini</option>
+                    <option value="semua"      {{ request('range', 'semua') == 'semua' ? 'selected' : '' }}>Semua</option>
+                </select>
+            </form>
         </div>
+    </div>
 
 <div class="row mb-4">
     <div class="col-md-5">
@@ -120,25 +120,25 @@
     new Chart(jenisCtx, {
         type: 'doughnut',
         data: {
-            labels: ['Saran', 'Informasi', 'Pengaduan'],
+            labels: ['Informasi', 'Saran', 'Pengaduan'],
             datasets: [{
-                data: [{{ $jenisSaran }}, {{ $Informasi }}, {{ $jenisPengaduan }}],
+                data: [{{ $Informasi }}, {{ $jenisSaran }}, {{ $jenisPengaduan }}],
                 backgroundColor: [
-                    'rgba(75, 192, 192, 0.8)',
-                    'rgba(54, 162, 235, 0.8)',
-                    'rgba(255, 99, 132, 0.8)'
+                    'rgba(67, 172, 188, 0.8)',  
+                    'rgba(255, 193, 7, 0.8)',   
+                    'rgba(220, 53, 69, 0.8)'    
                 ],
                 borderColor: [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 99, 132, 1)'
+                    'rgba(23, 162, 184, 1)',    
+                    'rgba(255, 193, 7, 1)',     
+                    'rgba(220, 53, 69, 1)'      
                 ],
-                borderWidth: 1
+                borderWidth: 0.8
             }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false, // Ditambahkan agar mengikuti tinggi wrapper div
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
                     position: 'bottom'
@@ -157,21 +157,21 @@
                 label: 'Jumlah',
                 data: [{{ $kategoriRingan }}, {{ $kategoriSedang }}, {{ $kategoriBerat }}],
                 backgroundColor: [
-                    'rgba(75, 192, 192, 0.8)',
-                    'rgba(255, 193, 7, 0.8)',
-                    'rgba(255, 99, 132, 0.8)'
+                    '#43acbcff', // bg-success untuk Ringan
+                    '#ffc107', // bg-warning untuk Sedang
+                    '#dc3545'  // bg-danger untuk Berat
                 ],
                 borderColor: [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(255, 193, 7, 1)',
-                    'rgba(255, 99, 132, 1)'
+                    '#17a2b8',
+                    '#ffc107',
+                    '#dc3545'
                 ],
                 borderWidth: 1
             }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false, // Ditambahkan agar mengikuti tinggi wrapper div
+            maintainAspectRatio: false,
             scales: {
                 y: {
                     beginAtZero: true
@@ -198,7 +198,7 @@
         },
         options: {
             responsive: true,
-            maintainAspectRatio: false, // <-- Tambahkan baris ini jika belum ada
+            maintainAspectRatio: false,
             scales: {
                 y: {
                     beginAtZero: true
@@ -206,7 +206,5 @@
             }
         }
     });
-
-    // Top Layanan Chart
 </script>
 @endpush

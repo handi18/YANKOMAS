@@ -32,7 +32,9 @@
                             <td>{{ $user->username }}</td>
                             <td>{{ $user->email }}</td>
                             <td>
-                                @if($user->role === 'admin')
+                                @if($user->role === 'superadmin' || $user->isSuperAdmin())
+                                    <span class="badge bg-dark">Super Admin</span>
+                                @elseif($user->role === 'admin')
                                     <span class="badge bg-danger">Admin</span>
                                 @else
                                     <span class="badge bg-info">Petugas</span>
@@ -49,6 +51,7 @@
                                     </button>
                                 </form>
                                 @if($user->id !== Auth::id())
+                                    @if(!$user->isSuperAdmin())
                                     <form action="{{ route('admin.users.delete', $user->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus?')">
                                         @csrf
                                         @method('DELETE')
@@ -56,6 +59,7 @@
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
+                                    @endif
                                 @endif
                             </td>
                         </tr>

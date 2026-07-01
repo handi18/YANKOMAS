@@ -50,16 +50,17 @@ class AsirasiController extends Controller
 
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where('nomor_tiket', 'like', "%$search%")
+            $query->where(function($q) use ($search) {
+                $q->where('nomor_tiket', 'like', "%$search%")
                   ->orWhere('isi_aspirasi', 'like', "%$search%");
+            });
         }
 
-        // For petugas, only show their own data
         if (Auth::user()->isPetugas()) {
             $query->byPetugas(Auth::id());
         }
 
-        $aspirasi = $query->orderBy('created_at', 'desc')->paginate(15);
+        $aspirasi = $query->orderBy('updated_at', 'desc')->paginate(15);
         $layanan = Layanan::all();
 
         return view('aspirasi.index', [
@@ -85,7 +86,7 @@ class AsirasiController extends Controller
             'jam_kejadian' => ['required', 'date_format:H:i'],
             'jenis' => ['required', 'in:saran,informasi,pengaduan'], 
             'kategori' => ['required_if:jenis,pengaduan', 'nullable', 'in:ringan,sedang,berat'],
-            'isi_aspirasi' => ['required', 'string', 'min:10'],
+            'isi_aspirasi' => ['required', 'string', 'min:1'],
             'layanan_id' => ['required', 'exists:layanan,id'],
             'media' => ['required', 'in:Tatap Muka,Telepon,WhatsApp'],
         ]);
@@ -141,12 +142,16 @@ class AsirasiController extends Controller
             abort(403);
         }
 
+        if ($request->jenis !== 'pengaduan') {
+            $request->merge(['kategori' => null]);
+        }
+
         $validated = $request->validate([
             'tanggal_kejadian' => ['required', 'date'],
             'jam_kejadian' => ['required', 'date_format:H:i'],
             'jenis' => ['required', 'in:saran,informasi,pengaduan'],
-            'kategori' => ['required', 'in:ringan,sedang,berat'],
-            'isi_aspirasi' => ['required', 'string', 'min:10'],
+            'kategori' => ['required_if:jenis,pengaduan', 'nullable', 'in:ringan,sedang,berat'],
+            'isi_aspirasi' => ['required', 'string', 'min:1'],
             'layanan_id' => ['required', 'exists:layanan,id'],
             'media' => ['required', 'in:Tatap Muka,Telepon,WhatsApp'],
             'status' => Auth::user()->isAdmin() ? ['required', 'in:Baru,Diproses,Selesai'] : [],
@@ -205,6 +210,6 @@ class AsirasiController extends Controller
             'aktivitas' => 'Mengubah status aspirasi ' . $aspirasi->nomor_tiket . ' menjadi ' . $validated['status'],
         ]);
 
-        return back()->with('success', 'Status aspirasi berhasil diperbarui.');
+        return redirect()->route('aspirasi.index')->with('success', 'Aspirasi berhasil diperbarui.');
     }
 }

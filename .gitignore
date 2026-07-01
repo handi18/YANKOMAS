@@ -1,14 +1,35 @@
 # Laravel .gitignore
 /vendor
-/.venv
-.env
-.env.backup
-.phpunit.result.cache
+/node_modules
+/public/build
+/public/hot
+/public/storage
 /storage/*.key
 /bootstrap/cache
+/.phpunit.cache
+.phpunit.result.cache
+
+# Environment
+.env
+.env.*
+!.env.example
+/.venv
+
+# Logs & Databases
+*.log
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+*.sqlite
+*.sqlite3
+/database/database.sqlite
+
+# OS & Editor
 .DS_Store
-/node_modules
-/public/storage
-/public/hot
 .rnd
+/.idea
+/.vscode
+/.fleet
+
+# Custom Folders
 /Agent&Design

@@ -10,23 +10,44 @@
     
     <style>
         body {
-            background: linear-gradient(135deg, #003366 0%, #0066cc 100%);
+            position: relative;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            margin: 0;
+        }
+        
+        /* Background Layer (Gambar + Gelap Transparan + Blur Ringan) */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Menggunakan overlay hitam transparan (0.4) agar warna asli gambar keluar */
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 100%), 
+                        url('{{ asset('assets/img/Ditjen_Imigrasi.jpeg') }}') no-repeat center center;
+            background-size: cover;
+            filter: blur(4px); /* Diturunkan dari 8px ke 4px agar gambar lebih terlihat */
+            transform: scale(1.05); /* Mengikuti penurunan blur */
+            z-index: -1;
         }
         
         .login-container {
             width: 100%;
             max-width: 400px;
+            position: relative;
+            z-index: 1;
         }
         
         .login-card {
             background: white;
             border-radius: 10px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
             padding: 40px;
         }
         
