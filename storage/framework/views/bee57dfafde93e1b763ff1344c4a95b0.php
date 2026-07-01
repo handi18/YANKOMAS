@@ -33,7 +33,7 @@
     
     <div class="row mb-3">  
         <div class="col-12 d-flex align-items-center gap-2">
-            <form method="GET" action="<?php echo e(route('dashboard')); ?>">
+            <form method="GET" action="<?php echo e(route('dashboard')); ?>" class="d-flex gap-2">
                 <select name="range" class="form-select form-select-sm" style="width: auto;" onchange="this.form.submit()">
                     <option value="hari_ini"   <?php echo e(request('range') == 'hari_ini'   ? 'selected' : ''); ?>>Hari Ini</option>
                     <option value="minggu_ini" <?php echo e(request('range') == 'minggu_ini' ? 'selected' : ''); ?>>Minggu Ini</option>
@@ -73,7 +73,7 @@
 
     <div class="col-md-7">
         <div class="card h-100"> <div class="card-header card-header-custom">
-                <h5 class="mb-0"><i class="fas fa-line-chart"></i> Tren Aspirasi (<?php echo e(now()->translatedFormat('F Y')); ?>)</h5>
+                <h5 class="mb-0"><i class="fas fa-line-chart"></i> <?php echo e($trendTitle); ?></h5>
             </div>
             <div class="card-body d-flex flex-column justify-content-center">
                 <div style="height: 570px; position: relative;">
@@ -157,9 +157,9 @@
                 label: 'Jumlah',
                 data: [<?php echo e($kategoriRingan); ?>, <?php echo e($kategoriSedang); ?>, <?php echo e($kategoriBerat); ?>],
                 backgroundColor: [
-                    '#43acbcff', // bg-success untuk Ringan
-                    '#ffc107', // bg-warning untuk Sedang
-                    '#dc3545'  // bg-danger untuk Berat
+                    '#43acbcff', 
+                    '#ffc107', 
+                    '#dc3545'  
                 ],
                 borderColor: [
                     '#17a2b8',
@@ -186,7 +186,7 @@
     new Chart(trendCtx, {
         type: 'line',
         data: {
-            labels: trendData.map(d => 'Hari ' + d.date),
+            labels: trendData.map(d => d.date),
             datasets: [{
                 label: 'Jumlah Aspirasi',
                 data: trendData.map(d => d.count),
