@@ -14,6 +14,19 @@
 
             <div class="row mb-3">
                 <div class="col-md-6">
+                    <label for="nama_pengadu" class="form-label">Nama Pengadu *</label>
+                    <input type="text" class="form-control @error('nama_pengadu') is-invalid @enderror" id="nama_pengadu" name="nama_pengadu" value="{{ old('nama_pengadu') }}" required>
+                    @error('nama_pengadu') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                </div>
+                <div class="col-md-6">
+                    <label for="no_telp" class="form-label">No. Telp (Opsional)</label>
+                    <input type="text" class="form-control @error('no_telp') is-invalid @enderror" id="no_telp" name="no_telp" value="{{ old('no_telp') }}">
+                    @error('no_telp') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
                     <label for="tanggal_kejadian" class="form-label">Tanggal Kejadian *</label>
                     <input type="date" class="form-control @error('tanggal_kejadian') is-invalid @enderror" id="tanggal_kejadian" name="tanggal_kejadian" value="{{ old('tanggal_kejadian', now()->format('Y-m-d')) }}" required>
                     @error('tanggal_kejadian') <div class="invalid-feedback">{{ $message }}</div> @enderror
@@ -59,6 +72,7 @@
                     </select>
                     @error('layanan_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
+                
                 <div class="col-md-6">
                     <label for="media" class="form-label">Media Penerimaan *</label>
                     <select class="form-select @error('media') is-invalid @enderror" id="media" name="media" required>

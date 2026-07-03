@@ -3,6 +3,18 @@
 @section('title', 'Dashboard')
 
 @section('content')
+<style>
+    .btn-gradient-custom {
+        background: linear-gradient(135deg, #0e3b75 40%);
+        border: none;
+        transition: filter 0.3s ease;
+    }
+    .btn-gradient-custom:hover {
+        filter: brightness(1.2);
+        color: #ffffff;
+    }
+</style>
+
 {{-- Stat Cards SIP --}}
 <div class="row mb-4">
     <div class="col-md-3">
@@ -30,17 +42,35 @@
         </div>
     </div>
     
-    {{-- Filter di bawah card --}}
-    <div class="row mb-3">  
-        <div class="col-12 d-flex align-items-center gap-2">
-            <form method="GET" action="{{ route('dashboard') }}" class="d-flex gap-2">
-                <select name="range" class="form-select form-select-sm" style="width: auto;" onchange="this.form.submit()">
-                    <option value="hari_ini"   {{ request('range') == 'hari_ini'   ? 'selected' : '' }}>Hari Ini</option>
-                    <option value="minggu_ini" {{ request('range') == 'minggu_ini' ? 'selected' : '' }}>Minggu Ini</option>
-                    <option value="bulan_ini"  {{ request('range') == 'bulan_ini'  ? 'selected' : '' }}>Bulan Ini</option>
-                    <option value="tahun_ini"  {{ request('range') == 'tahun_ini'  ? 'selected' : '' }}>Tahun Ini</option>
-                    <option value="semua"      {{ request('range', 'semua') == 'semua' ? 'selected' : '' }}>Semua</option>
-                </select>
+    {{-- Filter Rentang Waktu Independen --}}
+    <div class="row mb-3 mt-3">  
+        <div class="col-12">
+            <form method="GET" action="{{ route('dashboard') }}" class="d-flex flex-wrap align-items-center gap-3">
+                
+                <div class="d-flex align-items-center gap-2">
+                    <select name="range" class="form-select form-select-sm" style="width: auto;" onchange="this.form.start_date.value=''; this.form.end_date.value=''; this.form.submit()">
+                        <option value="semua"      {{ request('range', 'semua') == 'semua' && !request('start_date') ? 'selected' : '' }}>Semua Waktu</option>
+                        <option value="hari_ini"   {{ request('range') == 'hari_ini' ? 'selected' : '' }}>Hari Ini</option>
+                        <option value="minggu_ini" {{ request('range') == 'minggu_ini' ? 'selected' : '' }}>Minggu Ini</option>
+                        <option value="bulan_ini"  {{ request('range') == 'bulan_ini' ? 'selected' : '' }}>Bulan Ini</option>
+                        <option value="tahun_ini"  {{ request('range') == 'tahun_ini' ? 'selected' : '' }}>Tahun Ini</option>
+                    </select>
+                </div>
+
+                <div class="vr text-muted d-none d-md-block" style="height: 30px;"></div>
+
+                <div class="d-flex align-items-center gap-2">
+                    <span class="text-muted small">Rentang Custom:</span>
+                    <input type="date" name="start_date" class="form-control form-control-sm" value="{{ request('start_date') }}" required>
+                    <span class="text-muted small">s.d</span>
+                    <input type="date" name="end_date" class="form-control form-control-sm" value="{{ request('end_date') }}" required>
+                    <button type="submit" class="btn btn-gradient-custom btn-sm px-3 text-white">Cari</button>
+                    
+                    @if(request()->filled('start_date'))
+                        <a href="{{ route('dashboard') }}" class="btn btn-secondary btn-sm">Reset</a>
+                    @endif
+                </div>
+
             </form>
         </div>
     </div>
@@ -59,7 +89,8 @@
             </div>
         </div>
 
-        <div class="card mb-4 mb-md-0"> <div class="card-header card-header-custom">
+        <div class="card mb-4 mb-md-0"> 
+            <div class="card-header card-header-custom">
                 <h5 class="mb-0"><i class="fas fa-bars"></i> Grafik Kategori</h5>
             </div>
             <div class="card-body">
@@ -72,7 +103,8 @@
     </div>
 
     <div class="col-md-7">
-        <div class="card h-100"> <div class="card-header card-header-custom">
+        <div class="card h-100"> 
+            <div class="card-header card-header-custom">
                 <h5 class="mb-0"><i class="fas fa-line-chart"></i> {{ $trendTitle }}</h5>
             </div>
             <div class="card-body d-flex flex-column justify-content-center">
@@ -115,6 +147,16 @@
 
 @push('js')
 <script>
+    function toggleCustomRange(value) {
+        const customInputs = document.getElementById('customRangeInputs');
+        if (value === 'custom') {
+            customInputs.classList.remove('d-none');
+        } else {
+            customInputs.classList.add('d-none');
+            document.getElementById('rangeSelect').form.submit();
+        }
+    }
+
     // Jenis Aspirasi Chart
     const jenisCtx = document.getElementById('jenisChart').getContext('2d');
     new Chart(jenisCtx, {

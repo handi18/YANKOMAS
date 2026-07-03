@@ -197,7 +197,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?php echo e(request()->routeIs('admin.activity-logs') ? 'active' : ''); ?>" href="<?php echo e(route('admin.activity-logs')); ?>">
-                            <i class="fas fa-history"></i> Activity Log
+                            <i class="fas fa-history"></i> Log Aktivitas
                         </a>
                     </li>
                 <?php endif; ?>

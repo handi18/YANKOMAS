@@ -16,6 +16,8 @@ class Aspirasi extends Model
 
     protected $fillable = [
         'nomor_tiket',
+        'nama_pengadu', // Tambahkan ini
+        'no_telp',      // Tambahkan ini
         'tanggal_kejadian',
         'jam_kejadian',
         'jenis',

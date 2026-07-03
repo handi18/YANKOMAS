@@ -41,21 +41,25 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-warning btn-xs">
+                                <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-warning btn-xs custom-tooltip" data-tooltip="Edit Data">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="{{ route('admin.users.reset-password', $user->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    <button type="submit" class="btn btn-info btn-xs" onclick="return confirm('Reset password ke default?')">
-                                        <i class="fas fa-key"></i>
-                                    </button>
-                                </form>
+                                @if($user->id !== Auth::id())
+                                    @if(!$user->isSuperAdmin())
+                                    <form action="{{ route('admin.users.reset-password', $user->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        <button type="submit" class="btn btn-info btn-xs custom-tooltip" data-tooltip="Reset Password" onclick="return confirm('Reset password ke default?')">
+                                            <i class="fas fa-key"></i>
+                                        </button>
+                                    </form>
+                                    @endif
+                                @endif
                                 @if($user->id !== Auth::id())
                                     @if(!$user->isSuperAdmin())
                                     <form action="{{ route('admin.users.delete', $user->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-xs">
+                                        <button type="submit" class="btn btn-danger btn-xs custom-tooltip" data-tooltip="Hapus Data">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
@@ -83,6 +87,49 @@
         padding: 0.25rem 0.5rem;
         font-size: 0.75rem;
         margin: 0 2px;
+    }
+
+    /* Custom White Tooltip (Top) */
+    .custom-tooltip {
+        position: relative;
+    }
+    .custom-tooltip::before {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #fff;
+        color: #333;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 500;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.15s ease-in-out;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        border: 1px solid #e0e0e0;
+        z-index: 10;
+    }
+    .custom-tooltip::after {
+        content: "";
+        position: absolute;
+        bottom: 105%;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 5px;
+        border-style: solid;
+        border-color: #fff transparent transparent transparent;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.15s ease-in-out;
+        z-index: 10;
+    }
+    .custom-tooltip:hover::before,
+    .custom-tooltip:hover::after {
+        opacity: 1;
     }
 </style>
 @endsection

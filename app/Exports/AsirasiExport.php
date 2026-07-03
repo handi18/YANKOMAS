@@ -25,6 +25,8 @@ class AsirasiExport implements FromCollection, WithHeadings, WithMapping, Should
     {
         return [
             'Nomor Tiket',
+            'Nama Pengadu',
+            'No Telp',
             'Tanggal',
             'Jam',
             'Jenis',
@@ -41,10 +43,12 @@ class AsirasiExport implements FromCollection, WithHeadings, WithMapping, Should
     {
         return [
             $aspirasi->nomor_tiket,
+            $aspirasi->nama_pengadu,
+            $aspirasi->no_telp ?? '-',
             $aspirasi->tanggal_kejadian->format('d-m-Y'),
-            $aspirasi->jam_kejadian->format('H:i'),
+            $aspirasi->jam_kejadian ? $aspirasi->jam_kejadian->format('H:i') : '-',
             ucfirst($aspirasi->jenis),
-            ucfirst($aspirasi->kategori),
+            $aspirasi->kategori ? ucfirst($aspirasi->kategori) : '-',
             $aspirasi->isi_aspirasi,
             $aspirasi->layanan->nama_layanan,
             $aspirasi->media,

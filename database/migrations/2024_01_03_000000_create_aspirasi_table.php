@@ -11,6 +11,8 @@ return new class extends Migration
         Schema::create('aspirasi', function (Blueprint $table) {
             $table->id();
             $table->string('nomor_tiket')->unique();
+            $table->string('nama_pengadu');
+            $table->string('no_telp')->nullable(); 
             $table->date('tanggal_kejadian');
             $table->time('jam_kejadian');
             $table->enum('jenis', ['saran','informasi', 'pengaduan']); 

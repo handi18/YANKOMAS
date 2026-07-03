@@ -15,8 +15,19 @@ class ReportController extends Controller
     private function getFilteredAspirations(Request $request)
     {
         $query = Aspirasi::with(['petugas', 'layanan']);
+        $user = Auth::user();
 
-        // Apply filters
+        // Ambil filter scope dari request query string (Data Saya vs Semua Data)
+        // Default untuk petugas jika kosong: 'my_data'
+        // Default untuk admin jika kosong: 'all'
+        $scope = $request->get('scope', $user->isPetugas() ? 'my_data' : 'all');
+
+        // Jika dia petugas dan filternya memilih 'my_data' (Data Saya), kunci hanya datanya sendiri
+        if ($user->isPetugas() && $scope === 'my_data') {
+            $query->byPetugas($user->id);
+        }
+
+        // Apply filters bawaan lainnya
         if ($request->filled('date_from') && $request->filled('date_to')) {
             $query->byDateRange($request->date_from, $request->date_to);
         } elseif ($request->filled('filter')) {
@@ -46,11 +57,6 @@ class ReportController extends Controller
 
         if ($request->filled('layanan_id')) {
             $query->byLayanan($request->layanan_id);
-        }
-
-        // For petugas, only show their own data
-        if (Auth::user()->isPetugas()) {
-            $query->byPetugas(Auth::id());
         }
 
         return $query->orderBy('tanggal_kejadian', 'desc')->get();
@@ -98,6 +104,13 @@ class ReportController extends Controller
     private function getFilterInfo(Request $request)
     {
         $info = [];
+        $user = Auth::user();
+
+        // Tambahkan informasi visibilitas data pada header keterangan filter di PDF
+        $scope = $request->get('scope', $user->isPetugas() ? 'my_data' : 'all');
+        if ($user->isPetugas()) {
+            $info[] = 'Hak Akses: ' . ($scope === 'my_data' ? 'Data Saya' : 'Semua Data');
+        }
 
         if ($request->filled('date_from') && $request->filled('date_to')) {
             $info[] = 'Periode: ' . Carbon::parse($request->date_from)->format('d/m/Y') . ' - ' . Carbon::parse($request->date_to)->format('d/m/Y');

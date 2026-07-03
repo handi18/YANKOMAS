@@ -138,7 +138,7 @@
     <table>
         <thead>
             <tr>
-                <th style="width: 12%">Nomor Tiket</th>
+                <th style="width: 15%">Nomor Tiket / Pengadu</th>
                 <th style="width: 8%">Tanggal</th>
                 <th style="width: 8%">Jam</th>
                 <th style="width: 10%">Jenis</th>
@@ -153,11 +153,14 @@
         <tbody>
             @forelse($aspirations as $item)
                 <tr>
-                    <td><strong>{{ $item->nomor_tiket }}</strong></td>
+                    <td>
+                        <strong>{{ $item->nama_pengadu }}</strong>
+                        <div style="font-size: 9px; color: #555; margin-top: 2px;">{{ $item->nomor_tiket }}</div>
+                    </td>
                     <td>{{ $item->tanggal_kejadian->format('d/m/Y') }}</td>
-                    <td>{{ $item->jam_kejadian->format('H:i') }}</td>
+                    <td>{{ $item->jam_kejadian ? $item->jam_kejadian->format('H:i') : '-' }}</td>
                     <td>{{ ucfirst($item->jenis) }}</td>
-                    <td>{{ ucfirst($item->kategori) }}</td>
+                    <td>{{ $item->kategori ? ucfirst($item->kategori) : '-' }}</td>
                     <td>{{ substr($item->isi_aspirasi, 0, 50) }}...</td>
                     <td>{{ $item->layanan->nama_layanan }}</td>
                     <td>{{ $item->media }}</td>

@@ -15,8 +15,18 @@ class AsirasiController extends Controller
     public function index(Request $request)
     {
         $query = Aspirasi::with(['petugas', 'layanan']);
+        $user = Auth::user();
 
-        // Apply filters
+        // Handle Scope Otorisasi & Filter (Data Saya vs Semua Data)
+        // Default untuk petugas: Hanya data sendiri (my_data)
+        // Default untuk admin/super_admin: Semua data (all)
+        $scope = $request->get('scope', $user->isPetugas() ? 'my_data' : 'all');
+
+        if ($user->isPetugas() && $scope === 'my_data') {
+            $query->byPetugas($user->id);
+        }
+
+        // Apply filters lainnya (Periode, Jenis, Kategori, Status, Layanan, Search)
         if ($request->filled('date_from') && $request->filled('date_to')) {
             $query->byDateRange($request->date_from, $request->date_to);
         } elseif ($request->filled('filter')) {
@@ -52,12 +62,9 @@ class AsirasiController extends Controller
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('nomor_tiket', 'like', "%$search%")
+                  ->orWhere('nama_pengadu', 'like', "%$search%")
                   ->orWhere('isi_aspirasi', 'like', "%$search%");
             });
-        }
-
-        if (Auth::user()->isPetugas()) {
-            $query->byPetugas(Auth::id());
         }
 
         $aspirasi = $query->orderBy('updated_at', 'desc')->paginate(15);
@@ -66,6 +73,7 @@ class AsirasiController extends Controller
         return view('aspirasi.index', [
             'aspirasi' => $aspirasi,
             'layanan' => $layanan,
+            'current_scope' => $scope // Dikirim ke view untuk mempertahankan state dropdown
         ]);
     }
 
@@ -82,6 +90,8 @@ class AsirasiController extends Controller
         }
 
         $validated = $request->validate([
+            'nama_pengadu' => ['required', 'string', 'max:255'],
+            'no_telp' => ['nullable', 'string', 'max:20'],
             'tanggal_kejadian' => ['required', 'date'],
             'jam_kejadian' => ['required', 'date_format:H:i'],
             'jenis' => ['required', 'in:saran,informasi,pengaduan'], 
@@ -91,7 +101,6 @@ class AsirasiController extends Controller
             'media' => ['required', 'in:Tatap Muka,Telepon,WhatsApp'],
         ]);
 
-        // Generate nomor tiket
         $date = date('Ymd');
         $count = Aspirasi::whereDate('created_at', today())->count() + 1;
         $nomor_tiket = 'ASP-' . $date . '-' . str_pad($count, 4, '0', STR_PAD_LEFT);
@@ -102,7 +111,6 @@ class AsirasiController extends Controller
 
         Aspirasi::create($validated);
 
-        // Log activity
         ActivityLog::create([
             'user_id' => Auth::id(),
             'aktivitas' => 'Menambah aspirasi baru: ' . $nomor_tiket,
@@ -113,7 +121,8 @@ class AsirasiController extends Controller
 
     public function show(Aspirasi $aspirasi)
     {
-        // Check authorization
+        // Pagar Keamanan Backend: Petugas dilarang melihat detail data milik petugas lain (jika scope dibuka di masa depan)
+        // Jika aturan memperbolehkan petugas MELIHAT semua data tapi dilarang EDIT, hapus baris pengecekan show() ini.
         if (Auth::user()->isPetugas() && $aspirasi->petugas_id !== Auth::id()) {
             abort(403);
         }
@@ -123,7 +132,7 @@ class AsirasiController extends Controller
 
     public function edit(Aspirasi $aspirasi)
     {
-        // Check authorization
+        // Pagar Keamanan Backend: Mencegah tembak URL langsung oleh petugas lain
         if (Auth::user()->isPetugas() && $aspirasi->petugas_id !== Auth::id()) {
             abort(403);
         }
@@ -137,7 +146,7 @@ class AsirasiController extends Controller
 
     public function update(Request $request, Aspirasi $aspirasi)
     {
-        // Check authorization
+        // Pagar Keamanan Backend: Mencegah tembak URL update langsung oleh petugas lain
         if (Auth::user()->isPetugas() && $aspirasi->petugas_id !== Auth::id()) {
             abort(403);
         }
@@ -147,6 +156,8 @@ class AsirasiController extends Controller
         }
 
         $validated = $request->validate([
+            'nama_pengadu' => ['required', 'string', 'max:255'],
+            'no_telp' => ['nullable', 'string', 'max:20'],
             'tanggal_kejadian' => ['required', 'date'],
             'jam_kejadian' => ['required', 'date_format:H:i'],
             'jenis' => ['required', 'in:saran,informasi,pengaduan'],
@@ -163,7 +174,6 @@ class AsirasiController extends Controller
 
         $aspirasi->update($validated);
 
-        // Log activity
         ActivityLog::create([
             'user_id' => Auth::id(),
             'aktivitas' => 'Mengubah aspirasi: ' . $aspirasi->nomor_tiket,
@@ -174,7 +184,6 @@ class AsirasiController extends Controller
 
     public function destroy(Aspirasi $aspirasi)
     {
-        // Only admin can delete
         if (!Auth::user()->isAdmin()) {
             abort(403);
         }
@@ -182,7 +191,6 @@ class AsirasiController extends Controller
         $nomor_tiket = $aspirasi->nomor_tiket;
         $aspirasi->delete();
 
-        // Log activity
         ActivityLog::create([
             'user_id' => Auth::id(),
             'aktivitas' => 'Menghapus aspirasi: ' . $nomor_tiket,
@@ -191,11 +199,11 @@ class AsirasiController extends Controller
         return redirect()->route('aspirasi.index')->with('success', 'Aspirasi berhasil dihapus.');
     }
 
-    public function updateStatus(Request $request, Aspirasi $aspirasi)
+   public function updateStatus(Request $request, Aspirasi $aspirasi)
     {
-        // Only admin can update status
-        if (!Auth::user()->isAdmin()) {
-            abort(403);
+        // Otorisasi: Izinkan hanya Admin ATAU Petugas yang menginput data ini sendiri
+        if (!Auth::user()->isAdmin() && Auth::id() !== $aspirasi->petugas_id) {
+            abort(403, 'Anda tidak memiliki hak akses untuk mengubah status data ini.');
         }
 
         $validated = $request->validate([
@@ -204,12 +212,12 @@ class AsirasiController extends Controller
 
         $aspirasi->update($validated);
 
-        // Log activity
         ActivityLog::create([
             'user_id' => Auth::id(),
             'aktivitas' => 'Mengubah status aspirasi ' . $aspirasi->nomor_tiket . ' menjadi ' . $validated['status'],
         ]);
 
-        return redirect()->route('aspirasi.index')->with('success', 'Aspirasi berhasil diperbarui.');
+        // Kembalikan ke halaman show (detail) agar user bisa langsung melihat perubahan warnanya
+        return redirect()->route('aspirasi.show', $aspirasi->id)->with('success', 'Status aspirasi berhasil diperbarui.');
     }
 }

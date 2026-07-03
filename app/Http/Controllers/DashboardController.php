@@ -6,6 +6,7 @@ use App\Models\Aspirasi;
 use App\Models\Layanan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -13,21 +14,28 @@ class DashboardController extends Controller
     {
         $sipQuery = Aspirasi::query();
 
-        // 1. Filter Rentang Waktu Global
-        $range = $request->get('range', 'semua');
-        switch ($range) {
-            case 'hari_ini':
-                $sipQuery->today();
-                break;
-            case 'minggu_ini':
-                $sipQuery->thisWeek();
-                break;
-            case 'bulan_ini':
-                $sipQuery->thisMonth();
-                break;
-            case 'tahun_ini':
-                $sipQuery->thisYear();
-                break;
+        // 1. Filter Rentang Waktu (Independen: Custom Date vs Dropdown Preset)
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $range = 'custom';
+            $startDate = Carbon::createFromFormat('Y-m-d', $request->start_date)->startOfDay();
+            $endDate = Carbon::createFromFormat('Y-m-d', $request->end_date)->endOfDay();
+            $sipQuery->whereBetween('tanggal_kejadian', [$startDate, $endDate]);
+        } else {
+            $range = $request->get('range', 'semua');
+            switch ($range) {
+                case 'hari_ini':
+                    $sipQuery->today();
+                    break;
+                case 'minggu_ini':
+                    $sipQuery->thisWeek();
+                    break;
+                case 'bulan_ini':
+                    $sipQuery->thisMonth();
+                    break;
+                case 'tahun_ini':
+                    $sipQuery->thisYear();
+                    break;
+            }
         }
 
         // 2. Filter Berdasarkan Layanan
@@ -56,7 +64,7 @@ class DashboardController extends Controller
         $statusDiproses = (clone $sipQuery)->byStatus('Diproses')->count();
         $statusSelesai  = (clone $sipQuery)->byStatus('Selesai')->count();
 
-        // 3. Ambil Data Tren (Query langsung format string tgl via SQL biar kilat)
+        // 3. Ambil Data Tren
         $rawTrend = (clone $sipQuery)
             ->select(DB::raw("TO_CHAR(tanggal_kejadian, 'DD Mon') as date_label"), DB::raw("COUNT(*) as total"))
             ->groupBy(DB::raw("tanggal_kejadian, TO_CHAR(tanggal_kejadian, 'DD Mon')"))
@@ -71,15 +79,12 @@ class DashboardController extends Controller
             ];
         }
 
-        if (empty($trendData)) {
-            $trendData[] = ['date' => now()->translatedFormat('d M'), 'count' => 0];
-        }
-
         $trendTitle = 'Tren Aspirasi (' . match($range) {
             'hari_ini'   => 'Hari Ini',
             'minggu_ini' => 'Minggu Ini',
             'bulan_ini'  => now()->translatedFormat('F Y'),
             'tahun_ini'  => 'Tahun ' . now()->year,
+            'custom'     => Carbon::parse($request->start_date)->format('d/m/Y') . ' - ' . Carbon::parse($request->end_date)->format('d/m/Y'),
             default      => 'Semua Waktu'
         } . ')';
 

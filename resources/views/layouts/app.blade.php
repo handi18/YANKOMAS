@@ -196,7 +196,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('admin.activity-logs') ? 'active' : '' }}" href="{{ route('admin.activity-logs') }}">
-                            <i class="fas fa-history"></i> Activity Log
+                            <i class="fas fa-history"></i> Log Aktivitas
                         </a>
                     </li>
                 @endif

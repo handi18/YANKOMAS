@@ -90,10 +90,9 @@ class AdminController extends Controller
             return back()->with('error', 'Akun Super Admin tidak dapat di-reset passwordnya.');
         }
 
-        $newPassword = \Illuminate\Support\Str::random(12);
-
+        // Diubah langsung menggunakan 'password123'
         $user->update([
-            'password' => Hash::make($newPassword),
+            'password' => Hash::make('password123'),
         ]);
 
         ActivityLog::create([
@@ -101,7 +100,7 @@ class AdminController extends Controller
             'aktivitas' => 'Reset password user: ' . $user->username,
         ]);
 
-        return back()->with('success', 'Password berhasil direset. Password baru: ' . $newPassword . ' (Harap simpan/berikan ke user, password ini tidak akan ditampilkan lagi)');
+        return back()->with('success', 'Password berhasil di-reset menjadi password123');
     }
 
     public function activityLogs(Request $request)

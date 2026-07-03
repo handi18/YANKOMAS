@@ -139,7 +139,7 @@
     <table>
         <thead>
             <tr>
-                <th style="width: 12%">Nomor Tiket</th>
+                <th style="width: 15%">Nomor Tiket / Pengadu</th>
                 <th style="width: 8%">Tanggal</th>
                 <th style="width: 8%">Jam</th>
                 <th style="width: 10%">Jenis</th>
@@ -154,11 +154,14 @@
         <tbody>
             <?php $__empty_1 = true; $__currentLoopData = $aspirations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr>
-                    <td><strong><?php echo e($item->nomor_tiket); ?></strong></td>
+                    <td>
+                        <strong><?php echo e($item->nama_pengadu); ?></strong>
+                        <div style="font-size: 9px; color: #555; margin-top: 2px;"><?php echo e($item->nomor_tiket); ?></div>
+                    </td>
                     <td><?php echo e($item->tanggal_kejadian->format('d/m/Y')); ?></td>
-                    <td><?php echo e($item->jam_kejadian->format('H:i')); ?></td>
+                    <td><?php echo e($item->jam_kejadian ? $item->jam_kejadian->format('H:i') : '-'); ?></td>
                     <td><?php echo e(ucfirst($item->jenis)); ?></td>
-                    <td><?php echo e(ucfirst($item->kategori)); ?></td>
+                    <td><?php echo e($item->kategori ? ucfirst($item->kategori) : '-'); ?></td>
                     <td><?php echo e(substr($item->isi_aspirasi, 0, 50)); ?>...</td>
                     <td><?php echo e($item->layanan->nama_layanan); ?></td>
                     <td><?php echo e($item->media); ?></td>
@@ -190,5 +193,4 @@
         </div>
     </div>
 </body>
-</html>
-<?php /**PATH D:\kuliah\Magang\projek magang\simaspirasi-imigrasi\resources\views/reports/pdf.blade.php ENDPATH**/ ?>
+</html><?php /**PATH D:\kuliah\Magang\projek magang\simaspirasi-imigrasi\resources\views/reports/pdf.blade.php ENDPATH**/ ?>

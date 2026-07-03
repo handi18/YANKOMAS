@@ -1,11 +1,11 @@
-@extends('layouts.app')
 
-@section('title', 'Detail Aspirasi')
 
-@section('content')
+<?php $__env->startSection('title', 'Detail Aspirasi'); ?>
+
+<?php $__env->startSection('content'); ?>
 <div class="card">
     <div class="card-header card-header-custom">
-        <h5 class="mb-0"><i class="fas fa-eye"></i> Detail Aspirasi: {{ $aspirasi->nomor_tiket }}</h5>
+        <h5 class="mb-0"><i class="fas fa-eye"></i> Detail Aspirasi: <?php echo e($aspirasi->nomor_tiket); ?></h5>
     </div>
     
     <div class="card-body">
@@ -13,96 +13,96 @@
             <table class="table table-bordered">
                 <tr>
                     <th style="width: 25%; background-color: #f8f9fa;">Nomor Tiket</th>
-                    <td><strong>{{ $aspirasi->nomor_tiket }}</strong></td>
+                    <td><strong><?php echo e($aspirasi->nomor_tiket); ?></strong></td>
                 </tr>
                 <tr>
                     <th style="background-color: #f8f9fa;">Nama Pengadu</th>
-                    <td>{{ $aspirasi->nama_pengadu }}</td>
+                    <td><?php echo e($aspirasi->nama_pengadu); ?></td>
                 </tr>
                 <tr>
                     <th style="background-color: #f8f9fa;">No. Telepon / WhatsApp</th>
-                    <td>{{ $aspirasi->no_telp ?? '-' }}</td>
+                    <td><?php echo e($aspirasi->no_telp ?? '-'); ?></td>
                 </tr>
                 <tr>
                     <th style="background-color: #f8f9fa;">Tanggal & Jam Kejadian</th>
                     <td>
-                        {{ $aspirasi->tanggal_kejadian->format('d/m/Y') }} 
-                        Pukul {{ $aspirasi->jam_kejadian ? $aspirasi->jam_kejadian->format('H:i') : '-' }} WIB
+                        <?php echo e($aspirasi->tanggal_kejadian->format('d/m/Y')); ?> 
+                        Pukul <?php echo e($aspirasi->jam_kejadian ? $aspirasi->jam_kejadian->format('H:i') : '-'); ?> WIB
                     </td>
                 </tr>
                 <tr>
                     <th style="background-color: #f8f9fa;">Jenis Aspirasi</th>
-                    <td><span class="badge bg-info">{{ ucfirst($aspirasi->jenis) }}</span></td>
+                    <td><span class="badge bg-info"><?php echo e(ucfirst($aspirasi->jenis)); ?></span></td>
                 </tr>
                 <tr>
                     <th style="background-color: #f8f9fa;">Kategori</th>
                     <td>
-                        @if($aspirasi->kategori)
-                            @php
+                        <?php if($aspirasi->kategori): ?>
+                            <?php
                                 $kategoriBadges = ['ringan' => 'bg-success', 'sedang' => 'bg-warning', 'berat' => 'bg-danger'];
-                            @endphp
-                            <span class="badge {{ $kategoriBadges[$aspirasi->kategori] ?? 'bg-secondary' }}">{{ ucfirst($aspirasi->kategori) }}</span>
-                        @else
+                            ?>
+                            <span class="badge <?php echo e($kategoriBadges[$aspirasi->kategori] ?? 'bg-secondary'); ?>"><?php echo e(ucfirst($aspirasi->kategori)); ?></span>
+                        <?php else: ?>
                             -
-                        @endif
+                        <?php endif; ?>
                     </td>
                 </tr>
                 <tr>
                     <th style="background-color: #f8f9fa;">Layanan Terkait</th>
-                    <td>{{ $aspirasi->layanan->nama_layanan ?? '-' }}</td>
+                    <td><?php echo e($aspirasi->layanan->nama_layanan ?? '-'); ?></td>
                 </tr>
                 <tr>
                     <th style="background-color: #f8f9fa;">Media Pengaduan</th>
-                    <td>{{ $aspirasi->media }}</td>
+                    <td><?php echo e($aspirasi->media); ?></td>
                 </tr>
                 <tr>
                     <th style="background-color: #f8f9fa;">Status Saat Ini</th>
                     <td>
-                        @php
+                        <?php
                             $statusBadges = ['Baru' => 'bg-primary', 'Diproses' => 'bg-warning text-dark', 'Selesai' => 'bg-success'];
-                        @endphp
-                        <span class="badge {{ $statusBadges[$aspirasi->status] ?? 'bg-secondary' }}">{{ $aspirasi->status }}</span>
+                        ?>
+                        <span class="badge <?php echo e($statusBadges[$aspirasi->status] ?? 'bg-secondary'); ?>"><?php echo e($aspirasi->status); ?></span>
                     </td>
                 </tr>
                 <tr>
                     <th style="background-color: #f8f9fa;">Petugas Penginput</th>
-                    <td>{{ $aspirasi->petugas->nama ?? '-' }}</td>
+                    <td><?php echo e($aspirasi->petugas->nama ?? '-'); ?></td>
                 </tr>
                 <tr>
                     <th style="background-color: #f8f9fa;">Isi Aspirasi</th>
                     <td>
-                        <div class="p-3 bg-light rounded" style="white-space: pre-wrap;">{{ $aspirasi->isi_aspirasi }}</div>
+                        <div class="p-3 bg-light rounded" style="white-space: pre-wrap;"><?php echo e($aspirasi->isi_aspirasi); ?></div>
                     </td>
                 </tr>
             </table>
         </div>
 
-        {{-- Section Aksi/Tombol Bawah --}}
+        
         <div class="mt-4 d-flex flex-wrap align-items-center gap-3">
             
-            {{-- 1. Tombol Edit (Hanya jika Admin atau Pemilik Data) --}}
-            @if(Auth::user()->isAdmin() || Auth::id() === $aspirasi->petugas_id)
-                <a href="{{ route('aspirasi.edit', $aspirasi->id) }}" class="btn btn-warning">
+            
+            <?php if(Auth::user()->isAdmin() || Auth::id() === $aspirasi->petugas_id): ?>
+                <a href="<?php echo e(route('aspirasi.edit', $aspirasi->id)); ?>" class="btn btn-warning">
                     <i class="fas fa-edit"></i> Edit Data
                 </a>
-            @endif
+            <?php endif; ?>
 
-            {{-- 2. Fitur Update Status Langsung (Dropdown Inline Form Bermutasi Warna) --}}
-            @if(Auth::user()->isAdmin() || Auth::id() === $aspirasi->petugas_id)
-                @php
+            
+            <?php if(Auth::user()->isAdmin() || Auth::id() === $aspirasi->petugas_id): ?>
+                <?php
                     // Tentukan kelas warna awal berdasarkan status dari database
                     $bgClass = 'bg-primary text-white';
                     if ($aspirasi->status === 'Diproses') $bgClass = 'bg-warning text-dark';
                     if ($aspirasi->status === 'Selesai') $bgClass = 'bg-success text-white';
-                @endphp
+                ?>
 
-                <form action="{{ route('aspirasi.update-status', $aspirasi->id) }}" method="POST" class="d-flex align-items-center gap-2">
-                    @csrf
-                    <select name="status" id="statusDropdown" class="form-select form-select-sm fw-bold {{ $bgClass }}" style="width: 140px;" 
+                <form action="<?php echo e(route('aspirasi.update-status', $aspirasi->id)); ?>" method="POST" class="d-flex align-items-center gap-2">
+                    <?php echo csrf_field(); ?>
+                    <select name="status" id="statusDropdown" class="form-select form-select-sm fw-bold <?php echo e($bgClass); ?>" style="width: 140px;" 
                         onchange="updateDropdownColor(this); this.form.submit()">
-                        <option value="Baru" class="bg-white text-dark" {{ $aspirasi->status == 'Baru' ? 'selected' : '' }}>Baru</option>
-                        <option value="Diproses" class="bg-white text-dark" {{ $aspirasi->status == 'Diproses' ? 'selected' : '' }}>Diproses</option>
-                        <option value="Selesai" class="bg-white text-dark" {{ $aspirasi->status == 'Selesai' ? 'selected' : '' }}>Selesai</option>
+                        <option value="Baru" class="bg-white text-dark" <?php echo e($aspirasi->status == 'Baru' ? 'selected' : ''); ?>>Baru</option>
+                        <option value="Diproses" class="bg-white text-dark" <?php echo e($aspirasi->status == 'Diproses' ? 'selected' : ''); ?>>Diproses</option>
+                        <option value="Selesai" class="bg-white text-dark" <?php echo e($aspirasi->status == 'Selesai' ? 'selected' : ''); ?>>Selesai</option>
                     </select>
                 </form>
 
@@ -121,25 +121,26 @@
                     }
                 }
                 </script>
-            @endif
+            <?php endif; ?>
 
-            {{-- 3. Tombol Hapus (Hanya Admin) --}}
-            @if(Auth::user()->isAdmin())
-                <form action="{{ route('aspirasi.destroy', $aspirasi->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                    @csrf
-                    @method('DELETE')
+            
+            <?php if(Auth::user()->isAdmin()): ?>
+                <form action="<?php echo e(route('aspirasi.destroy', $aspirasi->id)); ?>" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                    <?php echo csrf_field(); ?>
+                    <?php echo method_field('DELETE'); ?>
                     <button type="submit" class="btn btn-danger">
                         <i class="fas fa-trash"></i> Hapus
                     </button>
                 </form>
-            @endif
+            <?php endif; ?>
 
-            {{-- 4. Tombol Kembali (Dipindah ke Samping Kanan Tombol Aksi) --}}
-            <a href="{{ route('aspirasi.index') }}" class="btn btn-secondary ms-auto">
+            
+            <a href="<?php echo e(route('aspirasi.index')); ?>" class="btn btn-secondary ms-auto">
                 <i class="fas fa-arrow-left"></i> Kembali
             </a>
             
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\kuliah\Magang\projek magang\simaspirasi-imigrasi\resources\views/aspirasi/show.blade.php ENDPATH**/ ?>
