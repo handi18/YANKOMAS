@@ -42,6 +42,7 @@
                         @foreach(['saran' => 'Saran', 'informasi' => 'Informasi', 'pengaduan' => 'Pengaduan'] as $val => $lbl)
                             <option value="{{ $val }}" {{ request('jenis') === $val ? 'selected' : '' }}>{{ $lbl }}</option>
                         @endforeach
+                        <option value="custom" {{ request('jenis') === 'custom' ? 'selected' : '' }}>Lainnya (Custom)...</option>
                     </select>
                 </div>
             </div>
@@ -53,6 +54,7 @@
                         @foreach(['ringan' => 'Ringan', 'sedang' => 'Sedang', 'berat' => 'Berat'] as $val => $lbl)
                             <option value="{{ $val }}" {{ request('kategori') === $val ? 'selected' : '' }}>{{ $lbl }}</option>
                         @endforeach
+                        <option value="custom" {{ request('kategori') === 'custom' ? 'selected' : '' }}>Lainnya (Custom)...</option>
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -69,6 +71,7 @@
                         @foreach($layanan as $item)
                             <option value="{{ $item->id }}" {{ request('layanan_id') == $item->id ? 'selected' : '' }}>{{ $item->nama_layanan }}</option>
                         @endforeach
+                        <option value="custom" {{ request('layanan_id') === 'custom' ? 'selected' : '' }}>Lainnya (Custom)...</option>
                     </select>
                 </div>
                 <div class="col-md-3">
@@ -110,14 +113,15 @@
                             </td>
                             <td>{{ $item->tanggal_kejadian->format('d/m/Y') }}</td>
                             <td>{{ $item->jam_kejadian->format('H:i') }}</td>
-                            <td><span class="badge bg-info">{{ ucfirst($item->jenis) }}</span></td>
+                            <td><span class="badge bg-info">{{ !is_null($item->jenis_custom) ? $item->jenis_custom : ucfirst($item->jenis) }}</span></td>
                             <td>
                                 @php
                                     $kategoriBadges = ['ringan' => 'bg-success', 'sedang' => 'bg-warning', 'berat' => 'bg-danger'];
                                 @endphp
-                                <span class="badge {{ $kategoriBadges[$item->kategori] ?? 'bg-secondary' }}">{{ ucfirst($item->kategori) }}</span>
+                                <span class="badge {{ $kategoriBadges[$item->kategori] ?? 'bg-secondary' }}">{{ !is_null($item->kategori_custom) ? $item->kategori_custom : ucfirst($item->kategori) }}</span>
                             </td>
-                            <td>{{ $item->layanan->nama_layanan }}</td>
+                            {{-- PERBAIKAN: Proteksi Null-Safe untuk data layanan kustom --}}
+                            <td>{{ is_null($item->layanan_id) ? ($item->layanan_custom ?? '-') : ($item->layanan->nama_layanan ?? '-') }}</td>
                             <td>
                                 @php
                                     $statusBadges = ['Baru' => 'bg-primary', 'Diproses' => 'bg-warning text-dark', 'Selesai' => 'bg-success'];
@@ -126,11 +130,7 @@
                             </td>
                             <td>{{ $item->petugas->nama }}</td>
                             <td>
-                                {{-- Tombol Lihat Detail: Petugas hanya boleh lihat datanya sendiri (jika show diproteksi) --}}
-                                @if(Auth::user()->isAdmin() || Auth::id() === $item->petugas_id)
                                     <a href="{{ route('aspirasi.show', $item->id) }}" class="btn btn-info btn-xs custom-tooltip" data-tooltip="Lihat Detail"><i class="fas fa-eye"></i></a>
-                                @endif
-
                                 {{-- Tombol Hapus: Dikunci total hanya untuk Admin/Super Admin --}}
                                 @if(Auth::user()->isAdmin())
                                     <form action="{{ route('aspirasi.destroy', $item->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus?')">

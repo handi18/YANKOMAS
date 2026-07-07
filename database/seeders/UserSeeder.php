@@ -10,51 +10,59 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // Cegah seeder dijalankan di environment production untuk keamanan data
         if (app()->environment('production')) {
             echo "UserSeeder tidak dapat dijalankan di environment production.\n";
             return;
         }
 
-        // 1. Definisikan password default sekali saja untuk menghemat proses hashing di loop
         $defaultPassword = Hash::make('password123'); 
 
-        // 2. Gabungkan akun inti menggunakan insert massal (Hemat query)
-        User::insert([
+        // 1. Akun Admin Utama (Gunakan updateOrCreate agar jika sudah ada, tidak double)
+        User::updateOrCreate(
+            ['username' => 'admin'], // Kunci pengecekan berdasarkan username
             [
-                'nama' => 'Administrator',
+                'nama' => 'Administrator Utama',
                 'nip' => '19800101001',
-                'username' => 'admin',
                 'email' => 'admin@imigrasi.go.id',
                 'password' => $defaultPassword,
                 'role' => 'admin',
-                'created_at' => now(),
-                'updated_at' => now(),
+            ]
+        );
+
+        // 2. Daftar Petugas Baru yang mau dimasukkan
+        $daftarPetugas = [
+            [
+                'nama' => 'Handi (Petugas)',
+                'nip' => '123140012',
+                'username' => 'handi_petugas',
+                'email' => 'handi@imigrasi.go.id',
+                'role' => 'petugas',
+                'password' => $defaultPassword,
             ],
             [
-                'nama' => 'Administrator2 (Handi)',
-                'nip' => '123140012',
-                'username' => 'handi_admin',
-                'email' => 'admin2@imigrasi.go.id',
-                'password' => $defaultPassword, // Jangan taruh password asli di sini!
-                'role' => 'admin',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'nama' => 'Doni (Petugas)',
+                'nip' => '123140013',
+                'username' => 'doni_petugas',
+                'email' => 'doni@imigrasi.go.id',
+                'role' => 'petugas',
+                'password' => $defaultPassword,
             ],
-        ]);
-
-        // 3. Data dummy petugas spesifik
-        $petugas = [
-            ['nama' => 'Budi Santoso', 'nip' => '19850315002', 'username' => 'budi.santoso', 'email' => 'budi.santoso@imigrasi.go.id', 'role' => 'petugas', 'password' => $defaultPassword, 'created_at' => now(), 'updated_at' => now()],
-            ['nama' => 'Siti Nurhaliza', 'nip' => '19880620003', 'username' => 'siti.nurhaliza', 'email' => 'siti.nurhaliza@imigrasi.go.id', 'role' => 'petugas', 'password' => $defaultPassword, 'created_at' => now(), 'updated_at' => now()],
-            ['nama' => 'Ahmad Wijaya', 'nip' => '19900812004', 'username' => 'ahmad.wijaya', 'email' => 'ahmad.wijaya@imigrasi.go.id', 'role' => 'petugas', 'password' => $defaultPassword, 'created_at' => now(), 'updated_at' => now()],
-            ['nama' => 'Rini Kusuma', 'nip' => '19920503005', 'username' => 'rini.kusuma', 'email' => 'rini.kusuma@imigrasi.go.id', 'role' => 'petugas', 'password' => $defaultPassword, 'created_at' => now(), 'updated_at' => now()],
-            ['nama' => 'Eka Prasetya', 'nip' => '19950711006', 'username' => 'eka.prasetya', 'email' => 'eka.prasetya@imigrasi.go.id', 'role' => 'petugas', 'password' => $defaultPassword, 'created_at' => now(), 'updated_at' => now()],
+            [
+                'nama' => 'Okta (Petugas)',
+                'nip' => '123140014',
+                'username' => 'okta_petugas',
+                'email' => 'okta@imigrasi.go.id',
+                'role' => 'petugas',
+                'password' => $defaultPassword,
+            ],
         ];
 
-        User::insert($petugas);
-
-        // 4. Tambahan data dummy otomatis via factory
-        User::factory()->petugas()->count(10)->create();
+        // Loop untuk memasukkan petugas secara aman tanpa duplikasi username
+        foreach ($daftarPetugas as $petugas) {
+            User::updateOrCreate(
+                ['username' => $petugas['username']], 
+                $petugas
+            );
+        }
     }
 }

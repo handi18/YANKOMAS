@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\Aspirasi;
 use Illuminate\Database\Seeder;
 
-class AsirasiSeeder extends Seeder
+class AspirasiSeeder extends Seeder
 {
     public function run(): void
     {

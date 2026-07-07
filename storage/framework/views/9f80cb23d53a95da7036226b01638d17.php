@@ -42,6 +42,7 @@
                         <?php $__currentLoopData = ['saran' => 'Saran', 'informasi' => 'Informasi', 'pengaduan' => 'Pengaduan']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $val => $lbl): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($val); ?>" <?php echo e(request('jenis') === $val ? 'selected' : ''); ?>><?php echo e($lbl); ?></option>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <option value="custom" <?php echo e(request('jenis') === 'custom' ? 'selected' : ''); ?>>Lainnya (Custom)...</option>
                     </select>
                 </div>
             </div>
@@ -53,6 +54,7 @@
                         <?php $__currentLoopData = ['ringan' => 'Ringan', 'sedang' => 'Sedang', 'berat' => 'Berat']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $val => $lbl): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($val); ?>" <?php echo e(request('kategori') === $val ? 'selected' : ''); ?>><?php echo e($lbl); ?></option>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <option value="custom" <?php echo e(request('kategori') === 'custom' ? 'selected' : ''); ?>>Lainnya (Custom)...</option>
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -69,6 +71,7 @@
                         <?php $__currentLoopData = $layanan; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($item->id); ?>" <?php echo e(request('layanan_id') == $item->id ? 'selected' : ''); ?>><?php echo e($item->nama_layanan); ?></option>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <option value="custom" <?php echo e(request('layanan_id') === 'custom' ? 'selected' : ''); ?>>Lainnya (Custom)...</option>
                     </select>
                 </div>
                 <div class="col-md-3">
@@ -110,14 +113,15 @@
                             </td>
                             <td><?php echo e($item->tanggal_kejadian->format('d/m/Y')); ?></td>
                             <td><?php echo e($item->jam_kejadian->format('H:i')); ?></td>
-                            <td><span class="badge bg-info"><?php echo e(ucfirst($item->jenis)); ?></span></td>
+                            <td><span class="badge bg-info"><?php echo e(!is_null($item->jenis_custom) ? $item->jenis_custom : ucfirst($item->jenis)); ?></span></td>
                             <td>
                                 <?php
                                     $kategoriBadges = ['ringan' => 'bg-success', 'sedang' => 'bg-warning', 'berat' => 'bg-danger'];
                                 ?>
-                                <span class="badge <?php echo e($kategoriBadges[$item->kategori] ?? 'bg-secondary'); ?>"><?php echo e(ucfirst($item->kategori)); ?></span>
+                                <span class="badge <?php echo e($kategoriBadges[$item->kategori] ?? 'bg-secondary'); ?>"><?php echo e(!is_null($item->kategori_custom) ? $item->kategori_custom : ucfirst($item->kategori)); ?></span>
                             </td>
-                            <td><?php echo e($item->layanan->nama_layanan); ?></td>
+                            
+                            <td><?php echo e(is_null($item->layanan_id) ? ($item->layanan_custom ?? '-') : ($item->layanan->nama_layanan ?? '-')); ?></td>
                             <td>
                                 <?php
                                     $statusBadges = ['Baru' => 'bg-primary', 'Diproses' => 'bg-warning text-dark', 'Selesai' => 'bg-success'];
@@ -126,11 +130,7 @@
                             </td>
                             <td><?php echo e($item->petugas->nama); ?></td>
                             <td>
-                                
-                                <?php if(Auth::user()->isAdmin() || Auth::id() === $item->petugas_id): ?>
                                     <a href="<?php echo e(route('aspirasi.show', $item->id)); ?>" class="btn btn-info btn-xs custom-tooltip" data-tooltip="Lihat Detail"><i class="fas fa-eye"></i></a>
-                                <?php endif; ?>
-
                                 
                                 <?php if(Auth::user()->isAdmin()): ?>
                                     <form action="<?php echo e(route('aspirasi.destroy', $item->id)); ?>" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus?')">

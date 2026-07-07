@@ -16,7 +16,7 @@ class Role
         }
 
         if (Auth::user()->isSuperAdmin()) {
-        return $next($request);
+            return $next($request);
         }
 
         if (in_array(Auth::user()->role, $roles)) {

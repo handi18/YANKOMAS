@@ -32,12 +32,19 @@
                 </tr>
                 <tr>
                     <th style="background-color: #f8f9fa;">Jenis Aspirasi</th>
-                    <td><span class="badge bg-info"><?php echo e(ucfirst($aspirasi->jenis)); ?></span></td>
+                    <td>
+                        <span class="badge bg-info">
+                            <?php echo e($aspirasi->jenis === 'custom' ? $aspirasi->jenis_custom : ucfirst($aspirasi->jenis)); ?>
+
+                        </span>
+                    </td>
                 </tr>
                 <tr>
                     <th style="background-color: #f8f9fa;">Kategori</th>
                     <td>
-                        <?php if($aspirasi->kategori): ?>
+                        <?php if($aspirasi->kategori === 'custom'): ?>
+                            <span class="badge bg-secondary"><?php echo e($aspirasi->kategori_custom); ?></span>
+                        <?php elseif($aspirasi->kategori): ?>
                             <?php
                                 $kategoriBadges = ['ringan' => 'bg-success', 'sedang' => 'bg-warning', 'berat' => 'bg-danger'];
                             ?>
@@ -49,7 +56,10 @@
                 </tr>
                 <tr>
                     <th style="background-color: #f8f9fa;">Layanan Terkait</th>
-                    <td><?php echo e($aspirasi->layanan->nama_layanan ?? '-'); ?></td>
+                    <td>
+                        <?php echo e(is_null($aspirasi->layanan_id) ? ($aspirasi->layanan_custom ?? '-') : ($aspirasi->layanan->nama_layanan ?? '-')); ?>
+
+                    </td>
                 </tr>
                 <tr>
                     <th style="background-color: #f8f9fa;">Media Pengaduan</th>
@@ -90,7 +100,6 @@
             
             <?php if(Auth::user()->isAdmin() || Auth::id() === $aspirasi->petugas_id): ?>
                 <?php
-                    // Tentukan kelas warna awal berdasarkan status dari database
                     $bgClass = 'bg-primary text-white';
                     if ($aspirasi->status === 'Diproses') $bgClass = 'bg-warning text-dark';
                     if ($aspirasi->status === 'Selesai') $bgClass = 'bg-success text-white';
@@ -108,10 +117,7 @@
 
                 <script>
                 function updateDropdownColor(el) {
-                    // Bersihkan kelas warna lama
                     el.classList.remove('bg-primary', 'bg-warning', 'bg-success', 'text-white', 'text-dark');
-                    
-                    // Terapkan kelas warna baru secara realtime sebelum form submit
                     if (el.value === 'Baru') {
                         el.classList.add('bg-primary', 'text-white');
                     } else if (el.value === 'Diproses') {

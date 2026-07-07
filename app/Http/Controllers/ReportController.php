@@ -27,20 +27,16 @@ class ReportController extends Controller
             $query->byPetugas($user->id);
         }
 
-        // Apply filters bawaan lainnya
         if ($request->filled('date_from') && $request->filled('date_to')) {
             $query->byDateRange($request->date_from, $request->date_to);
         } elseif ($request->filled('filter')) {
-            $filter = $request->filter;
-            if ($filter === 'today') {
-                $query->today();
-            } elseif ($filter === 'week') {
-                $query->thisWeek();
-            } elseif ($filter === 'month') {
-                $query->thisMonth();
-            } elseif ($filter === 'year') {
-                $query->thisYear();
-            }
+            match ($request->filter) {
+                'today' => $query->today(),
+                'week'  => $query->thisWeek(),
+                'month' => $query->thisMonth(),
+                'year'  => $query->thisYear(),
+                default => null,
+            };
         }
 
         if ($request->filled('jenis')) {
@@ -66,7 +62,11 @@ class ReportController extends Controller
     {
         $aspirations = $this->getFilteredAspirations($request);
 
-        return Excel::download(new \App\Exports\AsirasiExport($aspirations), 'aspirasi-' . now()->format('YmdHis') . '.xlsx');
+        // Perbaikan: format penamaan file diubah menjadi terpisah tanda hubung
+        // Hasil keluaran: aspirasi-2026-07-06-10-50-53.xlsx
+        $fileName = 'aspirasi-' . now()->format('Y-m-d-H-i-s') . '.xlsx';
+
+        return Excel::download(new \App\Exports\AsirasiExport($aspirations), $fileName);
     }
 
     public function exportPdf(Request $request)
@@ -98,15 +98,18 @@ class ReportController extends Controller
             'aktivitas' => 'Export laporan PDF',
         ]);
 
-        return $pdf->download('laporan-aspirasi-' . now()->format('YmdHis') . '.pdf');
+        // Perbaikan: format penamaan file diubah menjadi terpisah tanda hubung
+        // Hasil keluaran: laporan-aspirasi-2026-07-06-10-50-53.pdf
+        $fileName = 'laporan-aspirasi-' . now()->format('Y-m-d-H-i-s') . '.pdf';
+
+        return $pdf->download($fileName);
     }
 
-    private function getFilterInfo(Request $request)
+    private function getFilterInfo(Request $request): string
     {
         $info = [];
         $user = Auth::user();
 
-        // Tambahkan informasi visibilitas data pada header keterangan filter di PDF
         $scope = $request->get('scope', $user->isPetugas() ? 'my_data' : 'all');
         if ($user->isPetugas()) {
             $info[] = 'Hak Akses: ' . ($scope === 'my_data' ? 'Data Saya' : 'Semua Data');
@@ -115,15 +118,15 @@ class ReportController extends Controller
         if ($request->filled('date_from') && $request->filled('date_to')) {
             $info[] = 'Periode: ' . Carbon::parse($request->date_from)->format('d/m/Y') . ' - ' . Carbon::parse($request->date_to)->format('d/m/Y');
         } elseif ($request->filled('filter')) {
-            $filter = $request->filter;
-            if ($filter === 'today') {
-                $info[] = 'Hari ini (' . now()->format('d/m/Y') . ')';
-            } elseif ($filter === 'week') {
-                $info[] = 'Minggu ini';
-            } elseif ($filter === 'month') {
-                $info[] = 'Bulan ' . now()->format('m/Y');
-            } elseif ($filter === 'year') {
-                $info[] = 'Tahun ' . now()->format('Y');
+            $label = match ($request->filter) {
+                'today' => 'Hari ini (' . now()->format('d/m/Y') . ')',
+                'week'  => 'Minggu ini',
+                'month' => 'Bulan ' . now()->format('m/Y'),
+                'year'  => 'Tahun ' . now()->format('Y'),
+                default => null,
+            };
+            if ($label) {
+                $info[] = $label;
             }
         }
 

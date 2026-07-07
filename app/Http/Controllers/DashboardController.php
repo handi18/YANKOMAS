@@ -104,7 +104,6 @@ class DashboardController extends Controller
             'trendData'      => json_encode($trendData),
             'trendTitle'     => $trendTitle,
             'layanan'        => $layanan,
-            'lay'            => $layanan,
         ]);
     }
 }

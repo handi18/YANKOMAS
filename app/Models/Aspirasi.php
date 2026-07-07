@@ -10,14 +10,11 @@ class Aspirasi extends Model
     use HasFactory;
 
     protected $table = 'aspirasi';
-    protected $primaryKey = 'id';
-    public $incrementing = true;
-    protected $keyType = 'int';
 
     protected $fillable = [
         'nomor_tiket',
-        'nama_pengadu', // Tambahkan ini
-        'no_telp',      // Tambahkan ini
+        'nama_pengadu',
+        'no_telp',
         'tanggal_kejadian',
         'jam_kejadian',
         'jenis',
@@ -27,6 +24,9 @@ class Aspirasi extends Model
         'media',
         'petugas_id',
         'status',
+        'jenis_custom',
+        'kategori_custom',
+        'layanan_custom',
     ];
 
     protected $casts = [

@@ -41,34 +41,50 @@
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="jenis" class="form-label">Jenis Aspirasi *</label>
-                    <select class="form-select @error('jenis') is-invalid @enderror" id="jenis" name="jenis" required>
+                    <select class="form-select custom-trigger @error('jenis') is-invalid @enderror" id="jenis" name="jenis" data-target="#wrapper-jenis-custom" required>
                         <option value="">-- Pilih Jenis --</option>
                         @foreach(['saran' => 'Saran', 'informasi' => 'Informasi', 'pengaduan' => 'Pengaduan'] as $val => $lbl)
                             <option value="{{ $val }}" {{ old('jenis') === $val ? 'selected' : '' }}>{{ $lbl }}</option>
                         @endforeach
+                        <option value="custom" {{ old('jenis') === 'custom' ? 'selected' : '' }}>Lainnya (Custom)...</option>
                     </select>
                     @error('jenis') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
                 <div class="col-md-6">
                     <label for="kategori" class="form-label">Kategori *</label>
-                    <select class="form-select @error('kategori') is-invalid @enderror" id="kategori" name="kategori">
+                    <select class="form-select custom-trigger @error('kategori') is-invalid @enderror" id="kategori" name="kategori" data-target="#wrapper-kategori-custom">
                         <option value="">-- Pilih Kategori --</option>
                         @foreach(['ringan' => 'Ringan', 'sedang' => 'Sedang', 'berat' => 'Berat'] as $val => $lbl)
                             <option value="{{ $val }}" {{ old('kategori') === $val ? 'selected' : '' }}>{{ $lbl }}</option>
                         @endforeach
+                        <option value="custom" {{ old('kategori') === 'custom' ? 'selected' : '' }}>Lainnya (Custom)...</option>
                     </select>
                     @error('kategori') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div> 
             </div>
 
             <div class="row mb-3">
+                <div class="col-md-6 d-none" id="wrapper-jenis-custom">
+                    <label for="jenis_custom" class="form-label">Jenis Kustom *</label>
+                    <input type="text" class="form-control @error('jenis_custom') is-invalid @enderror" id="jenis_custom" name="jenis_custom" value="{{ old('jenis_custom') }}">
+                    @error('jenis_custom') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                </div>
+                <div class="col-md-6 d-none" id="wrapper-kategori-custom">
+                    <label for="kategori_custom" class="form-label">Kategori Kustom *</label>
+                    <input type="text" class="form-control @error('kategori_custom') is-invalid @enderror" id="kategori_custom" name="kategori_custom" value="{{ old('kategori_custom') }}">
+                    @error('kategori_custom') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                </div>
+            </div>
+
+            <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="layanan_id" class="form-label">Layanan *</label>
-                    <select class="form-select @error('layanan_id') is-invalid @enderror" id="layanan_id" name="layanan_id" required>
+                    <select class="form-select custom-trigger @error('layanan_id') is-invalid @enderror" id="layanan_id" name="layanan_id" data-target="#wrapper-layanan-custom" required>
                         <option value="">-- Pilih Layanan --</option>
                         @foreach($layanan as $item)
                             <option value="{{ $item->id }}" {{ old('layanan_id') == $item->id ? 'selected' : '' }}>{{ $item->nama_layanan }}</option>
                         @endforeach
+                        <option value="custom" {{ old('layanan_id') === 'custom' ? 'selected' : '' }}>Lainnya (Custom)...</option>
                     </select>
                     @error('layanan_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
@@ -82,6 +98,14 @@
                         @endforeach
                     </select>
                     @error('media') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                </div>
+            </div>
+
+            <div class="row mb-3 d-none" id="wrapper-layanan-custom">
+                <div class="col-md-6">
+                    <label for="layanan_custom" class="form-label">Layanan Kustom *</label>
+                    <input type="text" class="form-control @error('layanan_custom') is-invalid @enderror" id="layanan_custom" name="layanan_custom" value="{{ old('layanan_custom') }}">
+                    @error('layanan_custom') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
             </div>
 
@@ -117,15 +141,57 @@
         const jenis = document.getElementById('jenis');
         const kategori = document.getElementById('kategori');
 
-        function toggleKategori() {
+        // Logic 1: Toggle Kategori bawaan sistem (Pengaduan vs Non-Pengaduan)
+        function toggleKategoriBawaan() {
+            // Jika jenis pilih 'custom', kita bebaskan kategori agar bisa dipilih/kustom juga
             const isPengaduan = jenis.value === 'pengaduan';
-            kategori.disabled = !isPengaduan;
-            kategori.required = isPengaduan;
-            if (!isPengaduan) kategori.value = '';
+            const isCustom = jenis.value === 'custom';
+            
+            if (isCustom) {
+                kategori.disabled = false;
+                kategori.required = false;
+            } else {
+                kategori.disabled = !isPengaduan;
+                kategori.required = isPengaduan;
+                if (!isPengaduan) {
+                    kategori.value = '';
+                    // Trigger event change manual agar input kustom kategori ikut tersembunyi
+                    kategori.dispatchEvent(new Event('change'));
+                }
+            }
         }
 
-        toggleKategori();
-        jenis.addEventListener('change', toggleKategori);
+        // Logic 2: Handle Opsi Kustom Dinamis untuk Semua Dropdown bertanda .custom-trigger
+        document.querySelectorAll('.custom-trigger').forEach(select => {
+            const targetWrapper = document.querySelector(select.dataset.target);
+            if (!targetWrapper) return;
+            const inputField = targetWrapper.querySelector('input');
+
+            function toggleCustomInput() {
+                // Input kustom hanya wajib diisi jika dropdown bernilai 'custom' DAN dropdown tersebut sedang tidak disabled
+                if (select.value === 'custom' && !select.disabled) {
+                    targetWrapper.classList.remove('d-none');
+                    inputField.setAttribute('required', 'required');
+                } else {
+                    targetWrapper.classList.add('d-none');
+                    inputField.removeAttribute('required');
+                }
+            }
+
+            // Inisialisasi awal saat halaman diload (berguna jika ada old value)
+            toggleCustomInput();
+
+            select.addEventListener('change', function() {
+                toggleCustomInput();
+                if (this.value !== 'custom' || this.disabled) {
+                    inputField.value = ''; // Reset nilai input kustom jika batal pilih
+                }
+            });
+        });
+
+        // Hubungkan event listener jenis untuk trigger logika kategori bawaan
+        toggleKategoriBawaan();
+        jenis.addEventListener('change', toggleKategoriBawaan);
     });
 </script>
 @endsection

@@ -142,7 +142,7 @@ class AdminController extends Controller
             'aktivitas' => 'Menghapus user: ' . $username,
         ]);
 
-        return back()->with('success', 'User berhasil deleted.');
+        return back()->with('success', 'User berhasil dihapus.');
     }
 
     // ==========================================

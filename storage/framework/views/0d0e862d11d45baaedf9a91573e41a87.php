@@ -97,18 +97,19 @@ unset($__errorArgs, $__bag); ?>
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="jenis" class="form-label">Jenis Aspirasi *</label>
-                    <select class="form-select <?php $__errorArgs = ['jenis'];
+                    <select class="form-select custom-trigger <?php $__errorArgs = ['jenis'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>" id="jenis" name="jenis" required>
+unset($__errorArgs, $__bag); ?>" id="jenis" name="jenis" data-target="#wrapper-jenis-custom" required>
                         <option value="">-- Pilih Jenis --</option>
                         <?php $__currentLoopData = ['saran' => 'Saran', 'informasi' => 'Informasi', 'pengaduan' => 'Pengaduan']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $val => $lbl): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($val); ?>" <?php echo e(old('jenis') === $val ? 'selected' : ''); ?>><?php echo e($lbl); ?></option>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <option value="custom" <?php echo e(old('jenis') === 'custom' ? 'selected' : ''); ?>>Lainnya (Custom)...</option>
                     </select>
                     <?php $__errorArgs = ['jenis'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -121,18 +122,19 @@ unset($__errorArgs, $__bag); ?>
                 </div>
                 <div class="col-md-6">
                     <label for="kategori" class="form-label">Kategori *</label>
-                    <select class="form-select <?php $__errorArgs = ['kategori'];
+                    <select class="form-select custom-trigger <?php $__errorArgs = ['kategori'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>" id="kategori" name="kategori">
+unset($__errorArgs, $__bag); ?>" id="kategori" name="kategori" data-target="#wrapper-kategori-custom">
                         <option value="">-- Pilih Kategori --</option>
                         <?php $__currentLoopData = ['ringan' => 'Ringan', 'sedang' => 'Sedang', 'berat' => 'Berat']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $val => $lbl): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($val); ?>" <?php echo e(old('kategori') === $val ? 'selected' : ''); ?>><?php echo e($lbl); ?></option>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <option value="custom" <?php echo e(old('kategori') === 'custom' ? 'selected' : ''); ?>>Lainnya (Custom)...</option>
                     </select>
                     <?php $__errorArgs = ['kategori'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -146,20 +148,62 @@ unset($__errorArgs, $__bag); ?>
             </div>
 
             <div class="row mb-3">
-                <div class="col-md-6">
-                    <label for="layanan_id" class="form-label">Layanan *</label>
-                    <select class="form-select <?php $__errorArgs = ['layanan_id'];
+                <div class="col-md-6 d-none" id="wrapper-jenis-custom">
+                    <label for="jenis_custom" class="form-label">Jenis Kustom *</label>
+                    <input type="text" class="form-control <?php $__errorArgs = ['jenis_custom'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>" id="layanan_id" name="layanan_id" required>
+unset($__errorArgs, $__bag); ?>" id="jenis_custom" name="jenis_custom" value="<?php echo e(old('jenis_custom')); ?>">
+                    <?php $__errorArgs = ['jenis_custom'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <div class="invalid-feedback"><?php echo e($message); ?></div> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                </div>
+                <div class="col-md-6 d-none" id="wrapper-kategori-custom">
+                    <label for="kategori_custom" class="form-label">Kategori Kustom *</label>
+                    <input type="text" class="form-control <?php $__errorArgs = ['kategori_custom'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" id="kategori_custom" name="kategori_custom" value="<?php echo e(old('kategori_custom')); ?>">
+                    <?php $__errorArgs = ['kategori_custom'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <div class="invalid-feedback"><?php echo e($message); ?></div> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="layanan_id" class="form-label">Layanan *</label>
+                    <select class="form-select custom-trigger <?php $__errorArgs = ['layanan_id'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" id="layanan_id" name="layanan_id" data-target="#wrapper-layanan-custom" required>
                         <option value="">-- Pilih Layanan --</option>
                         <?php $__currentLoopData = $layanan; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($item->id); ?>" <?php echo e(old('layanan_id') == $item->id ? 'selected' : ''); ?>><?php echo e($item->nama_layanan); ?></option>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <option value="custom" <?php echo e(old('layanan_id') === 'custom' ? 'selected' : ''); ?>>Lainnya (Custom)...</option>
                     </select>
                     <?php $__errorArgs = ['layanan_id'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -187,6 +231,28 @@ unset($__errorArgs, $__bag); ?>" id="media" name="media" required>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                     <?php $__errorArgs = ['media'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <div class="invalid-feedback"><?php echo e($message); ?></div> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                </div>
+            </div>
+
+            <div class="row mb-3 d-none" id="wrapper-layanan-custom">
+                <div class="col-md-6">
+                    <label for="layanan_custom" class="form-label">Layanan Kustom *</label>
+                    <input type="text" class="form-control <?php $__errorArgs = ['layanan_custom'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" id="layanan_custom" name="layanan_custom" value="<?php echo e(old('layanan_custom')); ?>">
+                    <?php $__errorArgs = ['layanan_custom'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -243,15 +309,57 @@ unset($__errorArgs, $__bag); ?>
         const jenis = document.getElementById('jenis');
         const kategori = document.getElementById('kategori');
 
-        function toggleKategori() {
+        // Logic 1: Toggle Kategori bawaan sistem (Pengaduan vs Non-Pengaduan)
+        function toggleKategoriBawaan() {
+            // Jika jenis pilih 'custom', kita bebaskan kategori agar bisa dipilih/kustom juga
             const isPengaduan = jenis.value === 'pengaduan';
-            kategori.disabled = !isPengaduan;
-            kategori.required = isPengaduan;
-            if (!isPengaduan) kategori.value = '';
+            const isCustom = jenis.value === 'custom';
+            
+            if (isCustom) {
+                kategori.disabled = false;
+                kategori.required = false;
+            } else {
+                kategori.disabled = !isPengaduan;
+                kategori.required = isPengaduan;
+                if (!isPengaduan) {
+                    kategori.value = '';
+                    // Trigger event change manual agar input kustom kategori ikut tersembunyi
+                    kategori.dispatchEvent(new Event('change'));
+                }
+            }
         }
 
-        toggleKategori();
-        jenis.addEventListener('change', toggleKategori);
+        // Logic 2: Handle Opsi Kustom Dinamis untuk Semua Dropdown bertanda .custom-trigger
+        document.querySelectorAll('.custom-trigger').forEach(select => {
+            const targetWrapper = document.querySelector(select.dataset.target);
+            if (!targetWrapper) return;
+            const inputField = targetWrapper.querySelector('input');
+
+            function toggleCustomInput() {
+                // Input kustom hanya wajib diisi jika dropdown bernilai 'custom' DAN dropdown tersebut sedang tidak disabled
+                if (select.value === 'custom' && !select.disabled) {
+                    targetWrapper.classList.remove('d-none');
+                    inputField.setAttribute('required', 'required');
+                } else {
+                    targetWrapper.classList.add('d-none');
+                    inputField.removeAttribute('required');
+                }
+            }
+
+            // Inisialisasi awal saat halaman diload (berguna jika ada old value)
+            toggleCustomInput();
+
+            select.addEventListener('change', function() {
+                toggleCustomInput();
+                if (this.value !== 'custom' || this.disabled) {
+                    inputField.value = ''; // Reset nilai input kustom jika batal pilih
+                }
+            });
+        });
+
+        // Hubungkan event listener jenis untuk trigger logika kategori bawaan
+        toggleKategoriBawaan();
+        jenis.addEventListener('change', toggleKategoriBawaan);
     });
 </script>
 <?php $__env->stopSection(); ?>

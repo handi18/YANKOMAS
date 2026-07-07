@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\AsirasiController;
+use App\Http\Controllers\AspirasiController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
@@ -23,8 +23,8 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile/foto', [AdminController::class, 'deleteFoto'])->name('profile.delete-foto');
 
     // Aspirasi routes
-    Route::resource('aspirasi', AsirasiController::class);
-    Route::post('aspirasi/{aspirasi}/update-status', [AsirasiController::class, 'updateStatus'])->name('aspirasi.update-status');
+    Route::resource('aspirasi', AspirasiController::class);
+    Route::post('aspirasi/{aspirasi}/update-status', [AspirasiController::class, 'updateStatus'])->name('aspirasi.update-status');
 
     // Report routes
     Route::get('aspirasi/export/excel', [ReportController::class, 'exportExcel'])->name('aspirasi.export-excel');
