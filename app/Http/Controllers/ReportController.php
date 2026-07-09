@@ -61,12 +61,14 @@ class ReportController extends Controller
     public function exportExcel(Request $request)
     {
         $aspirations = $this->getFilteredAspirations($request);
+        $filterInfo = $this->getFilterInfo($request);
+        $printedAt = now()->format('d-m-Y H:i:s');
 
         // Perbaikan: format penamaan file diubah menjadi terpisah tanda hubung
         // Hasil keluaran: aspirasi-2026-07-06-10-50-53.xlsx
         $fileName = 'aspirasi-' . now()->format('Y-m-d-H-i-s') . '.xlsx';
 
-        return Excel::download(new \App\Exports\AsirasiExport($aspirations), $fileName);
+        return Excel::download(new \App\Exports\AsirasiExport($aspirations, $filterInfo, $printedAt), $fileName);
     }
 
     public function exportPdf(Request $request)

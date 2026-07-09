@@ -94,8 +94,18 @@
     </div>
 
     <div class="filter-info">
-        <strong>Filter:</strong> <?php echo e($filter_info); ?>
+        <table style="width: 100%; border-collapse: collapse; margin: 0; padding: 0; background: transparent; border: none;">
+            <tr style="background: transparent;">
+                <td style="padding: 0; border: none; text-align: left; background: transparent;">
+                    <strong>Filter:</strong> <?php echo e($filter_info); ?>
 
+                </td>
+                <td style="padding: 0; border: none; text-align: right; background: transparent;">
+                    <strong>Waktu Cetak:</strong> <?php echo e($printed_at); ?>
+
+                </td>
+            </tr>
+        </table>
     </div>
 
     <table style="width: 100%; background-color: #e8f4f8; margin-bottom: 15px; border-collapse: collapse;">
@@ -163,7 +173,7 @@
                     <td><?php echo e(ucfirst($item->jenis)); ?></td>
                     <td><?php echo e($item->kategori ? ucfirst($item->kategori) : '-'); ?></td>
                     <td><?php echo e(substr($item->isi_aspirasi, 0, 50)); ?>...</td>
-                    <td><?php echo e($item->layanan->nama_layanan); ?></td>
+                    <td><?php echo e($item->layanan_id ? ($item->layanan->nama_layanan ?? '-') : ($item->layanan_custom ?? '-')); ?></td>
                     <td><?php echo e($item->media); ?></td>
                     <td><?php echo e($item->status); ?></td>
                     <td><?php echo e($item->petugas->nama); ?></td>

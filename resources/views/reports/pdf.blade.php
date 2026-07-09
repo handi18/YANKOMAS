@@ -94,7 +94,16 @@
     </div>
 
     <div class="filter-info">
-        <strong>Filter:</strong> {{ $filter_info }}
+        <table style="width: 100%; border-collapse: collapse; margin: 0; padding: 0; background: transparent; border: none;">
+            <tr style="background: transparent;">
+                <td style="padding: 0; border: none; text-align: left; background: transparent;">
+                    <strong>Filter:</strong> {{ $filter_info }}
+                </td>
+                <td style="padding: 0; border: none; text-align: right; background: transparent;">
+                    <strong>Waktu Cetak:</strong> {{ $printed_at }}
+                </td>
+            </tr>
+        </table>
     </div>
 
     <table style="width: 100%; background-color: #e8f4f8; margin-bottom: 15px; border-collapse: collapse;">
@@ -162,7 +171,7 @@
                     <td>{{ ucfirst($item->jenis) }}</td>
                     <td>{{ $item->kategori ? ucfirst($item->kategori) : '-' }}</td>
                     <td>{{ substr($item->isi_aspirasi, 0, 50) }}...</td>
-                    <td>{{ $item->layanan->nama_layanan }}</td>
+                    <td>{{ $item->layanan_id ? ($item->layanan->nama_layanan ?? '-') : ($item->layanan_custom ?? '-') }}</td>
                     <td>{{ $item->media }}</td>
                     <td>{{ $item->status }}</td>
                     <td>{{ $item->petugas->nama }}</td>
