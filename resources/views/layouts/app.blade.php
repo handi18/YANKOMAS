@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title') - SIMASPIRASI IMIGRASI</title>
+    <title>@yield('title') - YANKOMAS</title>
 
     <link rel="icon" type="image/png" href="{{ asset('assets/img/logo_imigrasi_Bandung.png') }}">
 
@@ -140,7 +140,7 @@
                      style="width: 32px; height: 32px; object-fit: contain; flex-shrink: 0;"
                      class="me-2">
                 <span class="navbar-brand text-white font-weight-bold mb-0">
-                    SIMASPIRASI IMIGRASI
+                    YANKOMAS
                 </span>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
