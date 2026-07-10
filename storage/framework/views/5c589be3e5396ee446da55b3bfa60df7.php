@@ -1,8 +1,8 @@
-@extends('layouts.app')
 
-@section('title', 'Dashboard')
 
-@section('content')
+<?php $__env->startSection('title', 'Dashboard'); ?>
+
+<?php $__env->startSection('content'); ?>
 <style>
     .btn-gradient-custom {
         background: linear-gradient(135deg, #0e3b75 40%);
@@ -15,45 +15,45 @@
     }
 </style>
 
-{{-- Stat Cards SIP --}}
+
 <div class="row mb-4">
     <div class="col-md-3">
         <div class="stat-card today">
             <h5><i class="fas fa-envelope"></i> Total SIP</h5>
-            <div class="value">{{ $sipTotal }}</div>
+            <div class="value"><?php echo e($sipTotal); ?></div>
         </div>
     </div>
     <div class="col-md-3">
         <div class="stat-card week">
             <h5><i class="fas fa-lightbulb"></i> Saran</h5>
-            <div class="value">{{ $Saran }}</div>
+            <div class="value"><?php echo e($Saran); ?></div>
         </div>
     </div>
     <div class="col-md-3">
         <div class="stat-card month">
             <h5><i class="fas fa-info-circle"></i> Informasi</h5>
-            <div class="value">{{ $Informasi }}</div>
+            <div class="value"><?php echo e($Informasi); ?></div>
         </div>
     </div>
     <div class="col-md-3">
         <div class="stat-card year">
             <h5><i class="fas fa-exclamation-circle"></i> Pengaduan</h5>
-            <div class="value">{{ $Pengaduan }}</div>
+            <div class="value"><?php echo e($Pengaduan); ?></div>
         </div>
     </div>
     
-    {{-- Filter Rentang Waktu Independen --}}
+    
     <div class="row mb-3 mt-3">  
         <div class="col-12">
-            <form method="GET" action="{{ route('dashboard') }}" class="d-flex flex-wrap align-items-center gap-3">
+            <form method="GET" action="<?php echo e(route('dashboard')); ?>" class="d-flex flex-wrap align-items-center gap-3">
                 
                 <div class="d-flex align-items-center gap-2">
                     <select name="range" class="form-select form-select-sm" style="width: auto;" onchange="this.form.start_date.value=''; this.form.end_date.value=''; this.form.submit()">
-                        <option value="semua"      {{ request('range', 'semua') == 'semua' && !request('start_date') ? 'selected' : '' }}>Semua Waktu</option>
-                        <option value="hari_ini"   {{ request('range') == 'hari_ini' ? 'selected' : '' }}>Hari Ini</option>
-                        <option value="minggu_ini" {{ request('range') == 'minggu_ini' ? 'selected' : '' }}>Minggu Ini</option>
-                        <option value="bulan_ini"  {{ request('range') == 'bulan_ini' ? 'selected' : '' }}>Bulan Ini</option>
-                        <option value="tahun_ini"  {{ request('range') == 'tahun_ini' ? 'selected' : '' }}>Tahun Ini</option>
+                        <option value="semua"      <?php echo e(request('range', 'semua') == 'semua' && !request('start_date') ? 'selected' : ''); ?>>Semua Waktu</option>
+                        <option value="hari_ini"   <?php echo e(request('range') == 'hari_ini' ? 'selected' : ''); ?>>Hari Ini</option>
+                        <option value="minggu_ini" <?php echo e(request('range') == 'minggu_ini' ? 'selected' : ''); ?>>Minggu Ini</option>
+                        <option value="bulan_ini"  <?php echo e(request('range') == 'bulan_ini' ? 'selected' : ''); ?>>Bulan Ini</option>
+                        <option value="tahun_ini"  <?php echo e(request('range') == 'tahun_ini' ? 'selected' : ''); ?>>Tahun Ini</option>
                     </select>
                 </div>
 
@@ -61,14 +61,14 @@
 
                 <div class="d-flex align-items-center gap-2">
                     <span class="text-muted small">Rentang Custom:</span>
-                    <input type="date" name="start_date" class="form-control form-control-sm" value="{{ request('start_date') }}" required>
+                    <input type="date" name="start_date" class="form-control form-control-sm" value="<?php echo e(request('start_date')); ?>" required>
                     <span class="text-muted small">s.d</span>
-                    <input type="date" name="end_date" class="form-control form-control-sm" value="{{ request('end_date') }}" required>
+                    <input type="date" name="end_date" class="form-control form-control-sm" value="<?php echo e(request('end_date')); ?>" required>
                     <button type="submit" class="btn btn-gradient-custom btn-sm px-3 text-white">Cari</button>
                     
-                    @if(request()->filled('start_date'))
-                        <a href="{{ route('dashboard') }}" class="btn btn-secondary btn-sm">Reset</a>
-                    @endif
+                    <?php if(request()->filled('start_date')): ?>
+                        <a href="<?php echo e(route('dashboard')); ?>" class="btn btn-secondary btn-sm">Reset</a>
+                    <?php endif; ?>
                 </div>
 
             </form>
@@ -105,7 +105,7 @@
     <div class="col-md-7">
         <div class="card h-100"> 
             <div class="card-header card-header-custom">
-                <h5 class="mb-0"><i class="fas fa-line-chart"></i> {{ $trendTitle }}</h5>
+                <h5 class="mb-0"><i class="fas fa-line-chart"></i> <?php echo e($trendTitle); ?></h5>
             </div>
             <div class="card-body d-flex flex-column justify-content-center">
                 <div style="height: 570px; position: relative;">
@@ -126,15 +126,15 @@
                 <div class="d-flex justify-content-center">
                     <div class="row text-center w-100" style="max-width: 500px;"> 
                         <div class="col-4">
-                            <h3 class="text-primary">{{ $statusBaru }}</h3>
+                            <h3 class="text-primary"><?php echo e($statusBaru); ?></h3>
                             <p class="text-muted mb-0">Baru</p>
                         </div>
                         <div class="col-4">
-                            <h3 class="text-warning">{{ $statusDiproses }}</h3>
+                            <h3 class="text-warning"><?php echo e($statusDiproses); ?></h3>
                             <p class="text-muted mb-0">Diproses</p>
                         </div>
                         <div class="col-4">
-                            <h3 class="text-success">{{ $statusSelesai }}</h3>
+                            <h3 class="text-success"><?php echo e($statusSelesai); ?></h3>
                             <p class="text-muted mb-0">Selesai</p>
                         </div>
                     </div>
@@ -143,9 +143,9 @@
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('js')
+<?php $__env->startPush('js'); ?>
 <script>
     function toggleCustomRange(value) {
         const customInputs = document.getElementById('customRangeInputs');
@@ -164,7 +164,7 @@
         data: {
             labels: ['Informasi', 'Saran', 'Pengaduan'],
             datasets: [{
-                data: [{{ $Informasi }}, {{ $jenisSaran }}, {{ $jenisPengaduan }}],
+                data: [<?php echo e($Informasi); ?>, <?php echo e($jenisSaran); ?>, <?php echo e($jenisPengaduan); ?>],
                 backgroundColor: [
                     'rgba(67, 172, 188, 0.8)',  
                     'rgba(255, 193, 7, 0.8)',   
@@ -197,7 +197,7 @@
             labels: ['Ringan', 'Sedang', 'Berat'],
             datasets: [{
                 label: 'Jumlah',
-                data: [{{ $kategoriRingan }}, {{ $kategoriSedang }}, {{ $kategoriBerat }}],
+                data: [<?php echo e($kategoriRingan); ?>, <?php echo e($kategoriSedang); ?>, <?php echo e($kategoriBerat); ?>],
                 backgroundColor: [
                     '#43acbcff', 
                     '#ffc107', 
@@ -223,7 +223,7 @@
     });
 
     // Trend Chart
-    const trendData = {!! $trendData !!};
+    const trendData = <?php echo $trendData; ?>;
     const trendCtx = document.getElementById('trendChart').getContext('2d');
     new Chart(trendCtx, {
         type: 'line',
@@ -253,4 +253,5 @@
         }
     });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\simaspirasi-imigrasi\resources\views/dashboard/index.blade.php ENDPATH**/ ?>

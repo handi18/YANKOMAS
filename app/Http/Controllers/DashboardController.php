@@ -64,10 +64,16 @@ class DashboardController extends Controller
         $statusDiproses = (clone $sipQuery)->byStatus('Diproses')->count();
         $statusSelesai  = (clone $sipQuery)->byStatus('Selesai')->count();
 
-        // 3. Ambil Data Tren
+        // 3. Ambil Data Tren (Mendukung MySQL & Postgres secara adaptif)
+        $isMysql = DB::getDriverName() === 'mysql';
+        
+        $dateExpression = $isMysql 
+            ? "DATE_FORMAT(tanggal_kejadian, '%d %b')" 
+            : "TO_CHAR(tanggal_kejadian, 'DD Mon')";
+
         $rawTrend = (clone $sipQuery)
-            ->select(DB::raw("TO_CHAR(tanggal_kejadian, 'DD Mon') as date_label"), DB::raw("COUNT(*) as total"))
-            ->groupBy(DB::raw("tanggal_kejadian, TO_CHAR(tanggal_kejadian, 'DD Mon')"))
+            ->select(DB::raw("{$dateExpression} as date_label"), DB::raw("COUNT(*) as total"))
+            ->groupBy('tanggal_kejadian', DB::raw($dateExpression))
             ->orderBy('tanggal_kejadian', 'asc')
             ->get();
 

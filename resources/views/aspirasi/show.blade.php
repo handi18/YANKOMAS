@@ -138,11 +138,10 @@
                 </form>
             @endif
 
-            {{-- 4. Tombol Kembali (Dipindah ke Samping Kanan Tombol Aksi) --}}
-            <a href="{{ route('aspirasi.index') }}" class="btn btn-secondary ms-auto">
+            {{-- 4. Tombol Kembali dengan Jaring Pengaman Fallback --}}
+            <a href="{{ url()->previous() === url()->current() ? route('aspirasi.index') : url()->previous() }}" class="btn btn-secondary ms-auto">
                 <i class="fas fa-arrow-left"></i> Kembali
             </a>
-            
         </div>
     </div>
 </div>
