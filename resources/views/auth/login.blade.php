@@ -113,7 +113,7 @@
                          style="width: 50px; height: 50px; object-fit: contain;">
                 </div>
                 <h1>YANKOMAS</h1>
-                <p>Sistem Informasi Saran, Masukan, dan Pengaduan Internal</p>
+                <p>Sistem Informasi Saran, informasi, dan Pengaduan (SIP) Internal</p>
             </div>
 
             @if ($errors->any())
