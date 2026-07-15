@@ -1,4 +1,4 @@
-# SIMASPIRASI IMIGRASI
+# YANKOMAS
 ## Sistem Informasi Saran, Masukan, dan Pengaduan Internal
 
 Aplikasi web fullstack untuk mencatat dan mengelola saran, masukan, dan pengaduan dari masyarakat di Kantor Imigrasi Kelas I TPI Kota Bandung.

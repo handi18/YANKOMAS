@@ -88,7 +88,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>SIMASPIRASI IMIGRASI</h1>
+        <h1>YANKOMAS</h1>
         <p>Sistem Informasi Saran, Informasi, dan Pengaduan Internal</p>
         <p>Kantor Imigrasi Kelas I TPI Kota Bandung</p>
     </div>
@@ -185,7 +185,7 @@
     </table>
 
     <div class="footer">
-        <p>Laporan dihasilkan oleh SIMASPIRASI IMIGRASI</p>
+        <p>Laporan dihasilkan oleh YANKOMAS</p>
         <p>Waktu cetak: {{ $printed_at }}</p>
         <div class="footer-row">
             <div class="footer-section">

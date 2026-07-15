@@ -1,7 +1,7 @@
 .PHONY: help install serve migrate seed test lint format clean
 
 help:
-	@echo "=== SIMASPIRASI IMIGRASI - Development Commands ==="
+	@echo "=== YANKOMAS - Development Commands ==="
 	@echo ""
 	@echo "Setup Commands:"
 	@echo "  make install          - Install dependencies (composer install)"

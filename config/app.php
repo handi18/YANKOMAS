@@ -2,7 +2,7 @@
 
 return [
 
-    'name' => env('APP_NAME', 'SIMASPIRASI IMIGRASI'),
+    'name' => env('APP_NAME', 'YANKOMAS'),
     'env' => env('APP_ENV', 'production'),
     'debug' => (bool) env('APP_DEBUG', false),
     'url' => env('APP_URL', 'http://localhost'),

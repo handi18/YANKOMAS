@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
     working_dir: /app
     environment:
-      - APP_NAME="SIMASPIRASI IMIGRASI"
+      - APP_NAME="YANKOMAS"
       - APP_ENV=local
       - APP_DEBUG=true
       - APP_KEY=base64:4ktLQB1pjNmOKxcMa7qC6C/hR5j2F9T+2qW8pV5sX/0=
