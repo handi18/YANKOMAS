@@ -12,15 +12,17 @@
     <div class="card-body">
         <form method="GET" class="mb-4">
             <div class="row mb-3 gap-2 gap-md-0">
-                {{-- Filter Scope Otorisasi: Hanya Ditampilkan untuk Petugas --}}
-                @if(Auth::user()->isPetugas())
                 <div class="col-md-2">
                     <select name="scope" class="form-select form-select-sm" onchange="this.form.submit()">
-                        <option value="my_data" {{ ($current_scope ?? request('scope', 'my_data')) === 'my_data' ? 'selected' : '' }}>Data Saya</option>
-                        <option value="all" {{ ($current_scope ?? request('scope', 'my_data')) === 'all' ? 'selected' : '' }}>Semua Data</option>
+                        @if(Auth::user()->isPetugas())
+                            <option value="my_data" {{ ($current_scope ?? request('scope', 'my_data')) === 'my_data' ? 'selected' : '' }}>Data Saya</option>
+                        @endif
+                        <option value="all" {{ ($current_scope ?? request('scope', Auth::user()->isPetugas() ? 'my_data' : 'all')) === 'all' ? 'selected' : '' }}>Semua Data</option>
+                        
+                        {{-- Kolam Bersama: Admin dan Petugas bisa melihat tiket dari Masyarakat (Unassigned) --}}
+                        <option value="masyarakat" {{ request('scope') === 'masyarakat' ? 'selected' : '' }}>Data Masyarakat (Baru Masuk)</option>
                     </select>
                 </div>
-                @endif
                 
                 <div class="col-md-2">
                     <select name="filter" class="form-select form-select-sm">
@@ -128,7 +130,13 @@
                                 @endphp
                                 <span class="badge {{ $statusBadges[$item->status] ?? 'bg-secondary' }}">{{ $item->status }}</span>
                             </td>
-                            <td>{{ $item->petugas->nama }}</td>
+                            <td>
+                                @if($item->petugas)
+                                    {{ $item->petugas->nama }}
+                                @else
+                                    <span class="badge bg-secondary"><i class="fas fa-clock"></i> Menunggu Penugasan</span>
+                                @endif
+                            </td>
                             <td>
                                     <a href="{{ route('aspirasi.show', $item->id) }}" class="btn btn-info btn-xs custom-tooltip" data-tooltip="Lihat Detail"><i class="fas fa-eye"></i></a>
                                 {{-- Tombol Hapus: Dikunci total hanya untuk Admin/Super Admin --}}

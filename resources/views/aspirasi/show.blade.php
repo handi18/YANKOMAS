@@ -127,7 +127,49 @@
                 </script>
             @endif
 
-            {{-- 3. Tombol Hapus (Hanya Admin) --}}
+            {{-- 3. Fitur Ambil Alih Laporan / Claim (Kolam Bersama untuk Petugas) --}}
+            @if(is_null($aspirasi->petugas_id) && Auth::user()->isPetugas())
+                <form action="{{ route('aspirasi.claim', $aspirasi->id) }}" method="POST" onsubmit="return confirm('Anda yakin ingin mengambil alih laporan ini? Laporan ini akan dipindahkan ke Data Saya.')">
+                    @csrf
+                    @method('PUT')
+                    <button type="submit" class="btn btn-lg btn-success pulse-animation fw-bold">
+                        <i class="fas fa-hand-paper"></i> Ambil Alih Laporan Ini
+                    </button>
+                </form>
+                
+                <style>
+                    .pulse-animation {
+                        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+                        animation: pulse 2s infinite;
+                    }
+                    @keyframes pulse {
+                        0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+                        70% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
+                        100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+                    }
+                </style>
+            @endif
+
+            {{-- 4. Fitur Assign/Re-assign Petugas (Hanya Admin) --}}
+            @if(Auth::user()->isAdmin())
+                <form action="{{ route('admin.aspirasi.assign', $aspirasi->id) }}" method="POST" class="d-flex align-items-center gap-2">
+                    @csrf
+                    @method('PUT')
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                        <select name="petugas_id" class="form-select" onchange="this.form.submit()" required>
+                            <option value="">-- Tugaskan Petugas --</option>
+                            @foreach($petugasList as $petugas)
+                                <option value="{{ $petugas->id }}" {{ $aspirasi->petugas_id == $petugas->id ? 'selected' : '' }}>
+                                    {{ $petugas->nama }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </form>
+            @endif
+
+            {{-- 5. Tombol Hapus (Hanya Admin) --}}
             @if(Auth::user()->isAdmin())
                 <form action="{{ route('aspirasi.destroy', $aspirasi->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                     @csrf
@@ -138,7 +180,7 @@
                 </form>
             @endif
 
-            {{-- 4. Tombol Kembali dengan Jaring Pengaman Fallback --}}
+            {{-- 6. Tombol Kembali dengan Jaring Pengaman Fallback --}}
             <a href="{{ url()->previous() === url()->current() ? route('aspirasi.index') : url()->previous() }}" class="btn btn-secondary ms-auto">
                 <i class="fas fa-arrow-left"></i> Kembali
             </a>

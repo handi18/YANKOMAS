@@ -7,8 +7,14 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\PublicController;
+
+// Public routes (Landing Page & Form)
+Route::get('/', [PublicController::class, 'index'])->name('home');
+Route::post('/lapor', [PublicController::class, 'store'])->name('public.store');
+
 // Auth routes
-Route::get('/', [AuthController::class, 'login'])->name('login');
+Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate'])->middleware('throttle:5,1')->name('authenticate');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -25,6 +31,7 @@ Route::middleware(['auth'])->group(function () {
     // Aspirasi routes
     Route::resource('aspirasi', AspirasiController::class);
     Route::post('aspirasi/{aspirasi}/update-status', [AspirasiController::class, 'updateStatus'])->name('aspirasi.update-status');
+    Route::put('aspirasi/{aspirasi}/claim', [AspirasiController::class, 'claimPetugas'])->name('aspirasi.claim');
 
     // Report routes
     Route::get('aspirasi/export/excel', [ReportController::class, 'exportExcel'])->name('aspirasi.export-excel');
@@ -44,6 +51,9 @@ Route::middleware(['auth'])->group(function () {
 
             // Activity logs
             Route::get('activity-logs', [AdminController::class, 'activityLogs'])->name('admin.activity-logs');
+            
+            // Route assign & claim petugas
+            Route::put('aspirasi/{aspirasi}/assign', [AspirasiController::class, 'assignPetugas'])->name('admin.aspirasi.assign');
         });
     });
 });

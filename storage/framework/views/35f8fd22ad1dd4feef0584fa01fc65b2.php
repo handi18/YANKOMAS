@@ -12,15 +12,17 @@
     <div class="card-body">
         <form method="GET" class="mb-4">
             <div class="row mb-3 gap-2 gap-md-0">
-                
-                <?php if(Auth::user()->isPetugas()): ?>
                 <div class="col-md-2">
                     <select name="scope" class="form-select form-select-sm" onchange="this.form.submit()">
-                        <option value="my_data" <?php echo e(($current_scope ?? request('scope', 'my_data')) === 'my_data' ? 'selected' : ''); ?>>Data Saya</option>
-                        <option value="all" <?php echo e(($current_scope ?? request('scope', 'my_data')) === 'all' ? 'selected' : ''); ?>>Semua Data</option>
+                        <?php if(Auth::user()->isPetugas()): ?>
+                            <option value="my_data" <?php echo e(($current_scope ?? request('scope', 'my_data')) === 'my_data' ? 'selected' : ''); ?>>Data Saya</option>
+                        <?php endif; ?>
+                        <option value="all" <?php echo e(($current_scope ?? request('scope', Auth::user()->isPetugas() ? 'my_data' : 'all')) === 'all' ? 'selected' : ''); ?>>Semua Data</option>
+                        
+                        
+                        <option value="masyarakat" <?php echo e(request('scope') === 'masyarakat' ? 'selected' : ''); ?>>Data Masyarakat (Baru Masuk)</option>
                     </select>
                 </div>
-                <?php endif; ?>
                 
                 <div class="col-md-2">
                     <select name="filter" class="form-select form-select-sm">
@@ -128,7 +130,14 @@
                                 ?>
                                 <span class="badge <?php echo e($statusBadges[$item->status] ?? 'bg-secondary'); ?>"><?php echo e($item->status); ?></span>
                             </td>
-                            <td><?php echo e($item->petugas->nama); ?></td>
+                            <td>
+                                <?php if($item->petugas): ?>
+                                    <?php echo e($item->petugas->nama); ?>
+
+                                <?php else: ?>
+                                    <span class="badge bg-secondary"><i class="fas fa-clock"></i> Menunggu Penugasan</span>
+                                <?php endif; ?>
+                            </td>
                             <td>
                                     <a href="<?php echo e(route('aspirasi.show', $item->id)); ?>" class="btn btn-info btn-xs custom-tooltip" data-tooltip="Lihat Detail"><i class="fas fa-eye"></i></a>
                                 

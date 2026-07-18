@@ -22,6 +22,12 @@ class AspirasiController extends Controller
             $query->byPetugas($user->id);
         }
 
+        // Scope Masyarakat: tiket dari form publik yang belum memiliki petugas_id
+        // (Bisa diakses oleh Admin maupun Petugas untuk sistem kolam bersama/claim)
+        if ($scope === 'masyarakat') {
+            $query->whereNull('petugas_id');
+        }
+
         if ($request->filled('date_from') && $request->filled('date_to')) {
             $query->byDateRange($request->date_from, $request->date_to);
         } elseif ($request->filled('filter')) {
@@ -127,7 +133,11 @@ class AspirasiController extends Controller
 
     public function show(Aspirasi $aspirasi)
     {
-        return view('aspirasi.show', ['aspirasi' => $aspirasi]);
+        $petugasList = Auth::user()->isAdmin() ? User::where('role', 'petugas')->get() : [];
+        return view('aspirasi.show', [
+            'aspirasi' => $aspirasi,
+            'petugasList' => $petugasList
+        ]);
     }
 
     public function edit(Aspirasi $aspirasi)
@@ -222,6 +232,48 @@ class AspirasiController extends Controller
         ]);
 
         return redirect()->route('aspirasi.show', $aspirasi->id)->with('success', 'Status aspirasi berhasil diperbarui.');
+    }
+
+    public function assignPetugas(Request $request, Aspirasi $aspirasi)
+    {
+        if (!Auth::user()->isAdmin()) {
+            abort(403, 'Hanya Admin yang dapat menugaskan petugas.');
+        }
+
+        $validated = $request->validate([
+            'petugas_id' => ['required', 'exists:users,id'],
+        ]);
+
+        $aspirasi->update(['petugas_id' => $validated['petugas_id']]);
+
+        $petugas = User::find($validated['petugas_id']);
+
+        ActivityLog::create([
+            'user_id'   => Auth::id(),
+            'aktivitas' => 'Menugaskan tiket ' . $aspirasi->nomor_tiket . ' kepada ' . $petugas->nama,
+        ]);
+
+        return redirect()->route('aspirasi.show', $aspirasi->id)->with('success', 'Petugas berhasil ditugaskan untuk menangani laporan ini.');
+    }
+
+    public function claimPetugas(Request $request, Aspirasi $aspirasi)
+    {
+        // Hanya Petugas yang bisa meng-claim tiket (atau Admin yang bertindak juga sbg petugas)
+        if (!is_null($aspirasi->petugas_id)) {
+            return redirect()->route('aspirasi.show', $aspirasi->id)->with('error', 'Laporan ini sudah diambil alih oleh petugas lain.');
+        }
+
+        $aspirasi->update([
+            'petugas_id' => Auth::id(),
+            'status'     => 'Diproses' // Opsional: langsung mengubah status ke Diproses saat diclaim
+        ]);
+
+        ActivityLog::create([
+            'user_id'   => Auth::id(),
+            'aktivitas' => 'Mengambil alih tiket pengaduan masyarakat: ' . $aspirasi->nomor_tiket,
+        ]);
+
+        return redirect()->route('aspirasi.show', $aspirasi->id)->with('success', 'Berhasil mengambil alih laporan. Silakan diproses!');
     }
 
     /**
