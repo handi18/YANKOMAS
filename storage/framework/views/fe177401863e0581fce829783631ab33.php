@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YANKOMAS - Layanan Pengaduan Masyarakat</title>
+    <title>YANKOMAS - Layanan Pengaduan Imigrasi</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="<?php echo e(asset('assets/img/logo_imigrasi_Bandung.png')); ?>">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -142,22 +145,9 @@
         .status-baru { background: rgba(0, 153, 255, 0.2); color: #66b3ff; border: 1px solid rgba(102, 179, 255, 0.5); }
         .status-diproses { background: rgba(255, 193, 7, 0.2); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.5); }
         .status-selesai { background: rgba(40, 167, 69, 0.2); color: #28a745; border: 1px solid rgba(40, 167, 69, 0.5); }
-
-        .auth-link {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            color: rgba(255,255,255,0.7);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s;
-        }
-        .auth-link:hover { color: #fff; }
     </style>
 </head>
 <body>
-    <a href="<?php echo e(route('login')); ?>" class="auth-link"><i class="fas fa-lock"></i> Login Petugas</a>
-
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-9">
@@ -212,12 +202,12 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label fw-medium">Nomor WhatsApp/Telepon</label>
-                                        <input type="text" class="form-control" name="no_telp" value="<?php echo e(old('no_telp')); ?>" placeholder="Misal: 08123456789">
+                                        <input type="text" class="form-control" name="no_telp" value="<?php echo e(old('no_telp')); ?>" placeholder="Misal: 08xxxxxxxxxx">
                                     </div>
                                     
                                     <div class="col-md-6">
                                         <label class="form-label fw-medium">Tanggal Kejadian <span class="text-danger">*</span></label>
-                                        <input type="date" class="form-control" name="tanggal_kejadian" id="tanggal_kejadian" value="<?php echo e(old('tanggal_kejadian')); ?>" max="<?php echo e(date('Y-m-d')); ?>" required>
+                                        <input type="date" class="form-control" name="tanggal_kejadian" id="tanggal_kejadian" value="<?php echo e(old('tanggal_kejadian', date('Y-m-d'))); ?>" max="<?php echo e(date('Y-m-d')); ?>" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label fw-medium">Waktu/Jam Kejadian <span class="text-danger">*</span></label>

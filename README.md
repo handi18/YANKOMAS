@@ -1,61 +1,60 @@
 # YANKOMAS
-## Sistem Informasi Pelayanan Saran, Informasi, dan Pengaduan Internal
+## Sistem Informasi Pelayanan Saran, Informasi, dan Pengaduan Internal & Eksternal
 
-Aplikasi web untuk mencatat dan mengelola saran, informasi, dan pengaduan dari masyarakat di Kantor Imigrasi Kelas I TPI Kota Bandung.
+Aplikasi web terpadu untuk mencatat, mengelola, dan melacak saran, informasi, serta pengaduan dari masyarakat pada Kantor Imigrasi Kelas I TPI Kota Bandung.
+
+Sistem ini terbagi menjadi dua bagian utama:
+1. **Sistem Eksternal (Publik):** Halaman *Landing Page* modern (*Glassmorphism*) bagi masyarakat untuk mengisi form pengaduan mandiri secara *online* dan mengecek status laporan mereka bermodalkan Nomor Tiket.
+2. **Sistem Internal (Admin/Petugas):** Dashboard manajemen tiket bergaya formal untuk merespons, merekap, dan mengalokasikan laporan dari publik maupun *walk-in*.
 
 ---
 
-### Fitur Utama
+### Fitur Utama Baru (Update Terbaru)
+- 🚀 **Public Landing Page (Glassmorphism):** Halaman depan modern yang sepenuhnya terpisah dari sistem internal, dilengkapi efek blur/transparan dan desain premium.
+- 🎟️ **Sistem Tiket Otomatis:** Setiap pelapor dari masyarakat otomatis mendapatkan Nomor Tiket (cth: `ASP-20260718-0005`) yang bisa digunakan untuk melacak status laporan (Fitur Cek Status).
+- 🧠 **Smart LocalStorage Memory:** Saat masyarakat selesai melapor, *browser* mereka akan otomatis menyimpan nomor tiket tersebut, sehingga mereka tidak perlu mengetik ulang saat ingin "Cek Status".
+- 🙋‍♂️ **Shared Pool & Claim System (Ambil Alih):** Laporan baru dari masyarakat akan masuk ke kolam "Data Masyarakat". Semua petugas bisa melihatnya dan berlomba mengambil alih (*Claim/Assign*) laporan tersebut untuk segera diproses.
 
-- ✅ Authentication & Authorization (Super Admin, Admin & Petugas)
-- ✅ CRUD Data Aspirasi dengan nomor tiket otomatis (`ASP-YYYYMMDD-XXXX`)
-- ✅ Dashboard interaktif dengan grafik (Chart.js)
-- ✅ Filter data berdasarkan periode, jenis, kategori, status, dan layanan
-- ✅ Export laporan ke Excel dan PDF
-- ✅ Input kustom untuk jenis, kategori, dan layanan di luar standar
-- ✅ Kelola user/petugas (Admin only)
-- ✅ Activity log untuk audit trail
-- ✅ Profil mandiri (edit data & foto)
-- ✅ Responsive design dengan Bootstrap 5 & AdminLTE
+### Fitur *Core* (Inti)
+- ✅ **Multi-Role Authentication** (Super Admin, Admin & Petugas)
+- ✅ CRUD Data Aspirasi dengan nomor tiket otomatis
+- ✅ Dashboard interaktif dengan grafik analitik (Chart.js)
+- ✅ Filter data dinamis (Berdasarkan periode, jenis, status, "Data Saya", "Data Masyarakat")
+- ✅ Export laporan komprehensif ke Excel dan PDF (DomPDF & Laravel Excel)
+- ✅ Input kustom (Lainnya) untuk jenis, kategori, dan layanan di luar standar
+- ✅ Manajemen akun Petugas & Super Admin (Khusus Admin)
+- ✅ Activity log (Jejak rekam/audit) untuk melacak seluruh aktivitas pengguna
+- ✅ Profil mandiri pengguna (Ubah password, nama, dan foto profil)
 
 ---
 
 ### Persyaratan Sistem
-
 | Komponen    | Versi Minimum       |
 |-------------|---------------------|
 | PHP         | 8.2+                |
 | Composer    | 2.x                 |
-| MySQL       | 5.7+ / MariaDB 10.3+ |
-| Node.js     | 18+ (opsional)      |
+| MySQL       | 5.7+ / MariaDB 10.3+|
 
 ---
 
-### Instalasi (Step-by-Step)
+### Instalasi Cepat (Bisa untuk Clone)
 
-#### 1. Clone Repository
-
+#### 1. Clone Repository & Masuk ke Folder
 ```bash
 git clone <url-repository-anda> yankomas
 cd yankomas
 ```
 
 #### 2. Install Dependencies PHP
-
 ```bash
 composer install
 ```
 
-#### 3. Salin File Environment
-
+#### 3. Konfigurasi Environment (File .env)
 ```bash
 cp .env.example .env
 ```
-
-#### 4. Konfigurasi Database
-
-Buka file `.env` dan sesuaikan konfigurasi database Anda:
-
+Buka file `.env`, lalu sesuaikan konfigurasi database Anda:
 ```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -65,217 +64,74 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-#### 5. Buat Database
+#### 4. Buat Database Kosong
+Buat database bernama `yankomas_db` secara manual melalui aplikasi seperti phpMyAdmin, Laragon, atau HeidiSQL.
 
-Buat database secara manual melalui terminal MySQL atau phpMyAdmin:
-
-```sql
-CREATE DATABASE yankomas_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-```
-
-#### 6. Generate Application Key
-
+#### 5. Generate Key & Link Storage
 ```bash
 php artisan key:generate
-```
-
-#### 7. Jalankan Migrasi Database
-
-```bash
-php artisan migrate
-```
-
-#### 8. Jalankan Seeder (Data Awal)
-
-```bash
-php artisan db:seed
-```
-
-Seeder akan membuat:
-- 1 Akun Admin (`admin` / `password123`)
-- 3 Akun Petugas (lihat tabel di bawah)
-- 4 Data Layanan Keimigrasian
-
-#### 9. Buat Symbolic Link untuk Storage
-
-```bash
 php artisan storage:link
 ```
 
-#### 10. Jalankan Server
+#### 6. Migrasi & Data Dummy (Seeder)
+Jalankan perintah ini untuk membangun tabel dan mengisi data awal (akun Admin & Petugas):
+```bash
+php artisan migrate --seed
+```
 
+#### 7. Jalankan Aplikasi
 ```bash
 php artisan serve
 ```
-
-Akses di browser: **http://localhost:8000**
+Aplikasi kini dapat diakses di browser melalui URL: **`http://localhost:8000`**
 
 ---
 
 ### Akun Login Default
+> ⚠️ **Semua akun menggunakan password bawaan: `password123`**
 
-> ⚠️ **Semua akun menggunakan password: `password123`**
+| Role     | Username          | Akses/Fungsi Utama                            |
+|----------|-------------------|---------------------------------------------|
+| Admin    | `admin`           | Kelola Petugas, Log Aktivitas, Hapus Tiket |
+| Petugas  | `handi_petugas`   | Menjawab tiket, Claim laporan masyarakat   |
+| Petugas  | `doni_petugas`    | Menjawab tiket, Claim laporan masyarakat   |
 
-| Role     | Username          | Nama                |
-|----------|-------------------|---------------------|
-| Admin    | `admin`           | Administrator Utama |
-| Petugas  | `handi_petugas`   | Handi (Petugas)     |
-| Petugas  | `doni_petugas`    | Doni (Petugas)      |
-| Petugas  | `okta_petugas`    | Okta (Petugas)      |
-
----
-
-### Data Layanan Default
-
-| No | Nama Layanan       |
-|----|--------------------|
-| 1  | Paspor Baru        |
-| 2  | Paspor Penggantian |
-| 3  | Izin Tinggal       |
-| 4  | BAP                |
+*Catatan: Akses login internal ada di URL `/login`. Tidak ada lagi tombol login di halaman utama/publik untuk menjaga privasi sistem.*
 
 ---
 
-### Struktur Project
+### Daftar *Route* Penting
 
-```
-yankomas/
-├── app/
-│   ├── Exports/                # Export Excel (Maatwebsite)
-│   ├── Http/
-│   │   ├── Controllers/
-│   │   │   ├── AuthController.php
-│   │   │   ├── DashboardController.php
-│   │   │   ├── AspirasiController.php
-│   │   │   ├── AdminController.php
-│   │   │   └── ReportController.php
-│   │   └── Middleware/
-│   │       └── Role.php        # Middleware otorisasi role
-│   └── Models/
-│       ├── User.php
-│       ├── Aspirasi.php
-│       ├── Layanan.php
-│       └── ActivityLog.php
-├── database/
-│   ├── migrations/             # Skema tabel database
-│   ├── seeders/                # Data awal (user, layanan)
-│   └── factories/              # Factory untuk testing
-├── resources/views/
-│   ├── auth/                   # Halaman login
-│   ├── layouts/                # Template utama (AdminLTE)
-│   ├── dashboard/              # Halaman dashboard & grafik
-│   ├── aspirasi/               # Halaman CRUD aspirasi
-│   ├── admin/                  # Halaman kelola user & log
-│   └── reports/                # Template cetak PDF
-├── routes/
-│   └── web.php                 # Definisi semua route
-├── public/                     # Asset publik (gambar, CSS, JS)
-├── .env.example                # Template konfigurasi environment
-├── composer.json               # Dependencies PHP
-└── package.json                # Dependencies JavaScript
-```
+| Route Path                         | Fungsi / Deskripsi                                  | Hak Akses       |
+|------------------------------------|---------------------------------------------------|-----------------|
+| `/`                                | Landing Page (Formulir Masyarakat & Cek Status)     | Publik          |
+| `/lapor`                           | Memproses pengiriman formulir dari masyarakat       | Publik          |
+| `/login`                           | Halaman Autentikasi untuk Internal (Petugas/Admin)  | Publik          |
+| `/dashboard`                       | Ringkasan statistik tiket dan aktivitas             | Auth            |
+| `/aspirasi`                        | Daftar laporan (Data Saya & Semua Data)             | Auth            |
+| `/aspirasi/{id}/claim`             | Tombol "Ambil Alih Laporan" untuk tiket baru        | Petugas         |
+| `/aspirasi/export/pdf`             | Unduh rekap laporan dalam bentuk PDF                | Auth            |
+| `/admin/users`                     | Halaman manajemen akun Petugas & Admin              | Admin           |
 
 ---
 
-### Skema Database
-
-#### Tabel: `users`
-Menyimpan data pengguna (Super Admin, Admin & Petugas).
-- `role`: enum (`super_admin`, `admin`, `petugas`)
-- `nip`: Nomor Induk Pegawai (unik)
-- `foto`: Path foto profil (nullable)
-
-#### Tabel: `layanan`
-Data master jenis layanan keimigrasian.
-
-#### Tabel: `aspirasi`
-Tabel transaksi utama untuk saran, informasi, dan pengaduan.
-- `nomor_tiket`: Auto-generate format `ASP-YYYYMMDD-XXXX`
-- `jenis`: `saran`, `informasi`, `pengaduan`
-- `kategori`: `ringan`, `sedang`, `berat` (khusus pengaduan)
-- `status`: `Baru`, `Diproses`, `Selesai`
-- `layanan_id`: Nullable (mendukung input layanan kustom)
-- Kolom kustom: `jenis_custom`, `kategori_custom`, `layanan_custom`
-
-#### Tabel: `activity_logs`
-Audit trail untuk tracking seluruh aktivitas pengguna.
+### Tech Stack / Teknologi yang Digunakan
+- **Backend:** Laravel 12 (PHP 8.3+)
+- **Frontend Publik:** Vanilla HTML/CSS, Glassmorphism UI, SweetAlert2, Flatpickr
+- **Frontend Internal:** Bootstrap 5, AdminLTE 3 (CDN Based)
+- **Database:** MySQL / MariaDB
+- **Visualisasi & Export:** Chart.js 4, Maatwebsite/Excel, Barryvdh/DomPDF
 
 ---
 
-### Daftar Route
+### Troubleshooting Umum
 
-| Method | Route                              | Deskripsi             | Akses           |
-|--------|------------------------------------|-----------------------|-----------------|
-| GET    | `/`                                | Halaman login         | Public          |
-| POST   | `/login`                           | Proses autentikasi    | Public          |
-| POST   | `/logout`                          | Logout                | Auth            |
-| GET    | `/dashboard`                       | Dashboard             | Auth            |
-| GET    | `/profile`                         | Edit profil           | Auth            |
-| PUT    | `/profile`                         | Simpan profil         | Auth            |
-| DELETE | `/profile/foto`                    | Hapus foto profil     | Auth            |
-| GET    | `/aspirasi`                        | Daftar aspirasi       | Auth            |
-| GET    | `/aspirasi/create`                 | Form tambah aspirasi  | Auth            |
-| POST   | `/aspirasi`                        | Simpan aspirasi       | Auth            |
-| GET    | `/aspirasi/{id}`                   | Detail aspirasi       | Auth            |
-| GET    | `/aspirasi/{id}/edit`              | Form edit aspirasi    | Auth            |
-| PUT    | `/aspirasi/{id}`                   | Update aspirasi       | Auth            |
-| DELETE | `/aspirasi/{id}`                   | Hapus aspirasi        | Auth            |
-| POST   | `/aspirasi/{id}/update-status`     | Ubah status           | Auth            |
-| GET    | `/aspirasi/export/excel`           | Export Excel          | Auth            |
-| GET    | `/aspirasi/export/pdf`             | Export PDF            | Auth            |
-| GET    | `/admin/users`                     | Daftar petugas        | Admin           |
-| GET    | `/admin/users/create`              | Form tambah petugas   | Admin           |
-| POST   | `/admin/users`                     | Simpan petugas        | Admin           |
-| GET    | `/admin/users/{id}/edit`           | Form edit petugas     | Admin           |
-| PUT    | `/admin/users/{id}`                | Update petugas        | Admin           |
-| DELETE | `/admin/users/{id}`                | Hapus petugas         | Admin           |
-| POST   | `/admin/users/{id}/reset-password` | Reset password        | Admin           |
-| GET    | `/admin/activity-logs`             | Log aktivitas         | Admin           |
+- ❌ **The stream or file ... could not be opened:**
+  Anda lupa membuat jembatan ke folder foto. Jalankan `php artisan storage:link`.
+- ❌ **Target class [AdminController] does not exist:**
+  Coba jalankan `composer dump-autoload`.
+- ❌ **SQLSTATE[HY000] [2002] Target machine actively refused it:**
+  Aplikasi database Anda (seperti XAMPP/Laragon) belum dinyalakan atau MySQL dalam kondisi *Stop*.
 
 ---
-
-### Tech Stack
-
-| Layer     | Teknologi                          |
-|-----------|------------------------------------|
-| Backend   | Laravel 12 (PHP 8.3+)             |
-| Frontend  | Blade + Bootstrap 5 + AdminLTE 3   |
-| Database  | MySQL / MariaDB                    |
-| Grafik    | Chart.js 4                         |
-| Export    | Maatwebsite/Excel, Barryvdh/DomPDF |
-| Bundler   | Vite 5                             |
-
----
-
-### Troubleshooting
-
-#### ❌ Error: SQLSTATE[HY000] [1045] Access denied
-Database connection error. Pastikan:
-- Database `yankomas_db` sudah dibuat
-- Username & password di `.env` sudah benar
-- MySQL/MariaDB sudah berjalan
-
-#### ❌ Error: PDOException: could not find driver
-Extension `pdo_mysql` belum aktif di PHP. Aktifkan di `php.ini`:
-```ini
-extension=pdo_mysql
-```
-
-#### ❌ Error: The key must be 32 characters
-Jalankan:
-```bash
-php artisan key:generate
-```
-
-#### ❌ Error: The stream or file ... could not be opened
-Permission issue pada folder `storage`. Jalankan:
-```bash
-php artisan storage:link
-```
-
----
-
-### License
-
-MIT License
-
+**Hak Cipta © 2026 - Kantor Imigrasi Kelas I TPI Kota Bandung**

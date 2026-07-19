@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YANKOMAS - Layanan Pengaduan Masyarakat</title>
+    <title>YANKOMAS - Layanan Pengaduan Imigrasi</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('assets/img/logo_imigrasi_Bandung.png') }}">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -199,12 +202,12 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label fw-medium">Nomor WhatsApp/Telepon</label>
-                                        <input type="text" class="form-control" name="no_telp" value="{{ old('no_telp') }}" placeholder="Misal: 08123456789">
+                                        <input type="text" class="form-control" name="no_telp" value="{{ old('no_telp') }}" placeholder="Misal: 08xxxxxxxxxx">
                                     </div>
                                     
                                     <div class="col-md-6">
                                         <label class="form-label fw-medium">Tanggal Kejadian <span class="text-danger">*</span></label>
-                                        <input type="date" class="form-control" name="tanggal_kejadian" id="tanggal_kejadian" value="{{ old('tanggal_kejadian') }}" max="{{ date('Y-m-d') }}" required>
+                                        <input type="date" class="form-control" name="tanggal_kejadian" id="tanggal_kejadian" value="{{ old('tanggal_kejadian', date('Y-m-d')) }}" max="{{ date('Y-m-d') }}" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label fw-medium">Waktu/Jam Kejadian <span class="text-danger">*</span></label>
