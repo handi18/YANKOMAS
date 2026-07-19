@@ -171,12 +171,17 @@ class AdminController extends Controller
         ]);
 
         if ($request->hasFile('foto')) {
-            if ($user->foto && Storage::disk('public')->exists($user->foto)) {
-                Storage::disk('public')->delete($user->foto);
+            // Hapus file lama jika ada
+            if ($user->foto && file_exists(public_path($user->foto))) {
+                unlink(public_path($user->foto));
             }
 
-            $path = $request->file('foto')->store('avatars', 'public');
-            $validated['foto'] = $path;
+            // Simpan file baru ke public/uploads/avatars
+            $file = $request->file('foto');
+            $filename = time() . '_' . \Illuminate\Support\Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/avatars'), $filename);
+            
+            $validated['foto'] = 'uploads/avatars/' . $filename;
         }
 
         if (!empty($validated['password'])) {
@@ -201,8 +206,9 @@ class AdminController extends Controller
         $user = User::findOrFail(Auth::id());
 
         if ($user->foto) {
-            if (Storage::disk('public')->exists($user->foto)) {
-                Storage::disk('public')->delete($user->foto);
+            // Hapus file lama jika ada
+            if (file_exists(public_path($user->foto))) {
+                unlink(public_path($user->foto));
             }
 
             $user->update(['foto' => null]);

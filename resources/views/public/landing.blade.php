@@ -19,6 +19,7 @@
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
+            overflow-y: scroll; /* FIX PC: Mencegah layar bergeser/mengecil saat scrollbar muncul */
             margin: 0;
         }
 
@@ -26,10 +27,12 @@
         body::before {
             content: "";
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: -5%;
+            left: -5%;
+            width: 110%;
+            /* FIX HP: Gunakan lvh/svh agar background tidak melar/membesar saat address bar HP otomatis sembunyi waktu scroll */
+            height: 110vh; 
+            height: 110lvh; 
             background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 100%), 
                         url('{{ asset('assets/img/Ditjen_Imigrasi.jpeg') }}') no-repeat center center;
             background-size: cover;
@@ -201,7 +204,7 @@
                                         <input type="text" class="form-control" name="nama_pengadu" value="{{ old('nama_pengadu') }}" placeholder="Masukkan nama Anda" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label fw-medium">Nomor WhatsApp/Telepon</label>
+                                        <label class="form-label fw-medium">Nomor WhatsApp/Telepon (opsional)</label>
                                         <input type="text" class="form-control" name="no_telp" value="{{ old('no_telp') }}" placeholder="Misal: 08xxxxxxxxxx">
                                     </div>
                                     
@@ -279,15 +282,23 @@
                         <!-- TAB: CEK STATUS -->
                         <div class="tab-pane fade {{ $searchPerformed ? 'show active' : '' }}" id="status" role="tabpanel">
                             
-                            <!-- Notifikasi Nomor Tiket Terakhir (Dari LocalStorage) -->
-                            <div id="lastTicketAlert" class="alert d-none mb-4" style="background: rgba(0, 153, 255, 0.1); border: 1px solid rgba(0, 153, 255, 0.3); color: #e6f2ff; border-radius: 10px;">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <i class="fas fa-history me-2 text-info"></i> Tiket Terakhir Anda: <strong id="lastTicketNumberText" class="text-info fs-5 tracking-wide"></strong>
+                            <!-- Notifikasi Riwayat Tiket (Dari LocalStorage Array) -->
+                            <div id="historyContainer" class="d-none mb-4">
+                                <button class="btn btn-outline-light w-100 text-start d-flex justify-content-between align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHistory" aria-expanded="false" aria-controls="collapseHistory" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 10px; padding: 12px 15px;">
+                                    <span class="text-white-50"><i class="fas fa-history me-2"></i> Riwayat Laporan di Perangkat Ini</span>
+                                    <i class="fas fa-chevron-down text-white-50"></i>
+                                </button>
+                                
+                                <div class="collapse mt-2" id="collapseHistory">
+                                    <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 15px;">
+                                        <div class="table-responsive">
+                                            <table class="table table-borderless table-sm mb-0 align-middle">
+                                                <tbody id="historyList">
+                                                    <!-- List history akan dimunculkan oleh Javascript -->
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-                                    <button class="btn btn-sm btn-outline-info rounded-pill px-3" onclick="useLastTicket()">
-                                        <i class="fas fa-check-circle me-1"></i> Gunakan
-                                    </button>
                                 </div>
                             </div>
 
@@ -337,6 +348,13 @@
                                         <hr style="border-color: rgba(255,255,255,0.2);">
                                         <p class="mb-1 text-white-50">Isi Laporan:</p>
                                         <p class="fst-italic">"{{ $aspirasiChecked->isi_aspirasi }}"</p>
+                                        
+                                        @if($aspirasiChecked->jawaban)
+                                            <div class="mt-4 p-3 rounded" style="background: rgba(40, 167, 69, 0.1); border-left: 4px solid #28a745;">
+                                                <p class="mb-1 fw-bold text-success"><i class="fas fa-reply me-1"></i> Tanggapan / Jawaban Resmi:</p>
+                                                <p class="mb-0" style="white-space: pre-wrap;">{{ $aspirasiChecked->jawaban }}</p>
+                                            </div>
+                                        @endif
                                     </div>
                                 @else
                                     <div class="alert alert-warning text-center" style="background: rgba(255, 193, 7, 0.2); border: 1px solid rgba(255, 193, 7, 0.5); color: #ffe69c;">
@@ -371,51 +389,85 @@
         });
         // SweetAlert untuk pop up nomor tiket jika berhasil
         @if(session('success_ticket'))
-            // Simpan ke localStorage secara otomatis
-            localStorage.setItem('yankomas_last_ticket', '{{ session('success_ticket') }}');
+            // Simpan ke localStorage secara otomatis sebagai array (Riwayat)
+            var tickets = JSON.parse(localStorage.getItem('yankomas_tickets') || '[]');
+            var newTicket = '{{ session('success_ticket') }}';
+            if(!tickets.includes(newTicket)) {
+                tickets.push(newTicket);
+                localStorage.setItem('yankomas_tickets', JSON.stringify(tickets));
+            }
             
             Swal.fire({
                 title: 'Berhasil Dikirim!',
-                html: 'Laporan Anda telah diterima.<br><br>Mohon simpan/salin Nomor Tiket Anda:<br><strong style="font-size: 28px; color: #0066cc; display: block; margin: 15px 0;">{{ session('success_ticket') }}</strong>',
+                html: 'Laporan Anda telah diterima.<br><br>Mohon simpan/salin Nomor Tiket Anda:<br><strong style="font-size: 28px; color: #0066cc; display: block; margin: 15px 0;">' + newTicket + '</strong>',
                 icon: 'success',
                 showCancelButton: true,
-                confirmButtonText: '<i class="fas fa-copy me-1"></i> Salin Nomor',
+                showDenyButton: true,
+                confirmButtonText: '<i class="fas fa-copy me-1"></i> Salin',
+                denyButtonText: '<i class="fab fa-whatsapp me-1"></i> Kirim ke WA',
                 cancelButtonText: 'Tutup',
                 confirmButtonColor: '#0066cc',
+                denyButtonColor: '#25D366',
                 cancelButtonColor: '#6c757d',
                 background: '#fff',
                 allowOutsideClick: false
             }).then((result) => {
                 if (result.isConfirmed) {
-                    navigator.clipboard.writeText('{{ session('success_ticket') }}');
+                    navigator.clipboard.writeText(newTicket);
                     Swal.fire({
                         title: 'Tersalin!',
-                        text: 'Nomor tiket {{ session('success_ticket') }} berhasil disalin ke clipboard.',
+                        text: 'Nomor tiket ' + newTicket + ' berhasil disalin ke clipboard.',
                         icon: 'success',
                         timer: 2000,
                         showConfirmButton: false,
                         background: '#fff'
                     });
+                } else if (result.isDenied) {
+                    var waText = "Halo, ini adalah Nomor Tiket laporan saya di YANKOMAS Imigrasi Bandung:\n\n*" + newTicket + "*\n\nSimpan pesan ini agar tiket tidak hilang saat Anda ingin mengecek statusnya di kemudian hari.";
+                    window.open('https://wa.me/?text=' + encodeURIComponent(waText), '_blank');
                 }
             });
         @endif
 
-        // Cek LocalStorage untuk Tiket Terakhir
+        // Cek LocalStorage untuk Riwayat Tiket
         document.addEventListener('DOMContentLoaded', function() {
-            var lastTicket = localStorage.getItem('yankomas_last_ticket');
-            if (lastTicket) {
-                document.getElementById('lastTicketNumberText').innerText = lastTicket;
-                document.getElementById('lastTicketAlert').classList.remove('d-none');
+            var tickets = JSON.parse(localStorage.getItem('yankomas_tickets') || '[]');
+            
+            // Migrasi dari memori versi lama jika masih ada tiket tunggal
+            var oldTicket = localStorage.getItem('yankomas_last_ticket');
+            if(oldTicket && !tickets.includes(oldTicket)) {
+                tickets.push(oldTicket);
+                localStorage.setItem('yankomas_tickets', JSON.stringify(tickets));
+                localStorage.removeItem('yankomas_last_ticket'); // Bersihkan yang lama
+            }
+
+            if (tickets.length > 0) {
+                document.getElementById('historyContainer').classList.remove('d-none');
+                var historyList = document.getElementById('historyList');
+                historyList.innerHTML = '';
+                
+                // Urutkan array agar tiket terbaru ada di atas
+                tickets.slice().reverse().forEach(function(ticket) {
+                    var tr = document.createElement('tr');
+                    tr.className = 'bg-transparent';
+                    tr.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
+                    tr.innerHTML = `
+                        <td class="text-white fw-bold py-3 fs-5 bg-transparent">${ticket}</td>
+                        <td class="text-end py-3 bg-transparent">
+                            <button type="button" class="btn btn-sm btn-outline-info rounded-pill px-4" onclick="useTicket('${ticket}')">
+                                <i class="fas fa-search me-1"></i> Cek Status
+                            </button>
+                        </td>
+                    `;
+                    historyList.appendChild(tr);
+                });
             }
         });
 
-        function useLastTicket() {
-            var lastTicket = localStorage.getItem('yankomas_last_ticket');
-            if(lastTicket) {
-                document.querySelector('input[name="tiket"]').value = lastTicket;
-                // Optional: langsung submit otomatis
-                // document.querySelector('input[name="tiket"]').closest('form').submit();
-            }
+        function useTicket(ticketNumber) {
+            document.querySelector('input[name="tiket"]').value = ticketNumber;
+            // Langsung klik tombol submit secara otomatis agar instan
+            document.querySelector('input[name="tiket"]').closest('form').submit();
         }
 
         // Dynamic Form Logic (Menampilkan field custom jika dipilih)

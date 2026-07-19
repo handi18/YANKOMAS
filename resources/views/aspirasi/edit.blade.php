@@ -84,7 +84,7 @@
                     <label for="media" class="form-label">Media Penerimaan *</label>
                     <select class="form-select @error('media') is-invalid @enderror" id="media" name="media" required>
                         <option value="">-- Pilih Media --</option>
-                        @foreach(['Tatap Muka', 'Telepon', 'WhatsApp'] as $med)
+                        @foreach(['Tatap Muka', 'Telepon', 'WhatsApp', 'Web/Online'] as $med)
                             <option value="{{ $med }}" {{ old('media', $aspirasi->media) === $med ? 'selected' : '' }}>{{ $med }}</option>
                         @endforeach
                     </select>

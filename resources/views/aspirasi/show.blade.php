@@ -82,6 +82,14 @@
                         <div class="p-3 bg-light rounded" style="white-space: pre-wrap;">{{ $aspirasi->isi_aspirasi }}</div>
                     </td>
                 </tr>
+                @if($aspirasi->jawaban)
+                <tr>
+                    <th style="background-color: #e6f9e6;">Tanggapan Petugas</th>
+                    <td>
+                        <div class="p-3 rounded" style="background-color: #f0fdf0; border-left: 4px solid #28a745; white-space: pre-wrap;">{{ $aspirasi->jawaban }}</div>
+                    </td>
+                </tr>
+                @endif
             </table>
         </div>
 
@@ -95,36 +103,46 @@
                 </a>
             @endif
 
-            {{-- 2. Fitur Update Status Langsung (Dropdown Inline Form Bermutasi Warna) --}}
+            {{-- 2. Fitur Update Status & Tanggapan (Modal) --}}
             @if(Auth::user()->isAdmin() || Auth::id() === $aspirasi->petugas_id)
-                @php
-                    $bgClass = 'bg-primary text-white';
-                    if ($aspirasi->status === 'Diproses') $bgClass = 'bg-warning text-dark';
-                    if ($aspirasi->status === 'Selesai') $bgClass = 'bg-success text-white';
-                @endphp
+                <button type="button" class="btn btn-info text-white fw-bold" data-bs-toggle="modal" data-bs-target="#tanggapanModal">
+                    <i class="fas fa-reply"></i> Tanggapi & Ubah Status
+                </button>
 
-                <form action="{{ route('aspirasi.update-status', $aspirasi->id) }}" method="POST" class="d-flex align-items-center gap-2">
-                    @csrf
-                    <select name="status" id="statusDropdown" class="form-select form-select-sm fw-bold {{ $bgClass }}" style="width: 140px;" 
-                        onchange="updateDropdownColor(this); this.form.submit()">
-                        <option value="Baru" class="bg-white text-dark" {{ $aspirasi->status == 'Baru' ? 'selected' : '' }}>Baru</option>
-                        <option value="Diproses" class="bg-white text-dark" {{ $aspirasi->status == 'Diproses' ? 'selected' : '' }}>Diproses</option>
-                        <option value="Selesai" class="bg-white text-dark" {{ $aspirasi->status == 'Selesai' ? 'selected' : '' }}>Selesai</option>
-                    </select>
-                </form>
-
-                <script>
-                function updateDropdownColor(el) {
-                    el.classList.remove('bg-primary', 'bg-warning', 'bg-success', 'text-white', 'text-dark');
-                    if (el.value === 'Baru') {
-                        el.classList.add('bg-primary', 'text-white');
-                    } else if (el.value === 'Diproses') {
-                        el.classList.add('bg-warning', 'text-dark');
-                    } else if (el.value === 'Selesai') {
-                        el.classList.add('bg-success', 'text-white');
-                    }
-                }
-                </script>
+                <!-- Modal Tanggapan -->
+                <div class="modal fade" id="tanggapanModal" tabindex="-1" aria-labelledby="tanggapanModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header bg-info text-white">
+                        <h5 class="modal-title" id="tanggapanModalLabel"><i class="fas fa-reply"></i> Beri Tanggapan & Update Status</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <form action="{{ route('aspirasi.update-status', $aspirasi->id) }}" method="POST">
+                          @csrf
+                          <div class="modal-body">
+                              <div class="mb-3">
+                                  <label class="form-label fw-bold">Status Laporan</label>
+                                  <select name="status" class="form-select fw-bold text-dark" required>
+                                      <option value="Baru" {{ $aspirasi->status == 'Baru' ? 'selected' : '' }}>Baru</option>
+                                      <option value="Diproses" {{ $aspirasi->status == 'Diproses' ? 'selected' : '' }}>Diproses</option>
+                                      <option value="Selesai" {{ $aspirasi->status == 'Selesai' ? 'selected' : '' }}>Selesai</option>
+                                  </select>
+                                  <small class="text-muted">Pilih "Selesai" jika laporan sudah ditangani sepenuhnya.</small>
+                              </div>
+                              <div class="mb-3">
+                                  <label class="form-label fw-bold">Tanggapan Resmi / Jawaban (Opsional)</label>
+                                  <textarea name="jawaban" class="form-control" rows="5" placeholder="Ketikkan jawaban resmi atau tindak lanjut dari laporan ini. Jawaban ini akan bisa dibaca oleh pelapor.">{{ $aspirasi->jawaban }}</textarea>
+                                  <small class="text-muted">Jawaban sangat direkomendasikan untuk laporan yang statusnya Selesai.</small>
+                              </div>
+                          </div>
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                              <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Simpan Tanggapan</button>
+                          </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
             @endif
 
             {{-- 3. Fitur Ambil Alih Laporan / Claim (Kolam Bersama untuk Petugas) --}}

@@ -150,7 +150,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
                             @if(Auth::user()->foto)
-                                <img src="{{ asset('storage/' . Auth::user()->foto) }}" class="rounded-circle me-2" style="width: 28px; height: 28px; object-fit: cover; border: 1px solid rgba(255,255,255,0.5);">
+                                <img src="{{ asset(Auth::user()->foto) }}" class="rounded-circle me-2" style="width: 28px; height: 28px; object-fit: cover; border: 1px solid rgba(255,255,255,0.5);">
                             @else
                                 <img src="https://ui-avatars.com/api/?name={{ urlencode(substr(Auth::user()->nama, 0, 1)) }}&background=0066cc&color=fff&size=28&bold=true" class="rounded-circle me-2" style="width: 28px; height: 28px; object-fit: cover;">
                             @endif

@@ -27,6 +27,7 @@ class Aspirasi extends Model
         'jenis_custom',
         'kategori_custom',
         'layanan_custom',
+        'jawaban',
     ];
 
     protected $casts = [

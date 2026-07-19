@@ -106,7 +106,7 @@ class AspirasiController extends Controller
                 }
             }],
             'layanan_custom'  => ['required_if:layanan_id,custom', 'nullable', 'string', 'max:255'],
-            'media'           => ['required', 'in:Tatap Muka,Telepon,WhatsApp'],
+            'media'           => ['required', 'in:Tatap Muka,Telepon,WhatsApp,Web/Online'],
         ]);
 
         $validated = $this->normalizeData($validated);
@@ -177,7 +177,7 @@ class AspirasiController extends Controller
                 }
             }],
             'layanan_custom'  => ['required_if:layanan_id,custom', 'nullable', 'string', 'max:255'],
-            'media'           => ['required', 'in:Tatap Muka,Telepon,WhatsApp'],
+            'media'           => ['required', 'in:Tatap Muka,Telepon,WhatsApp,Web/Online'],
         ];
 
         if (Auth::user()->isAdmin()) {
@@ -222,6 +222,7 @@ class AspirasiController extends Controller
 
         $validated = $request->validate([
             'status' => ['required', 'in:Baru,Diproses,Selesai'],
+            'jawaban' => ['nullable', 'string']
         ]);
 
         $aspirasi->update($validated);

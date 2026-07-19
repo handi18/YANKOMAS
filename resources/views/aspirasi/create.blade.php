@@ -90,11 +90,11 @@
                 </div>
                 
                 <div class="col-md-6">
-                    <label for="media" class="form-label">Media Penerimaan *</label>
+                    <label for="media" class="form-label">Media Penerimaan <span class="text-danger">*</span></label>
                     <select class="form-select @error('media') is-invalid @enderror" id="media" name="media" required>
                         <option value="">-- Pilih Media --</option>
-                        @foreach(['Tatap Muka', 'Telepon', 'WhatsApp'] as $med)
-                            <option value="{{ $med }}" {{ old('media', 'Tatap Muka') === $med ? 'selected' : '' }}>{{ $med }}</option>
+                        @foreach(['Tatap Muka', 'Telepon', 'WhatsApp', 'Web/Online'] as $med)
+                            <option value="{{ $med }}" {{ old('media') === $med ? 'selected' : '' }}>{{ $med }}</option>
                         @endforeach
                     </select>
                     @error('media') <div class="invalid-feedback">{{ $message }}</div> @enderror
