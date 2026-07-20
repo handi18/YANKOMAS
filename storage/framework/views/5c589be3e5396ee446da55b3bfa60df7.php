@@ -17,37 +17,44 @@
 
 
 <div class="row mb-4">
-    <div class="col-md-3">
-        <div class="stat-card today">
+    <div class="col-12 col-sm-6 col-md-4 col-lg mb-3">
+        <div class="stat-card today h-100">
             <h5><i class="fas fa-envelope"></i> Total SIP</h5>
             <div class="value"><?php echo e($sipTotal); ?></div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="stat-card week">
+    <div class="col-12 col-sm-6 col-md-4 col-lg mb-3">
+        <div class="stat-card week h-100">
             <h5><i class="fas fa-lightbulb"></i> Saran</h5>
             <div class="value"><?php echo e($Saran); ?></div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="stat-card month">
+    <div class="col-12 col-sm-6 col-md-4 col-lg mb-3">
+        <div class="stat-card month h-100">
             <h5><i class="fas fa-info-circle"></i> Informasi</h5>
             <div class="value"><?php echo e($Informasi); ?></div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="stat-card year">
+    <div class="col-12 col-sm-6 col-md-6 col-lg mb-3">
+        <div class="stat-card year h-100">
             <h5><i class="fas fa-exclamation-circle"></i> Pengaduan</h5>
             <div class="value"><?php echo e($Pengaduan); ?></div>
         </div>
     </div>
+    <div class="col-12 col-sm-12 col-md-6 col-lg mb-3">
+        <div class="stat-card today h-100">
+            <h5><i class="fas fa-ellipsis-h"></i> Lainnya</h5>
+            <div class="value"><?php echo e($Lainnya); ?></div>
+        </div>
+    </div>
+</div>
     
     
     <div class="row mb-3 mt-3">  
         <div class="col-12">
-            <form method="GET" action="<?php echo e(route('dashboard')); ?>" class="d-flex flex-wrap align-items-center gap-3">
+            <form method="GET" action="<?php echo e(route('dashboard')); ?>" class="d-flex flex-column flex-md-row align-items-md-center gap-3">
                 
-                <div class="d-flex align-items-center gap-2 mb-2 mb-md-0">
+                <div class="d-flex align-items-center gap-2">
                     <select name="range" class="form-select form-select-sm" style="width: auto;" onchange="this.form.start_date.value=''; this.form.end_date.value=''; this.form.submit()">
                         <option value="semua"      <?php echo e(request('range', 'semua') == 'semua' && !request('start_date') ? 'selected' : ''); ?>>Semua Waktu</option>
                         <option value="hari_ini"   <?php echo e(request('range') == 'hari_ini' ? 'selected' : ''); ?>>Hari Ini</option>
@@ -59,16 +66,28 @@
 
                 <div class="vr text-muted d-none d-md-block" style="height: 30px;"></div>
 
-                <div class="d-flex flex-wrap align-items-center gap-2">
-                    <span class="text-muted small">Rentang Custom:</span>
-                    <input type="date" name="start_date" class="form-control form-control-sm" style="width: auto;" value="<?php echo e(request('start_date')); ?>" required>
-                    <span class="text-muted small">s.d</span>
-                    <input type="date" name="end_date" class="form-control form-control-sm" style="width: auto;" value="<?php echo e(request('end_date')); ?>" required>
-                    <button type="submit" class="btn btn-gradient-custom btn-sm px-3 text-white">Cari</button>
+                <div class="d-flex flex-column flex-md-row align-items-md-center gap-2 w-100 w-md-auto border p-2 p-md-0 border-md-0 rounded">
+                    <span class="text-muted small d-none d-md-inline font-weight-bold">Rentang Custom:</span>
                     
-                    <?php if(request()->filled('start_date')): ?>
-                        <a href="<?php echo e(route('dashboard')); ?>" class="btn btn-secondary btn-sm">Reset</a>
-                    <?php endif; ?>
+                    <div class="d-flex flex-column flex-md-row gap-2 w-100">
+                        <div class="w-100">
+                            <span class="text-muted small d-md-none fw-bold">Dari Tanggal:</span>
+                            <input type="date" name="start_date" class="form-control form-control-sm w-100" style="min-width: 140px;" value="<?php echo e(request('start_date')); ?>" required>
+                        </div>
+                        <span class="text-muted small align-self-center d-none d-md-inline">s.d</span>
+                        <div class="w-100">
+                            <span class="text-muted small d-md-none fw-bold">Sampai Tanggal:</span>
+                            <input type="date" name="end_date" class="form-control form-control-sm w-100" style="min-width: 140px;" value="<?php echo e(request('end_date')); ?>" required>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 w-100 mt-1 mt-md-0">
+                        <button type="submit" class="btn btn-gradient-custom btn-sm px-3 text-white flex-grow-1 flex-md-grow-0">Cari</button>
+                        
+                        <?php if(request()->filled('start_date')): ?>
+                            <a href="<?php echo e(route('dashboard')); ?>" class="btn btn-secondary btn-sm flex-grow-1 flex-md-grow-0">Reset</a>
+                        <?php endif; ?>
+                    </div>
                 </div>
 
             </form>
@@ -162,18 +181,20 @@
     new Chart(jenisCtx, {
         type: 'doughnut',
         data: {
-            labels: ['Informasi', 'Saran', 'Pengaduan'],
+            labels: ['Informasi', 'Saran', 'Pengaduan', 'Lainnya'],
             datasets: [{
-                data: [<?php echo e($Informasi); ?>, <?php echo e($jenisSaran); ?>, <?php echo e($jenisPengaduan); ?>],
+                data: [<?php echo e($Informasi); ?>, <?php echo e($jenisSaran); ?>, <?php echo e($jenisPengaduan); ?>, <?php echo e($jenisLainnya); ?>],
                 backgroundColor: [
                     'rgba(67, 172, 188, 0.8)',  
                     'rgba(255, 193, 7, 0.8)',   
-                    'rgba(220, 53, 69, 0.8)'    
+                    'rgba(220, 53, 69, 0.8)',
+                    'rgba(142, 68, 173, 0.8)'
                 ],
                 borderColor: [
                     'rgba(23, 162, 184, 1)',    
                     'rgba(255, 193, 7, 1)',     
-                    'rgba(220, 53, 69, 1)'      
+                    'rgba(220, 53, 69, 1)',
+                    'rgba(142, 68, 173, 1)'
                 ],
                 borderWidth: 0.8
             }]

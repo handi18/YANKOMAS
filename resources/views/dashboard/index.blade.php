@@ -17,30 +17,37 @@
 
 {{-- Stat Cards SIP --}}
 <div class="row mb-4">
-    <div class="col-md-3">
-        <div class="stat-card today">
+    <div class="col-12 col-sm-6 col-md-4 col-lg mb-3">
+        <div class="stat-card today h-100">
             <h5><i class="fas fa-envelope"></i> Total SIP</h5>
             <div class="value">{{ $sipTotal }}</div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="stat-card week">
+    <div class="col-12 col-sm-6 col-md-4 col-lg mb-3">
+        <div class="stat-card week h-100">
             <h5><i class="fas fa-lightbulb"></i> Saran</h5>
             <div class="value">{{ $Saran }}</div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="stat-card month">
+    <div class="col-12 col-sm-6 col-md-4 col-lg mb-3">
+        <div class="stat-card month h-100">
             <h5><i class="fas fa-info-circle"></i> Informasi</h5>
             <div class="value">{{ $Informasi }}</div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="stat-card year">
+    <div class="col-12 col-sm-6 col-md-6 col-lg mb-3">
+        <div class="stat-card year h-100">
             <h5><i class="fas fa-exclamation-circle"></i> Pengaduan</h5>
             <div class="value">{{ $Pengaduan }}</div>
         </div>
     </div>
+    <div class="col-12 col-sm-12 col-md-6 col-lg mb-3">
+        <div class="stat-card today h-100">
+            <h5><i class="fas fa-ellipsis-h"></i> Lainnya</h5>
+            <div class="value">{{ $Lainnya }}</div>
+        </div>
+    </div>
+</div>
     
     {{-- Filter Rentang Waktu Independen --}}
     <div class="row mb-3 mt-3">  
@@ -174,18 +181,20 @@
     new Chart(jenisCtx, {
         type: 'doughnut',
         data: {
-            labels: ['Informasi', 'Saran', 'Pengaduan'],
+            labels: ['Informasi', 'Saran', 'Pengaduan', 'Lainnya'],
             datasets: [{
-                data: [{{ $Informasi }}, {{ $jenisSaran }}, {{ $jenisPengaduan }}],
+                data: [{{ $Informasi }}, {{ $jenisSaran }}, {{ $jenisPengaduan }}, {{ $jenisLainnya }}],
                 backgroundColor: [
                     'rgba(67, 172, 188, 0.8)',  
                     'rgba(255, 193, 7, 0.8)',   
-                    'rgba(220, 53, 69, 0.8)'    
+                    'rgba(220, 53, 69, 0.8)',
+                    'rgba(142, 68, 173, 0.8)'
                 ],
                 borderColor: [
                     'rgba(23, 162, 184, 1)',    
                     'rgba(255, 193, 7, 1)',     
-                    'rgba(220, 53, 69, 1)'      
+                    'rgba(220, 53, 69, 1)',
+                    'rgba(142, 68, 173, 1)'
                 ],
                 borderWidth: 0.8
             }]

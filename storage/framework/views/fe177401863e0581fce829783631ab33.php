@@ -242,7 +242,7 @@
                                         <select class="form-select" name="jenis" id="jenis" required>
                                             <option value="">-- Pilih Jenis --</option>
                                             <option value="saran" <?php echo e(old('jenis') == 'saran' ? 'selected' : ''); ?>>Saran</option>
-                                            <option value="informasi" <?php echo e(old('jenis') == 'informasi' ? 'selected' : ''); ?>>Permintaan Informasi</option>
+                                            <option value="informasi" <?php echo e(old('jenis') == 'informasi' ? 'selected' : ''); ?>>Informasi</option>
                                             <option value="pengaduan" <?php echo e(old('jenis') == 'pengaduan' ? 'selected' : ''); ?>>Pengaduan</option>
                                             <option value="custom" <?php echo e(old('jenis') == 'custom' ? 'selected' : ''); ?>>Lainnya (Kustom)</option>
                                         </select>

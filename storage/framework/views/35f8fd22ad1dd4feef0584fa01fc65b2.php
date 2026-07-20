@@ -31,10 +31,10 @@
                     </select>
                 </div>
                 <div class="col-12 col-md-2">
-                    <input type="date" name="date_from" class="form-control form-control-sm" placeholder="Mulai Tanggal" value="<?php echo e(request('date_from')); ?>">
+                    <input type="<?php echo e(request('date_from') ? 'date' : 'text'); ?>" onfocus="(this.type='date')" onblur="if(this.value==''){this.type='text'}" name="date_from" class="form-control form-control-sm" placeholder="Mulai Tanggal" value="<?php echo e(request('date_from')); ?>">
                 </div>
                 <div class="col-12 col-md-2">
-                    <input type="date" name="date_to" class="form-control form-control-sm" placeholder="Sampai Tanggal" value="<?php echo e(request('date_to')); ?>">
+                    <input type="<?php echo e(request('date_to') ? 'date' : 'text'); ?>" onfocus="(this.type='date')" onblur="if(this.value==''){this.type='text'}" name="date_to" class="form-control form-control-sm" placeholder="Sampai Tanggal" value="<?php echo e(request('date_to')); ?>">
                 </div>
                 <div class="col-12 col-md-2">
                     <select name="jenis" class="form-select form-select-sm">
@@ -45,9 +45,7 @@
                         <option value="custom" <?php echo e(request('jenis') === 'custom' ? 'selected' : ''); ?>>Lainnya (Custom)...</option>
                     </select>
                 </div>
-            </div>
 
-            <div class="row g-2 mb-3">
                 <div class="col-12 col-md-2">
                     <select name="kategori" class="form-select form-select-sm">
                         <option value="">Semua Kategori</option>

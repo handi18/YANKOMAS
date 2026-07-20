@@ -242,7 +242,7 @@
                                         <select class="form-select" name="jenis" id="jenis" required>
                                             <option value="">-- Pilih Jenis --</option>
                                             <option value="saran" {{ old('jenis') == 'saran' ? 'selected' : '' }}>Saran</option>
-                                            <option value="informasi" {{ old('jenis') == 'informasi' ? 'selected' : '' }}>Permintaan Informasi</option>
+                                            <option value="informasi" {{ old('jenis') == 'informasi' ? 'selected' : '' }}>Informasi</option>
                                             <option value="pengaduan" {{ old('jenis') == 'pengaduan' ? 'selected' : '' }}>Pengaduan</option>
                                             <option value="custom" {{ old('jenis') == 'custom' ? 'selected' : '' }}>Lainnya (Kustom)</option>
                                         </select>
@@ -503,7 +503,7 @@
             var kategoriDiv = document.getElementById('kategori_div');
             var kategoriSelect = document.getElementById('kategori');
             
-            if(jenis === 'pengaduan' || jenis === 'custom') {
+            if(jenis === 'pengaduan') {
                 kategoriDiv.style.display = 'block';
                 kategoriSelect.required = true;
             } else {

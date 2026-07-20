@@ -50,11 +50,15 @@ class DashboardController extends Controller
         $sipTotal  = (clone $sipQuery)->count();
         $Saran     = (clone $sipQuery)->byJenis('saran')->count();
         $Informasi = (clone $sipQuery)->byJenis('informasi')->count();
-        $Pengaduan = (clone $sipQuery)->byJenis('pengaduan')->count();
+        $Pengaduan = (clone $sipQuery)->byJenis('pengaduan')->whereNull('jenis_custom')->count();
+        $Lainnya   = (clone $sipQuery)->whereNotNull('jenis_custom')->count();
 
         // Grafik jenis & kategori
         $jenisSaran     = (clone $sipQuery)->byJenis('saran')->count();
-        $jenisPengaduan = (clone $sipQuery)->byJenis('pengaduan')->count();
+        $jenisInformasi = (clone $sipQuery)->byJenis('informasi')->count();
+        $jenisPengaduan = (clone $sipQuery)->byJenis('pengaduan')->whereNull('jenis_custom')->count();
+        $jenisLainnya   = (clone $sipQuery)->whereNotNull('jenis_custom')->count();
+        
         $kategoriRingan = (clone $sipQuery)->byKategori('ringan')->count();
         $kategoriSedang = (clone $sipQuery)->byKategori('sedang')->count();
         $kategoriBerat  = (clone $sipQuery)->byKategori('berat')->count();
@@ -99,8 +103,11 @@ class DashboardController extends Controller
             'Saran'          => $Saran,
             'Informasi'      => $Informasi,
             'Pengaduan'      => $Pengaduan,
+            'Lainnya'        => $Lainnya,
             'jenisSaran'     => $jenisSaran,
+            'jenisInformasi' => $jenisInformasi,
             'jenisPengaduan' => $jenisPengaduan,
+            'jenisLainnya'   => $jenisLainnya,
             'kategoriRingan' => $kategoriRingan,
             'kategoriSedang' => $kategoriSedang,
             'kategoriBerat'  => $kategoriBerat,

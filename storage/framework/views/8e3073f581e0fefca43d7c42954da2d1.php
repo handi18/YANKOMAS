@@ -155,22 +155,18 @@
                     YANKOMAS
                 </span>
             </div>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+            <div class="ms-auto d-flex align-items-center">
+                <ul class="navbar-nav flex-row">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle text-white d-flex align-items-center px-2 py-1" href="#" role="button" data-bs-toggle="dropdown">
                             <?php if(Auth::user()->foto): ?>
-                                <img src="<?php echo e(asset(Auth::user()->foto)); ?>" class="rounded-circle me-2" style="width: 28px; height: 28px; object-fit: cover; border: 1px solid rgba(255,255,255,0.5);">
+                                <img src="<?php echo e(asset(Auth::user()->foto)); ?>" class="rounded-circle me-1 me-md-2" style="width: 32px; height: 32px; object-fit: cover; border: 1px solid rgba(255,255,255,0.5);">
                             <?php else: ?>
-                                <img src="https://ui-avatars.com/api/?name=<?php echo e(urlencode(substr(Auth::user()->nama, 0, 1))); ?>&background=0066cc&color=fff&size=28&bold=true" class="rounded-circle me-2" style="width: 28px; height: 28px; object-fit: cover;">
+                                <img src="https://ui-avatars.com/api/?name=<?php echo e(urlencode(substr(Auth::user()->nama, 0, 1))); ?>&background=0066cc&color=fff&size=32&bold=true" class="rounded-circle me-1 me-md-2" style="width: 32px; height: 32px; object-fit: cover;">
                             <?php endif; ?>
-                            <?php echo e(Auth::user()->nama); ?>
-
+                            <span class="d-none d-md-inline"><?php echo e(Auth::user()->nama); ?></span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
+                        <ul class="dropdown-menu dropdown-menu-end position-absolute mt-2 shadow-sm" style="right: 0; left: auto;">
                             <li><a class="dropdown-item <?php echo e(request()->routeIs('profile.edit') ? 'active' : ''); ?>" href="<?php echo e(route('profile.edit')); ?>">Profil</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
