@@ -66,7 +66,7 @@
 
                 <div class="vr text-muted d-none d-md-block" style="height: 30px;"></div>
 
-                <div class="d-flex flex-column flex-md-row align-items-md-center gap-2 w-100 w-md-auto border p-2 p-md-0 border-md-0 rounded">
+                <div class="d-flex flex-column flex-md-row align-items-md-center gap-2 w-100 w-md-auto p-2 p-md-0 rounded">
                     <span class="text-muted small d-none d-md-inline font-weight-bold">Rentang Custom:</span>
                     
                     <div class="d-flex flex-column flex-md-row gap-2 w-100">
