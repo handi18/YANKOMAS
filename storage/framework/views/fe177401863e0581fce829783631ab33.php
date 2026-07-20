@@ -148,9 +148,29 @@
         .status-baru { background: rgba(0, 153, 255, 0.2); color: #66b3ff; border: 1px solid rgba(102, 179, 255, 0.5); }
         .status-diproses { background: rgba(255, 193, 7, 0.2); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.5); }
         .status-selesai { background: rgba(40, 167, 69, 0.2); color: #28a745; border: 1px solid rgba(40, 167, 69, 0.5); }
+        
+        .login-petugas-icon {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .login-petugas-icon:hover {
+            color: rgba(255, 255, 255, 1);
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body>
+    <!-- Ikon Rahasia untuk Login Petugas (Pojok Kanan Atas) -->
+    <a href="<?php echo e(route('login')); ?>" class="login-petugas-icon" title="Login Petugas">
+        <i class="fas fa-user-shield"></i>
+    </a>
+
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-9">
@@ -204,8 +224,8 @@
                                         <input type="text" class="form-control" name="nama_pengadu" value="<?php echo e(old('nama_pengadu')); ?>" placeholder="Masukkan nama Anda" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label fw-medium">Nomor WhatsApp/Telepon</label>
-                                        <input type="text" class="form-control" name="no_telp" value="<?php echo e(old('no_telp')); ?>" placeholder="Misal: 08xxxxxxxxxx">
+                                        <label class="form-label fw-medium">Nomor WhatsApp/Telepon (opsional)</label>
+                                        <input type="tel" class="form-control" name="no_telp" value="<?php echo e(old('no_telp')); ?>" placeholder="Misal: 081234567890" inputmode="numeric" pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                     </div>
                                     
                                     <div class="col-md-6">

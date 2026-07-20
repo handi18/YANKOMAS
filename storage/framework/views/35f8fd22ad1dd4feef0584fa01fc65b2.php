@@ -11,20 +11,18 @@
     
     <div class="card-body">
         <form method="GET" class="mb-4">
-            <div class="row mb-3 gap-2 gap-md-0">
-                <div class="col-md-2">
+            <div class="row g-2 mb-3">
+                <div class="col-12 col-md-2">
                     <select name="scope" class="form-select form-select-sm" onchange="this.form.submit()">
                         <?php if(Auth::user()->isPetugas()): ?>
                             <option value="my_data" <?php echo e(($current_scope ?? request('scope', 'my_data')) === 'my_data' ? 'selected' : ''); ?>>Data Saya</option>
                         <?php endif; ?>
                         <option value="all" <?php echo e(($current_scope ?? request('scope', Auth::user()->isPetugas() ? 'my_data' : 'all')) === 'all' ? 'selected' : ''); ?>>Semua Data</option>
-                        
-                        
                         <option value="masyarakat" <?php echo e(request('scope') === 'masyarakat' ? 'selected' : ''); ?>>Data Masyarakat (Baru Masuk)</option>
                     </select>
                 </div>
                 
-                <div class="col-md-2">
+                <div class="col-12 col-md-2">
                     <select name="filter" class="form-select form-select-sm">
                         <option value="">Semua Periode</option>
                         <?php $__currentLoopData = ['today' => 'Hari Ini', 'week' => 'Minggu Ini', 'month' => 'Bulan Ini', 'year' => 'Tahun Ini']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $val => $lbl): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -32,13 +30,13 @@
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
-                <div class="col-md-2">
-                    <input type="date" name="date_from" class="form-control form-control-sm" value="<?php echo e(request('date_from')); ?>">
+                <div class="col-12 col-md-2">
+                    <input type="date" name="date_from" class="form-control form-control-sm" placeholder="Mulai Tanggal" value="<?php echo e(request('date_from')); ?>">
                 </div>
-                <div class="col-md-2">
-                    <input type="date" name="date_to" class="form-control form-control-sm" value="<?php echo e(request('date_to')); ?>">
+                <div class="col-12 col-md-2">
+                    <input type="date" name="date_to" class="form-control form-control-sm" placeholder="Sampai Tanggal" value="<?php echo e(request('date_to')); ?>">
                 </div>
-                <div class="col-md-2">
+                <div class="col-12 col-md-2">
                     <select name="jenis" class="form-select form-select-sm">
                         <option value="">Semua Jenis</option>
                         <?php $__currentLoopData = ['saran' => 'Saran', 'informasi' => 'Informasi', 'pengaduan' => 'Pengaduan']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $val => $lbl): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -49,8 +47,8 @@
                 </div>
             </div>
 
-            <div class="row mb-3">
-                <div class="col-md-2">
+            <div class="row g-2 mb-3">
+                <div class="col-12 col-md-2">
                     <select name="kategori" class="form-select form-select-sm">
                         <option value="">Semua Kategori</option>
                         <?php $__currentLoopData = ['ringan' => 'Ringan', 'sedang' => 'Sedang', 'berat' => 'Berat']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $val => $lbl): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -59,7 +57,7 @@
                         <option value="custom" <?php echo e(request('kategori') === 'custom' ? 'selected' : ''); ?>>Lainnya (Custom)...</option>
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-12 col-md-2">
                     <select name="status" class="form-select form-select-sm">
                         <option value="">Semua Status</option>
                         <?php $__currentLoopData = ['Baru', 'Diproses', 'Selesai']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $st): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -67,7 +65,7 @@
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-12 col-md-2">
                     <select name="layanan_id" class="form-select form-select-sm">
                         <option value="">Semua Layanan</option>
                         <?php $__currentLoopData = $layanan; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -76,12 +74,12 @@
                         <option value="custom" <?php echo e(request('layanan_id') === 'custom' ? 'selected' : ''); ?>>Lainnya (Custom)...</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-12 col-md-3">
                     <input type="text" name="search" class="form-control form-control-sm" placeholder="Cari nomor tiket..." value="<?php echo e(request('search')); ?>">
                 </div>
-                <div class="col-md-3">
-                    <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-search"></i> Filter</button>
-                    <a href="<?php echo e(route('aspirasi.index')); ?>" class="btn btn-secondary btn-sm"><i class="fas fa-redo"></i> Reset</a>
+                <div class="col-12 col-md-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary btn-sm flex-grow-1 flex-md-grow-0"><i class="fas fa-search"></i> Filter</button>
+                    <a href="<?php echo e(route('aspirasi.index')); ?>" class="btn btn-secondary btn-sm flex-grow-1 flex-md-grow-0"><i class="fas fa-redo"></i> Reset</a>
                 </div>
             </div>
         </form>

@@ -45,7 +45,7 @@
     {{-- Filter Rentang Waktu Independen --}}
     <div class="row mb-3 mt-3">  
         <div class="col-12">
-            <form method="GET" action="{{ route('dashboard') }}" class="d-flex flex-wrap align-items-center gap-3">
+            <form method="GET" action="{{ route('dashboard') }}" class="d-flex flex-column flex-md-row align-items-md-center gap-3">
                 
                 <div class="d-flex align-items-center gap-2">
                     <select name="range" class="form-select form-select-sm" style="width: auto;" onchange="this.form.start_date.value=''; this.form.end_date.value=''; this.form.submit()">
@@ -59,16 +59,28 @@
 
                 <div class="vr text-muted d-none d-md-block" style="height: 30px;"></div>
 
-                <div class="d-flex align-items-center gap-2">
-                    <span class="text-muted small">Rentang Custom:</span>
-                    <input type="date" name="start_date" class="form-control form-control-sm" value="{{ request('start_date') }}" required>
-                    <span class="text-muted small">s.d</span>
-                    <input type="date" name="end_date" class="form-control form-control-sm" value="{{ request('end_date') }}" required>
-                    <button type="submit" class="btn btn-gradient-custom btn-sm px-3 text-white">Cari</button>
+                <div class="d-flex flex-column flex-md-row align-items-md-center gap-2 w-100 w-md-auto border p-2 p-md-0 border-md-0 rounded">
+                    <span class="text-muted small d-none d-md-inline font-weight-bold">Rentang Custom:</span>
                     
-                    @if(request()->filled('start_date'))
-                        <a href="{{ route('dashboard') }}" class="btn btn-secondary btn-sm">Reset</a>
-                    @endif
+                    <div class="d-flex flex-column flex-md-row gap-2 w-100">
+                        <div class="w-100">
+                            <span class="text-muted small d-md-none fw-bold">Dari Tanggal:</span>
+                            <input type="date" name="start_date" class="form-control form-control-sm w-100" style="min-width: 140px;" value="{{ request('start_date') }}" required>
+                        </div>
+                        <span class="text-muted small align-self-center d-none d-md-inline">s.d</span>
+                        <div class="w-100">
+                            <span class="text-muted small d-md-none fw-bold">Sampai Tanggal:</span>
+                            <input type="date" name="end_date" class="form-control form-control-sm w-100" style="min-width: 140px;" value="{{ request('end_date') }}" required>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 w-100 mt-1 mt-md-0">
+                        <button type="submit" class="btn btn-gradient-custom btn-sm px-3 text-white flex-grow-1 flex-md-grow-0">Cari</button>
+                        
+                        @if(request()->filled('start_date'))
+                            <a href="{{ route('dashboard') }}" class="btn btn-secondary btn-sm flex-grow-1 flex-md-grow-0">Reset</a>
+                        @endif
+                    </div>
                 </div>
 
             </form>

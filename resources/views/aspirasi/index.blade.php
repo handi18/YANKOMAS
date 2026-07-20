@@ -11,20 +11,18 @@
     
     <div class="card-body">
         <form method="GET" class="mb-4">
-            <div class="row mb-3 gap-2 gap-md-0">
-                <div class="col-md-2">
+            <div class="row g-2 mb-3">
+                <div class="col-12 col-md-2">
                     <select name="scope" class="form-select form-select-sm" onchange="this.form.submit()">
                         @if(Auth::user()->isPetugas())
                             <option value="my_data" {{ ($current_scope ?? request('scope', 'my_data')) === 'my_data' ? 'selected' : '' }}>Data Saya</option>
                         @endif
                         <option value="all" {{ ($current_scope ?? request('scope', Auth::user()->isPetugas() ? 'my_data' : 'all')) === 'all' ? 'selected' : '' }}>Semua Data</option>
-                        
-                        {{-- Kolam Bersama: Admin dan Petugas bisa melihat tiket dari Masyarakat (Unassigned) --}}
                         <option value="masyarakat" {{ request('scope') === 'masyarakat' ? 'selected' : '' }}>Data Masyarakat (Baru Masuk)</option>
                     </select>
                 </div>
                 
-                <div class="col-md-2">
+                <div class="col-12 col-md-2">
                     <select name="filter" class="form-select form-select-sm">
                         <option value="">Semua Periode</option>
                         @foreach(['today' => 'Hari Ini', 'week' => 'Minggu Ini', 'month' => 'Bulan Ini', 'year' => 'Tahun Ini'] as $val => $lbl)
@@ -32,13 +30,13 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-2">
-                    <input type="date" name="date_from" class="form-control form-control-sm" value="{{ request('date_from') }}">
+                <div class="col-12 col-md-2">
+                    <input type="{{ request('date_from') ? 'date' : 'text' }}" onfocus="(this.type='date')" onblur="if(this.value==''){this.type='text'}" name="date_from" class="form-control form-control-sm" placeholder="Mulai Tanggal" value="{{ request('date_from') }}">
                 </div>
-                <div class="col-md-2">
-                    <input type="date" name="date_to" class="form-control form-control-sm" value="{{ request('date_to') }}">
+                <div class="col-12 col-md-2">
+                    <input type="{{ request('date_to') ? 'date' : 'text' }}" onfocus="(this.type='date')" onblur="if(this.value==''){this.type='text'}" name="date_to" class="form-control form-control-sm" placeholder="Sampai Tanggal" value="{{ request('date_to') }}">
                 </div>
-                <div class="col-md-2">
+                <div class="col-12 col-md-2">
                     <select name="jenis" class="form-select form-select-sm">
                         <option value="">Semua Jenis</option>
                         @foreach(['saran' => 'Saran', 'informasi' => 'Informasi', 'pengaduan' => 'Pengaduan'] as $val => $lbl)
@@ -47,10 +45,8 @@
                         <option value="custom" {{ request('jenis') === 'custom' ? 'selected' : '' }}>Lainnya (Custom)...</option>
                     </select>
                 </div>
-            </div>
 
-            <div class="row mb-3">
-                <div class="col-md-2">
+                <div class="col-12 col-md-2">
                     <select name="kategori" class="form-select form-select-sm">
                         <option value="">Semua Kategori</option>
                         @foreach(['ringan' => 'Ringan', 'sedang' => 'Sedang', 'berat' => 'Berat'] as $val => $lbl)
@@ -59,7 +55,7 @@
                         <option value="custom" {{ request('kategori') === 'custom' ? 'selected' : '' }}>Lainnya (Custom)...</option>
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-12 col-md-2">
                     <select name="status" class="form-select form-select-sm">
                         <option value="">Semua Status</option>
                         @foreach(['Baru', 'Diproses', 'Selesai'] as $st)
@@ -67,7 +63,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-12 col-md-2">
                     <select name="layanan_id" class="form-select form-select-sm">
                         <option value="">Semua Layanan</option>
                         @foreach($layanan as $item)
@@ -76,12 +72,12 @@
                         <option value="custom" {{ request('layanan_id') === 'custom' ? 'selected' : '' }}>Lainnya (Custom)...</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-12 col-md-3">
                     <input type="text" name="search" class="form-control form-control-sm" placeholder="Cari nomor tiket..." value="{{ request('search') }}">
                 </div>
-                <div class="col-md-3">
-                    <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-search"></i> Filter</button>
-                    <a href="{{ route('aspirasi.index') }}" class="btn btn-secondary btn-sm"><i class="fas fa-redo"></i> Reset</a>
+                <div class="col-12 col-md-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary btn-sm flex-grow-1 flex-md-grow-0"><i class="fas fa-search"></i> Filter</button>
+                    <a href="{{ route('aspirasi.index') }}" class="btn btn-secondary btn-sm flex-grow-1 flex-md-grow-0"><i class="fas fa-redo"></i> Reset</a>
                 </div>
             </div>
         </form>

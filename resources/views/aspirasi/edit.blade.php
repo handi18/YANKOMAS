@@ -17,7 +17,7 @@
                 <strong>Nomor Tiket:</strong> {{ $aspirasi->nomor_tiket }}
             </div>
 
-            <div class="row mb-3">
+            <div class="row g-3 mb-3">
                 <div class="col-md-6">
                     <label for="tanggal_kejadian" class="form-label">Tanggal Kejadian *</label>
                     <input type="date" class="form-control @error('tanggal_kejadian') is-invalid @enderror" id="tanggal_kejadian" name="tanggal_kejadian" value="{{ old('tanggal_kejadian', $aspirasi->tanggal_kejadian->format('Y-m-d')) }}" required>
@@ -30,7 +30,7 @@
                 </div>
             </div>
 
-            <div class="row mb-3">
+            <div class="row g-3 mb-3">
                 <div class="col-md-6">
                     <label for="jenis" class="form-label">Jenis Aspirasi *</label>
                     <select class="form-select custom-trigger @error('jenis') is-invalid @enderror" id="jenis" name="jenis" data-target="#wrapper-jenis-custom" required>
@@ -55,7 +55,7 @@
                 </div> 
             </div>
 
-            <div class="row mb-3">
+            <div class="row g-3 mb-3">
                 <div class="col-md-6 d-none" id="wrapper-jenis-custom">
                     <label for="jenis_custom" class="form-label">Jenis custom *</label>
                     <input type="text" class="form-control @error('jenis_custom') is-invalid @enderror" id="jenis_custom" name="jenis_custom" value="{{ old('jenis_custom', $aspirasi->jenis_custom) }}">
@@ -68,7 +68,7 @@
                 </div>
             </div>
 
-            <div class="row mb-3">
+            <div class="row g-3 mb-3">
                 <div class="col-md-6">
                     <label for="layanan_id" class="form-label">Layanan *</label>
                     <select class="form-select custom-trigger @error('layanan_id') is-invalid @enderror" id="layanan_id" name="layanan_id" data-target="#wrapper-layanan-custom" required>

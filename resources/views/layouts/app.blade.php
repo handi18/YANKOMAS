@@ -46,14 +46,20 @@
         }
         
         .sidebar-custom {
-            background-color: var(--color-primary);
-            width: var(--sidebar-width);
-            flex-shrink: 0; /* Mengunci agar sidebar tidak menyusut */
-            padding-top: 20px;
-            position: sticky;
-            top: 56px; /* Menempel tepat di bawah navbar */
-            height: calc(100vh - 56px);
-            overflow-y: auto;
+            background-color: var(--color-primary) !important;
+        }
+        
+        /* Layout Sidebar Khusus PC/Tablet Besar */
+        @media (min-width: 768px) {
+            .sidebar-custom {
+                width: var(--sidebar-width);
+                flex-shrink: 0;
+                padding-top: 20px;
+                position: sticky !important;
+                top: 56px;
+                height: calc(100vh - 56px);
+                overflow-y: auto;
+            }
         }
         
         .sidebar-custom .nav-link {
@@ -133,6 +139,12 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container-fluid">
+            <div class="d-flex align-items-center">
+                <!-- Hamburger Menu for Mobile -->
+                <button class="navbar-toggler me-2 d-md-none border-0 text-white shadow-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" style="padding: 0; background: transparent;">
+                    <i class="fas fa-bars fs-4"></i>
+                </button>
+                
                 <img src="{{ asset('assets/img/logo_imigrasi_RI.png') }}" 
                      style="width: 32px; height: 32px; object-fit: contain; flex-shrink: 0;"
                      class="me-2">
@@ -142,21 +154,19 @@
                 <span class="navbar-brand text-white font-weight-bold mb-0">
                     YANKOMAS
                 </span>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+            </div>
+            <div class="ms-auto d-flex align-items-center">
+                <ul class="navbar-nav flex-row">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle text-white d-flex align-items-center px-2 py-1" href="#" role="button" data-bs-toggle="dropdown">
                             @if(Auth::user()->foto)
-                                <img src="{{ asset(Auth::user()->foto) }}" class="rounded-circle me-2" style="width: 28px; height: 28px; object-fit: cover; border: 1px solid rgba(255,255,255,0.5);">
+                                <img src="{{ asset(Auth::user()->foto) }}" class="rounded-circle me-1 me-md-2" style="width: 32px; height: 32px; object-fit: cover; border: 1px solid rgba(255,255,255,0.5);">
                             @else
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode(substr(Auth::user()->nama, 0, 1)) }}&background=0066cc&color=fff&size=28&bold=true" class="rounded-circle me-2" style="width: 28px; height: 28px; object-fit: cover;">
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode(substr(Auth::user()->nama, 0, 1)) }}&background=0066cc&color=fff&size=32&bold=true" class="rounded-circle me-1 me-md-2" style="width: 32px; height: 32px; object-fit: cover;">
                             @endif
-                            {{ Auth::user()->nama }}
+                            <span class="d-none d-md-inline">{{ Auth::user()->nama }}</span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
+                        <ul class="dropdown-menu dropdown-menu-end position-absolute mt-2 shadow-sm" style="right: 0; left: auto;">
                             <li><a class="dropdown-item {{ request()->routeIs('profile.edit') ? 'active' : '' }}" href="{{ route('profile.edit') }}">Profil</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
@@ -174,33 +184,39 @@
 
     <div class="main-layout">
         
-        <nav class="sidebar-custom">
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
-                        <i class="fas fa-chart-line"></i> Dashboard
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('aspirasi.*') ? 'active' : '' }}" href="{{ route('aspirasi.index') }}">
-                        <i class="fas fa-list"></i> Data Aspirasi
-                    </a>
-                </li>
-                
-                @if(Auth::user()->isAdmin())
-                    <hr class="my-3 border-light opacity-25">
+        <nav class="sidebar-custom offcanvas-md offcanvas-start" tabindex="-1" id="sidebarMenu">
+            <div class="offcanvas-header d-md-none border-bottom border-secondary">
+                <h5 class="offcanvas-title text-white">Menu Petugas</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu"></button>
+            </div>
+            <div class="offcanvas-body flex-column p-0 pt-md-0 pt-3">
+                <ul class="nav flex-column w-100">
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('admin.users*') ? 'active' : '' }}" href="{{ route('admin.users') }}">
-                            <i class="fas fa-users"></i> Kelola Petugas
+                        <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
+                            <i class="fas fa-chart-line"></i> Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('admin.activity-logs') ? 'active' : '' }}" href="{{ route('admin.activity-logs') }}">
-                            <i class="fas fa-history"></i> Log Aktivitas
+                        <a class="nav-link {{ request()->routeIs('aspirasi.*') ? 'active' : '' }}" href="{{ route('aspirasi.index') }}">
+                            <i class="fas fa-list"></i> Data Aspirasi
                         </a>
                     </li>
-                @endif
-            </ul>
+                    
+                    @if(Auth::user()->isAdmin())
+                        <hr class="my-3 border-light opacity-25">
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.users*') ? 'active' : '' }}" href="{{ route('admin.users') }}">
+                                <i class="fas fa-users"></i> Kelola Petugas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.activity-logs') ? 'active' : '' }}" href="{{ route('admin.activity-logs') }}">
+                                <i class="fas fa-history"></i> Log Aktivitas
+                            </a>
+                        </li>
+                    @endif
+                </ul>
+            </div>
         </nav>
 
         <main class="main-content-area">

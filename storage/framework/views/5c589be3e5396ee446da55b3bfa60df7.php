@@ -47,7 +47,7 @@
         <div class="col-12">
             <form method="GET" action="<?php echo e(route('dashboard')); ?>" class="d-flex flex-wrap align-items-center gap-3">
                 
-                <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center gap-2 mb-2 mb-md-0">
                     <select name="range" class="form-select form-select-sm" style="width: auto;" onchange="this.form.start_date.value=''; this.form.end_date.value=''; this.form.submit()">
                         <option value="semua"      <?php echo e(request('range', 'semua') == 'semua' && !request('start_date') ? 'selected' : ''); ?>>Semua Waktu</option>
                         <option value="hari_ini"   <?php echo e(request('range') == 'hari_ini' ? 'selected' : ''); ?>>Hari Ini</option>
@@ -59,11 +59,11 @@
 
                 <div class="vr text-muted d-none d-md-block" style="height: 30px;"></div>
 
-                <div class="d-flex align-items-center gap-2">
+                <div class="d-flex flex-wrap align-items-center gap-2">
                     <span class="text-muted small">Rentang Custom:</span>
-                    <input type="date" name="start_date" class="form-control form-control-sm" value="<?php echo e(request('start_date')); ?>" required>
+                    <input type="date" name="start_date" class="form-control form-control-sm" style="width: auto;" value="<?php echo e(request('start_date')); ?>" required>
                     <span class="text-muted small">s.d</span>
-                    <input type="date" name="end_date" class="form-control form-control-sm" value="<?php echo e(request('end_date')); ?>" required>
+                    <input type="date" name="end_date" class="form-control form-control-sm" style="width: auto;" value="<?php echo e(request('end_date')); ?>" required>
                     <button type="submit" class="btn btn-gradient-custom btn-sm px-3 text-white">Cari</button>
                     
                     <?php if(request()->filled('start_date')): ?>

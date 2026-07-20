@@ -12,7 +12,7 @@
         <form action="{{ route('aspirasi.store') }}" method="POST">
             @csrf
 
-            <div class="row mb-3">
+            <div class="row g-3 mb-3">
                 <div class="col-md-6">
                     <label for="nama_pengadu" class="form-label">Nama Pengadu *</label>
                     <input type="text" class="form-control @error('nama_pengadu') is-invalid @enderror" id="nama_pengadu" name="nama_pengadu" value="{{ old('nama_pengadu') }}" required>
@@ -20,12 +20,12 @@
                 </div>
                 <div class="col-md-6">
                     <label for="no_telp" class="form-label">No. Telp (Opsional)</label>
-                    <input type="text" class="form-control @error('no_telp') is-invalid @enderror" id="no_telp" name="no_telp" value="{{ old('no_telp') }}">
+                    <input type="tel" class="form-control @error('no_telp') is-invalid @enderror" id="no_telp" name="no_telp" value="{{ old('no_telp') }}" inputmode="numeric" pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                     @error('no_telp') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
             </div>
 
-            <div class="row mb-3">
+            <div class="row g-3 mb-3">
                 <div class="col-md-6">
                     <label for="tanggal_kejadian" class="form-label">Tanggal Kejadian *</label>
                     <input type="date" class="form-control @error('tanggal_kejadian') is-invalid @enderror" id="tanggal_kejadian" name="tanggal_kejadian" value="{{ old('tanggal_kejadian', now()->format('Y-m-d')) }}" required>
@@ -38,7 +38,7 @@
                 </div>
             </div>
 
-            <div class="row mb-3">
+            <div class="row g-3 mb-3">
                 <div class="col-md-6">
                     <label for="jenis" class="form-label">Jenis Aspirasi *</label>
                     <select class="form-select custom-trigger @error('jenis') is-invalid @enderror" id="jenis" name="jenis" data-target="#wrapper-jenis-custom" required>
@@ -63,7 +63,7 @@
                 </div> 
             </div>
 
-            <div class="row mb-3">
+            <div class="row g-3 mb-3">
                 <div class="col-md-6 d-none" id="wrapper-jenis-custom">
                     <label for="jenis_custom" class="form-label">Jenis Kustom *</label>
                     <input type="text" class="form-control @error('jenis_custom') is-invalid @enderror" id="jenis_custom" name="jenis_custom" value="{{ old('jenis_custom') }}">
@@ -76,7 +76,7 @@
                 </div>
             </div>
 
-            <div class="row mb-3">
+            <div class="row g-3 mb-3">
                 <div class="col-md-6">
                     <label for="layanan_id" class="form-label">Layanan *</label>
                     <select class="form-select custom-trigger @error('layanan_id') is-invalid @enderror" id="layanan_id" name="layanan_id" data-target="#wrapper-layanan-custom" required>
