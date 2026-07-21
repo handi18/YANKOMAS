@@ -443,7 +443,8 @@
                         background: '#fff'
                     });
                 } else if (result.isDenied) {
-                    var waText = "Halo, ini adalah Nomor Tiket laporan saya di YANKOMAS Imigrasi Bandung:\n\n*" + newTicket + "*\n\nSimpan pesan ini agar tiket tidak hilang saat Anda ingin mengecek statusnya di kemudian hari.";
+                    var webUrl = '{{ url('/') }}';
+                    var waText = "Halo, ini adalah Nomor Tiket laporan saya di YANKOMAS Imigrasi Bandung:\n\n*" + newTicket + "*\n\nCek status laporan secara berkala melalui link berikut:\n" + webUrl + "\n\nSimpan pesan ini agar tiket tidak hilang.";
                     window.open('https://wa.me/?text=' + encodeURIComponent(waText), '_blank');
                 }
             });
