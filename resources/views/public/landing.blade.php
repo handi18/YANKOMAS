@@ -246,11 +246,11 @@
                                             <option value="pengaduan" {{ old('jenis') == 'pengaduan' ? 'selected' : '' }}>Pengaduan</option>
                                             <option value="custom" {{ old('jenis') == 'custom' ? 'selected' : '' }}>Lainnya (Kustom)</option>
                                         </select>
-                                    </div>
-                                    
-                                    <div class="col-md-6" id="jenis_custom_div" style="display: none;">
-                                        <label class="form-label fw-medium text-info">Sebutkan Jenis Kustom <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control border-info" name="jenis_custom" value="{{ old('jenis_custom') }}">
+                                        
+                                        <div id="jenis_custom_div" style="display: none;" class="mt-3">
+                                            <label class="form-label fw-medium text-info">Sebutkan Jenis Kustom <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control border-info" name="jenis_custom" value="{{ old('jenis_custom') }}">
+                                        </div>
                                     </div>
 
                                     <div class="col-md-6" id="kategori_div" style="display: none;">
@@ -262,11 +262,11 @@
                                             <option value="berat" {{ old('kategori') == 'berat' ? 'selected' : '' }}>Berat</option>
                                             <option value="custom" {{ old('kategori') == 'custom' ? 'selected' : '' }}>Lainnya (Kustom)</option>
                                         </select>
-                                    </div>
-                                    
-                                    <div class="col-md-6" id="kategori_custom_div" style="display: none;">
-                                        <label class="form-label fw-medium text-warning">Sebutkan Kategori Kustom <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control border-warning" name="kategori_custom" value="{{ old('kategori_custom') }}">
+                                        
+                                        <div id="kategori_custom_div" style="display: none;" class="mt-3">
+                                            <label class="form-label fw-medium text-warning">Sebutkan Kategori Kustom <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control border-warning" name="kategori_custom" value="{{ old('kategori_custom') }}">
+                                        </div>
                                     </div>
 
                                     <div class="col-md-6">
@@ -278,11 +278,11 @@
                                             @endforeach
                                             <option value="custom" {{ old('layanan_id') == 'custom' ? 'selected' : '' }}>Lainnya (Kustom)</option>
                                         </select>
-                                    </div>
-
-                                    <div class="col-md-6" id="layanan_custom_div" style="display: none;">
-                                        <label class="form-label fw-medium text-info">Sebutkan Layanan Kustom <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control border-info" name="layanan_custom" value="{{ old('layanan_custom') }}">
+                                        
+                                        <div id="layanan_custom_div" style="display: none;" class="mt-3">
+                                            <label class="form-label fw-medium text-info">Sebutkan Layanan Kustom <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control border-info" name="layanan_custom" value="{{ old('layanan_custom') }}">
+                                        </div>
                                     </div>
 
                                     <div class="col-12">
