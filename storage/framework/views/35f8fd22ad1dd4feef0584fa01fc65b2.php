@@ -82,9 +82,23 @@
             </div>
         </form>
 
-        <div class="mb-3">
-            <a href="<?php echo e(route('aspirasi.export-excel', request()->query())); ?>" class="btn btn-success btn-sm"><i class="fas fa-file-excel"></i> Export Excel</a>
-            <a href="<?php echo e(route('aspirasi.export-pdf', request()->query())); ?>" class="btn btn-danger btn-sm"><i class="fas fa-file-pdf"></i> Export PDF</a>
+        <div class="mb-3 d-flex flex-column flex-md-row justify-content-md-between align-items-md-center gap-2">
+            <div class="d-flex gap-2">
+                <a href="<?php echo e(route('aspirasi.export-excel', request()->query())); ?>" class="btn btn-success btn-sm flex-grow-1 flex-md-grow-0"><i class="fas fa-file-excel"></i> Export Excel</a>
+                <a href="<?php echo e(route('aspirasi.export-pdf', request()->query())); ?>" class="btn btn-danger btn-sm flex-grow-1 flex-md-grow-0"><i class="fas fa-file-pdf"></i> Export PDF</a>
+            </div>
+
+            <?php if(Auth::user()->isAdmin()): ?>
+            <div>
+                <form id="deleteAllForm" action="<?php echo e(route('aspirasi.destroy-all')); ?>" method="POST" class="d-inline w-100">
+                    <?php echo csrf_field(); ?>
+                    <?php echo method_field('DELETE'); ?>
+                    <button type="button" class="btn btn-outline-danger btn-sm w-100 w-md-auto" onclick="confirmDeleteAll()">
+                        <i class="fas fa-trash-alt"></i> Bersihkan Tiket Selesai
+                    </button>
+                </form>
+            </div>
+            <?php endif; ?>
         </div>
 
         <div class="table-responsive">
@@ -161,6 +175,52 @@
         </div>
     </div>
 </div>
+
+<?php $__env->startPush('js'); ?>
+<!-- Load SweetAlert2 khusus untuk fitur hapus massal (jika app.blade belum memuatnya global) -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function confirmDeleteAll() {
+        let timerInterval;
+        let timeLeft = 5;
+
+        Swal.fire({
+            title: 'Bersihkan Tiket Selesai?',
+            html: 'Apakah Anda yakin ingin menghapus <b>SEMUA TIKET</b> yang sudah berstatus <b>Selesai</b>?<br><br><i>Pastikan Anda telah merekap/mendownload data tersebut terlebih dahulu (Excel/PDF). Data yang sudah bersih tidak dapat dikembalikan!</i>',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Tunggu 5 detik...',
+            cancelButtonText: 'Batal',
+            allowOutsideClick: false,
+            didOpen: () => {
+                const confirmBtn = Swal.getConfirmButton();
+                confirmBtn.disabled = true; // Kunci tombol saat pertama dibuka
+                
+                timerInterval = setInterval(() => {
+                    timeLeft -= 1;
+                    if (timeLeft > 0) {
+                        confirmBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Tunggu ${timeLeft} detik...`;
+                    } else {
+                        clearInterval(timerInterval);
+                        confirmBtn.disabled = false;
+                        confirmBtn.innerHTML = 'Ya, Hapus Semua!';
+                    }
+                }, 1000);
+            },
+            willClose: () => {
+                clearInterval(timerInterval);
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Submit form
+                document.getElementById('deleteAllForm').submit();
+            }
+        });
+    }
+</script>
+<?php $__env->stopPush(); ?>
 
 <style>
     .btn-xs { 

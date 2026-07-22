@@ -309,4 +309,31 @@ class AspirasiController extends Controller
 
         return $validated;
     }
+
+    /**
+     * Menghapus data aspirasi yang sudah berstatus 'Selesai' (Hanya untuk Admin/Superadmin).
+     */
+    public function destroyAll()
+    {
+        if (!Auth::user()->isAdmin()) {
+            abort(403, 'Anda tidak memiliki akses untuk tindakan ini.');
+        }
+
+        $query = \App\Models\Aspirasi::where('status', 'Selesai');
+        $total = $query->count();
+        
+        if ($total === 0) {
+            return redirect()->route('aspirasi.index')->with('error', 'Tidak ada tiket berstatus Selesai yang dapat dihapus.');
+        }
+        
+        // Menghapus hanya data yang selesai
+        $query->delete();
+
+        \App\Models\ActivityLog::create([
+            'user_id'   => Auth::id(),
+            'aktivitas' => "Membersihkan data aspirasi berstatus Selesai (Total: $total tiket).",
+        ]);
+
+        return redirect()->route('aspirasi.index')->with('success', "$total tiket yang berstatus Selesai berhasil dihapus dari sistem.");
+    }
 }

@@ -246,11 +246,11 @@
                                             <option value="pengaduan" <?php echo e(old('jenis') == 'pengaduan' ? 'selected' : ''); ?>>Pengaduan</option>
                                             <option value="custom" <?php echo e(old('jenis') == 'custom' ? 'selected' : ''); ?>>Lainnya (Kustom)</option>
                                         </select>
-                                    </div>
-                                    
-                                    <div class="col-md-6" id="jenis_custom_div" style="display: none;">
-                                        <label class="form-label fw-medium text-info">Sebutkan Jenis Kustom <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control border-info" name="jenis_custom" value="<?php echo e(old('jenis_custom')); ?>">
+                                        
+                                        <div id="jenis_custom_div" style="display: none;" class="mt-3">
+                                            <label class="form-label fw-medium text-info">Sebutkan Jenis Kustom <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control border-info" name="jenis_custom" value="<?php echo e(old('jenis_custom')); ?>">
+                                        </div>
                                     </div>
 
                                     <div class="col-md-6" id="kategori_div" style="display: none;">
@@ -262,11 +262,11 @@
                                             <option value="berat" <?php echo e(old('kategori') == 'berat' ? 'selected' : ''); ?>>Berat</option>
                                             <option value="custom" <?php echo e(old('kategori') == 'custom' ? 'selected' : ''); ?>>Lainnya (Kustom)</option>
                                         </select>
-                                    </div>
-                                    
-                                    <div class="col-md-6" id="kategori_custom_div" style="display: none;">
-                                        <label class="form-label fw-medium text-warning">Sebutkan Kategori Kustom <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control border-warning" name="kategori_custom" value="<?php echo e(old('kategori_custom')); ?>">
+                                        
+                                        <div id="kategori_custom_div" style="display: none;" class="mt-3">
+                                            <label class="form-label fw-medium text-warning">Sebutkan Kategori Kustom <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control border-warning" name="kategori_custom" value="<?php echo e(old('kategori_custom')); ?>">
+                                        </div>
                                     </div>
 
                                     <div class="col-md-6">
@@ -278,11 +278,11 @@
                                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             <option value="custom" <?php echo e(old('layanan_id') == 'custom' ? 'selected' : ''); ?>>Lainnya (Kustom)</option>
                                         </select>
-                                    </div>
-
-                                    <div class="col-md-6" id="layanan_custom_div" style="display: none;">
-                                        <label class="form-label fw-medium text-info">Sebutkan Layanan Kustom <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control border-info" name="layanan_custom" value="<?php echo e(old('layanan_custom')); ?>">
+                                        
+                                        <div id="layanan_custom_div" style="display: none;" class="mt-3">
+                                            <label class="form-label fw-medium text-info">Sebutkan Layanan Kustom <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control border-info" name="layanan_custom" value="<?php echo e(old('layanan_custom')); ?>">
+                                        </div>
                                     </div>
 
                                     <div class="col-12">
@@ -443,7 +443,8 @@
                         background: '#fff'
                     });
                 } else if (result.isDenied) {
-                    var waText = "Halo, ini adalah Nomor Tiket laporan saya di YANKOMAS Imigrasi Bandung:\n\n*" + newTicket + "*\n\nSimpan pesan ini agar tiket tidak hilang saat Anda ingin mengecek statusnya di kemudian hari.";
+                    var webUrl = '<?php echo e(url('/')); ?>';
+                    var waText = "Halo, ini adalah Nomor Tiket laporan saya di YANKOMAS Imigrasi Bandung:\n\n*" + newTicket + "*\n\nCek status laporan secara berkala melalui link berikut:\n" + webUrl + "\n\nSimpan pesan ini agar tiket tidak hilang.";
                     window.open('https://wa.me/?text=' + encodeURIComponent(waText), '_blank');
                 }
             });
@@ -503,7 +504,7 @@
             var kategoriDiv = document.getElementById('kategori_div');
             var kategoriSelect = document.getElementById('kategori');
             
-            if(jenis === 'pengaduan' || jenis === 'custom') {
+            if(jenis === 'pengaduan') {
                 kategoriDiv.style.display = 'block';
                 kategoriSelect.required = true;
             } else {

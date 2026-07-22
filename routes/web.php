@@ -41,6 +41,9 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware('role:admin')->group(function () {
         // User management
         Route::prefix('admin')->group(function () {
+            // Route destroy-all aspirasi
+            Route::delete('aspirasi/destroy-all', [AspirasiController::class, 'destroyAll'])->name('aspirasi.destroy-all');
+
             Route::get('users', [AdminController::class, 'users'])->name('admin.users');
             Route::get('users/create', [AdminController::class, 'createUser'])->name('admin.users.create');
             Route::post('users', [AdminController::class, 'storeUser'])->name('admin.users.store');
