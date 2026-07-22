@@ -10,6 +10,17 @@ use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
+    /**
+     * API untuk mengecek ID tiket terbaru (untuk fitur Auto Update / Polling)
+     */
+    public function checkNewTickets()
+    {
+        $latestTicket = Aspirasi::orderBy('id', 'desc')->first();
+        return response()->json([
+            'latest_id' => $latestTicket ? $latestTicket->id : 0
+        ]);
+    }
+
     public function index(Request $request)
     {
         $sipQuery = Aspirasi::query();

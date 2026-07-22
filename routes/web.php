@@ -20,6 +20,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Protected routes
 Route::middleware(['auth'])->group(function () {
+    // Jalur khusus untuk mengecek tiket baru di latar belakang
+    Route::get('/api/check-new-tickets', [DashboardController::class, 'checkNewTickets'])->name('api.check-tickets');
+
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

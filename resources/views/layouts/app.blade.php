@@ -249,24 +249,78 @@
             @yield('content')
         </main>
 
-    </div> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </div> 
     
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2.0/dist/js/adminlte.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     @stack('js')
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Dismiss Bootstrap Alerts otomatis
             const alerts = document.querySelectorAll('.main-content-area .alert');
-            
             alerts.forEach(function(alert) {
                 setTimeout(function() {
                     const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
-                    if (bsAlert) {
-                        bsAlert.close();
-                    }
+                    if (bsAlert) { bsAlert.close(); }
                 }, 3000);
             });
+
+            // ==========================================
+            // LOGIKA AUTO UPDATE (AJAX POLLING)
+            // ==========================================
+            let baselineId = null;
+
+            // 1. Ambil ID acuan saat pertama kali halaman dimuat
+            fetch('{{ route("api.check-tickets") }}')
+                .then(response => response.json())
+                .then(data => {
+                    baselineId = data.latest_id;
+                })
+                .catch(error => console.error('Error fetching baseline ticket ID:', error));
+
+            // 2. Lakukan pengecekan setiap 15 detik
+            setInterval(function() {
+                if (baselineId === null) return; // Tunggu baseline di-load
+
+                fetch('{{ route("api.check-tickets") }}')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.latest_id > baselineId) {
+                            // Ada data baru! Update baseline agar tidak spam notif
+                            baselineId = data.latest_id;
+
+                            // Munculkan Toast SweetAlert di pojok kanan atas
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: true,
+                                showCloseButton: true,
+                                confirmButtonText: 'Muat Ulang',
+                                confirmButtonColor: '#0066cc',
+                                timer: null, // Jangan hilang otomatis sampai di-klik atau ditutup
+                                timerProgressBar: false,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            });
+
+                            Toast.fire({
+                                iconHtml: '<i class="fas fa-bell text-dark"></i>',
+                                title: 'Ada Laporan Baru Masuk!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    // Jika tombol "Muat Ulang" di-klik
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    })
+                    .catch(error => console.error('Error polling new tickets:', error));
+            }, 15000); // 15 detik
         });
     </script>
 </body>
