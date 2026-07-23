@@ -174,7 +174,7 @@
                     <td>{{ $item->layanan_id ? ($item->layanan->nama_layanan ?? '-') : ($item->layanan_custom ?? '-') }}</td>
                     <td>{{ $item->media }}</td>
                     <td>{{ $item->status }}</td>
-                    <td>{{ $item->petugas->nama }}</td>
+                    <td>{{ $item->petugas->nama ?? '-' }}</td>
                 </tr>
             @empty
                 <tr>

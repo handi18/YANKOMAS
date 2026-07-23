@@ -65,7 +65,7 @@ class AsirasiExport implements FromCollection, WithHeadings, WithMapping, Should
             $aspirasi->layanan_id ? ($aspirasi->layanan->nama_layanan ?? '-') : ($aspirasi->layanan_custom ?? '-'),
             $aspirasi->media,
             $aspirasi->status,
-            $aspirasi->petugas->nama,
+            $aspirasi->petugas->nama ?? '-',
         ];
     }
 
