@@ -14,6 +14,8 @@ Sistem ini terbagi menjadi dua bagian utama:
 - 🎟️ **Sistem Tiket Otomatis:** Setiap pelapor dari masyarakat otomatis mendapatkan Nomor Tiket (cth: `ASP-20260718-0005`) yang bisa digunakan untuk melacak status laporan (Fitur Cek Status).
 - 🧠 **Smart LocalStorage Memory:** Saat masyarakat selesai melapor, *browser* mereka akan otomatis menyimpan nomor tiket tersebut, sehingga mereka tidak perlu mengetik ulang saat ingin "Cek Status".
 - 🙋‍♂️ **Shared Pool & Claim System (Ambil Alih):** Laporan baru dari masyarakat akan masuk ke kolam "Data Masyarakat". Semua petugas bisa melihatnya dan berlomba mengambil alih (*Claim/Assign*) laporan tersebut untuk segera diproses.
+- 🔔 **Auto-Update & Real-Time Notification:** Menggunakan teknologi *AJAX Polling*, Admin/Petugas akan otomatis mendapatkan notifikasi *Toast* setiap ada laporan baru yang masuk tanpa perlu memuat ulang halaman.
+- 🧹 **Mass Delete (Bersihkan Data):** Super Admin memiliki akses tombol khusus (dengan sistem pengamanan *cooldown* 5 detik) untuk menghapus massal semua tiket yang sudah berstatus 'Selesai'.
 
 ### Fitur *Core* (Inti)
 - ✅ **Multi-Role Authentication** (Super Admin, Admin & Petugas)
@@ -22,7 +24,7 @@ Sistem ini terbagi menjadi dua bagian utama:
 - ✅ Filter data dinamis (Berdasarkan periode, jenis, status, "Data Saya", "Data Masyarakat")
 - ✅ Export laporan komprehensif ke Excel dan PDF (DomPDF & Laravel Excel)
 - ✅ Input kustom (Lainnya) untuk jenis, kategori, dan layanan di luar standar
-- ✅ Manajemen akun Petugas & Super Admin (Khusus Admin)
+- ✅ Manajemen akun Petugas & Admin (Khusus Super Admin)
 - ✅ Activity log (Jejak rekam/audit) untuk melacak seluruh aktivitas pengguna
 - ✅ Profil mandiri pengguna (Ubah password, nama, dan foto profil)
 
@@ -37,11 +39,10 @@ Sistem ini terbagi menjadi dua bagian utama:
 
 ---
 
-### Instalasi Cepat (Bisa untuk Clone)
+### Instalasi Cepat (Setup untuk Server/Imigrasi)
 
-#### 1. Clone Repository & Masuk ke Folder
+#### 1. Masuk ke Folder Proyek
 ```bash
-git clone <url-repository-anda> yankomas
 cd yankomas
 ```
 
@@ -54,18 +55,18 @@ composer install
 ```bash
 cp .env.example .env
 ```
-Buka file `.env`, lalu sesuaikan konfigurasi database Anda:
+Buka file `.env`, lalu sesuaikan konfigurasi database Anda (secara default sudah disiapkan `yankomas`):
 ```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=yankomas_db
+DB_DATABASE=yankomas
 DB_USERNAME=root
 DB_PASSWORD=
 ```
 
 #### 4. Buat Database Kosong
-Buat database bernama `yankomas_db` secara manual melalui aplikasi seperti phpMyAdmin, Laragon, atau HeidiSQL.
+Buat database bernama `yankomas` secara manual melalui aplikasi seperti phpMyAdmin, Laragon, atau HeidiSQL.
 
 #### 5. Generate Key & Link Storage
 ```bash
@@ -73,13 +74,13 @@ php artisan key:generate
 php artisan storage:link
 ```
 
-#### 6. Migrasi & Data Dummy (Seeder)
-Jalankan perintah ini untuk membangun tabel dan mengisi data awal (akun Admin & Petugas):
+#### 6. Migrasi & Data Master (Seeder)
+Jalankan perintah ini untuk membangun 4 tabel utama yang rapi dan mengisi 1 akun akses pertama:
 ```bash
 php artisan migrate --seed
 ```
 
-#### 7. Jalankan Aplikasi
+#### 7. Jalankan Aplikasi (Jika di Localhost)
 ```bash
 php artisan serve
 ```
@@ -87,16 +88,16 @@ Aplikasi kini dapat diakses di browser melalui URL: **`http://localhost:8000`**
 
 ---
 
-### Akun Login Default
-> ⚠️ **Semua akun menggunakan password bawaan: `password123`**
+### Akun Login Akses Pertama (Default)
+> ⚠️ **Sistem ini dirancang murni tanpa data dummy/kotoran.**
 
-| Role     | Username          | Akses/Fungsi Utama                            |
-|----------|-------------------|---------------------------------------------|
-| Admin    | `admin`           | Kelola Petugas, Log Aktivitas, Hapus Tiket |
-| Petugas  | `handi_petugas`   | Menjawab tiket, Claim laporan masyarakat   |
-| Petugas  | `doni_petugas`    | Menjawab tiket, Claim laporan masyarakat   |
+Saat pertama kali diinstal, sistem hanya akan membangkitkan **1 Akun Pintu Masuk** untuk memudahkan persiapan pihak instansi:
 
-*Catatan: Akses login internal ada di URL `/login`. Tidak ada lagi tombol login di halaman utama/publik untuk menjaga privasi sistem.*
+| Role          | Username      | Password        | Akses Utama                                          |
+|---------------|---------------|-----------------|------------------------------------------------------|
+| **Super Admin**| `superadmin`  | `password123`   | Manajemen penuh (Tambah Petugas, Hapus Massal, Log)  |
+
+*Catatan: Segera login menggunakan akun ini, tambahkan akun petugas asli Imigrasi di menu "Kelola User", dan ubah password Super Admin di menu Profil demi keamanan.*
 
 ---
 
@@ -105,13 +106,13 @@ Aplikasi kini dapat diakses di browser melalui URL: **`http://localhost:8000`**
 | Route Path                         | Fungsi / Deskripsi                                  | Hak Akses       |
 |------------------------------------|---------------------------------------------------|-----------------|
 | `/`                                | Landing Page (Formulir Masyarakat & Cek Status)     | Publik          |
-| `/lapor`                           | Memproses pengiriman formulir dari masyarakat       | Publik          |
-| `/login`                           | Halaman Autentikasi untuk Internal (Petugas/Admin)  | Publik          |
+| `/login`                           | Halaman Autentikasi untuk Internal                  | Publik          |
 | `/dashboard`                       | Ringkasan statistik tiket dan aktivitas             | Auth            |
 | `/aspirasi`                        | Daftar laporan (Data Saya & Semua Data)             | Auth            |
 | `/aspirasi/{id}/claim`             | Tombol "Ambil Alih Laporan" untuk tiket baru        | Petugas         |
 | `/aspirasi/export/pdf`             | Unduh rekap laporan dalam bentuk PDF                | Auth            |
-| `/admin/users`                     | Halaman manajemen akun Petugas & Admin              | Admin           |
+| `/admin/users`                     | Halaman manajemen akun Petugas & Admin              | Super Admin     |
+| `/admin/aspirasi/destroy-all`      | Hapus massal tiket yang sudah selesai               | Super Admin     |
 
 ---
 
@@ -130,8 +131,8 @@ Aplikasi kini dapat diakses di browser melalui URL: **`http://localhost:8000`**
   Anda lupa membuat jembatan ke folder foto. Jalankan `php artisan storage:link`.
 - ❌ **Target class [AdminController] does not exist:**
   Coba jalankan `composer dump-autoload`.
-- ❌ **SQLSTATE[HY000] [2002] Target machine actively refused it:**
-  Aplikasi database Anda (seperti XAMPP/Laragon) belum dinyalakan atau MySQL dalam kondisi *Stop*.
+- ❌ **SQLSTATE[HY000] [1049] Unknown database 'yankomas':**
+  Anda belum membuat *database* kosong bernama `yankomas` di phpMyAdmin Anda.
 
 ---
 **Hak Cipta © 2026 - Kantor Imigrasi Kelas I TPI Kota Bandung**
