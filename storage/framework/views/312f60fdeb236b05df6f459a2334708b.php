@@ -60,7 +60,7 @@
                         <div class="d-flex align-items-center p-3 bg-light rounded">
                             <div class="me-3">
                                 <?php if($user->foto): ?>
-                                    <img id="avatar-preview" src="<?php echo e(asset('storage/' . $user->foto)); ?>" class="rounded-circle img-thumbnail" style="width: 80px; height: 80px; object-fit: cover;">
+                                    <img id="avatar-preview" src="<?php echo e(asset($user->foto)); ?>" class="rounded-circle img-thumbnail" style="width: 80px; height: 80px; object-fit: cover;">
                                 <?php else: ?>
                                     <img id="avatar-preview" src="https://ui-avatars.com/api/?name=<?php echo e(urlencode(substr($user->nama, 0, 2))); ?>&background=003366&color=fff&size=80&bold=true" class="rounded-circle img-thumbnail" style="width: 80px; height: 80px; object-fit: cover;">
                                 <?php endif; ?>

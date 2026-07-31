@@ -64,12 +64,6 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-// Jalur Rahasia untuk Update Database di InfinityFree (Hapus jika tidak dipakai lagi)
-Route::get('/update-db-otomatis', function () {
-    \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-    return 'Database berhasil di-update! Silakan tutup halaman ini dan kembali ke aplikasi utama.';
-});
-
 // Solusi Tuntas Foto Profil Corrupt di Shared Hosting (Membaca file dari storage tanpa symlink)
 Route::get('/storage/{path}', function ($path) {
     $filePath = storage_path('app/public/' . $path);

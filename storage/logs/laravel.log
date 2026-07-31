@@ -505,3 +505,18 @@
 #40 C:/laragon/www/simaspirasi-imigrasi/artisan(14): Illuminate/Foundation/Console/Kernel->handle(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
 #41 {main}
 "} 
+[2026-07-31 10:46:03] local.ERROR: The "-s" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"-s\" option does not exist. at C:/laragon/www/YANKOMAS/vendor/symfony/console/Input/ArgvInput.php:128)
+[stacktrace]
+#0 C:/laragon/www/YANKOMAS/vendor/symfony/console/Input/ArgvInput.php(110): Symfony/Component/Console/Input/ArgvInput->parseShortOptionSet('seed')
+#1 C:/laragon/www/YANKOMAS/vendor/symfony/console/Input/ArgvInput.php(90): Symfony/Component/Console/Input/ArgvInput->parseShortOption('-seed')
+#2 C:/laragon/www/YANKOMAS/vendor/symfony/console/Input/ArgvInput.php(77): Symfony/Component/Console/Input/ArgvInput->parseToken('-seed', true)
+#3 C:/laragon/www/YANKOMAS/vendor/symfony/console/Input/Input.php(53): Symfony/Component/Console/Input/ArgvInput->parse()
+#4 C:/laragon/www/YANKOMAS/vendor/symfony/console/Command/Command.php(295): Symfony/Component/Console/Input/Input->bind(Object(Symfony/Component/Console/Input/InputDefinition))
+#5 C:/laragon/www/YANKOMAS/vendor/laravel/framework/src/Illuminate/Console/Command.php(180): Symfony/Component/Console/Command/Command->run(Object(Symfony/Component/Console/Input/ArgvInput), Object(Illuminate/Console/OutputStyle))
+#6 C:/laragon/www/YANKOMAS/vendor/symfony/console/Application.php(1117): Illuminate/Console/Command->run(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#7 C:/laragon/www/YANKOMAS/vendor/symfony/console/Application.php(356): Symfony/Component/Console/Application->doRunCommand(Object(Illuminate/Database/Console/Migrations/FreshCommand), Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#8 C:/laragon/www/YANKOMAS/vendor/symfony/console/Application.php(195): Symfony/Component/Console/Application->doRun(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#9 C:/laragon/www/YANKOMAS/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(198): Symfony/Component/Console/Application->run(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#10 C:/laragon/www/YANKOMAS/artisan(14): Illuminate/Foundation/Console/Kernel->handle(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#11 {main}
+"} 
